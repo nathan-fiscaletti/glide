@@ -5,7 +5,7 @@ import glide.Glide;
 import glide.entities.Bullet;
 import glide.entities.Drop;
 import glide.entities.Enemy;
-import glide.entities.Player;
+import glide.entities.EnemyBullet;
 import glide.spritehandles.Bounds;
 
 import java.awt.Graphics;
@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class Controller {
 	private LinkedList<Bullet> b = new LinkedList<Bullet>();
+	private LinkedList<EnemyBullet> eb = new LinkedList<EnemyBullet>();
 	private LinkedList<Enemy> e = new LinkedList<Enemy>();
 	private LinkedList<Drop> drops = new LinkedList<Drop>();
 	Random r = new Random();
@@ -28,6 +29,28 @@ public class Controller {
 			b.get(i).tick();
 			if(b.get(i).getY() < 0)
 				removeBullet(b.get(i));
+		}
+		for(int i = 0; i < eb.size(); i++){
+			try{
+			eb.get(i).tick();
+			if(Bounds.intersectsWith(eb.get(i), game.getPlayer())){
+				int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+				if(h == 5){
+					game.lose();
+				}else{
+					removeEnemyBullet(eb.get(i));
+					game.getHealthBar().setHealth(h);
+					game.getPlayer().hurt();
+				}
+				Glide.hurt.play();
+			}
+			
+				if(eb.get(i).getY() > (Glide.HEIGHT * Glide.SCALE))
+					removeEnemyBullet(eb.get(i));
+				
+			}catch(Exception ex){
+				
+			}
 		}
 		try{
 		for(int i = 0; i < e.size(); i++){
@@ -46,8 +69,8 @@ public class Controller {
 			}
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
 				if(!e.get(i).isDead()){
-					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 3;
-					if(h == 3){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+					if(h == 5){
 						game.lose();
 					}else{
 						removeEnemy(e.get(i));
@@ -103,6 +126,9 @@ public class Controller {
 		for(int i = 0; i < drops.size(); i++){
 			drops.get(i).render(g);
 		}
+		for(int i = 0; i < eb.size(); i++){
+			eb.get(i).render(g);
+		}
 	}
 	
 	public void addBullet(Bullet block){
@@ -110,6 +136,12 @@ public class Controller {
 	}
 	public void removeBullet(Bullet block){
 		b.remove(block);
+	}
+	public void addEnemyBullet(EnemyBullet enb){
+		eb.add(enb);
+	}
+	public void removeEnemyBullet(EnemyBullet enb){
+		eb.remove(enb);
 	}
 	
 	public void addEnemy(Enemy block){
@@ -133,5 +165,8 @@ public class Controller {
 			b.remove();
 		while(drops.size() > 0)
 			drops.remove();
+		while(eb.size() > 0){
+			eb.remove();
+		}
 	}
 }

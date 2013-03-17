@@ -23,7 +23,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.4a";
+	public static final String TITLE = "Glide v0.5a";
 	
 	
 	public static JFrame frame = new JFrame(TITLE);

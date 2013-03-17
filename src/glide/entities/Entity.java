@@ -15,6 +15,8 @@ public class Entity {
 	public static final int TYPE_BULLET = 6;
 	public static final int TYPE_HEALTHBAR = 7;
 	
+	public static final int TYPE_ENEMYBULLET = 11;
+	
 	private double x;
 	private double y;
 	private int type;

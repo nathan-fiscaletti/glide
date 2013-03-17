@@ -10,6 +10,7 @@ public class Enemy extends Entity{
 	public int speed;
 	public boolean drop;
 	private boolean dead;
+	int shootw = 120;
 	public Enemy(double x, double y, Game game, boolean drop) {
 		super(x, y, game);
 		this.drop = drop;
@@ -19,12 +20,14 @@ public class Enemy extends Entity{
 		if(speed == 5){
 			this.setEntityImage(game.getTextures().enemy2);
 			this.drop = true;
+			shootw = 30;
 		}else{
 			this.setEntityImage(game.getTextures().enemy);
 		}
 	}
 	
 	int deathticks = 0;
+	int shoot = 0;
 	@Override
 	public void tick(){
 		if(isDead()){
@@ -42,19 +45,28 @@ public class Enemy extends Entity{
 				Glide.game.getController().removeEnemy(this);
 				if(drop){
 					Random r = new Random();
-					int go = r.nextInt(3);
 					if(speed == 5){
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
 						return;
 					}
-					if(go == 1){
+					boolean go = r.nextBoolean();
+					if(go){
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_HEALTHPACK);
-					}else if(go == 2){
+					}else{
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_BEAM);
 					}
 				}
 			}
 		}else{
+			shoot ++;
+			if(shoot == shootw){
+				Random r = new Random();
+				if(r.nextBoolean()){
+					game.getController().addEnemyBullet(new EnemyBullet(getX(), getY() + 32, game));
+				}
+				shoot = 0;
+			}
+			
 			setY(getY() + speed);
 		}
 		
