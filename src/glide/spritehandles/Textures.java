@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class Textures {
 	
-	public BufferedImage player,enemy,enemy2,bullet,healthbar1,healthbar2,healthbar3,healthpack,beam,diamond;
+	public BufferedImage player,enemy,enemy2,bullet,healthbar1,healthbar2,healthbar3,healthpack,beam,diamond,des1,des2,des3;
 	
 	private SpriteSheet sprite_sheet = null;
 	public Textures(Game game){
@@ -26,5 +26,8 @@ public class Textures {
 		healthpack = sprite_sheet.grabImage(5, 1, 32,32);
 		beam = sprite_sheet.grabImage(5, 2, 32,32);
 		diamond = sprite_sheet.grabImage(5, 3, 32,32);
+		des1 = sprite_sheet.grabImage(1, 8, 32,32);
+		des2 = sprite_sheet.grabImage(2, 8, 32,32);
+		des3 = sprite_sheet.grabImage(3, 8, 32,32);
 	}
 }

@@ -36,43 +36,47 @@ public class Controller {
 			}
 			for(int i2 = 0; i2 < b.size(); i2++){
 				if(Bounds.intersectsWith(e.get(i), b.get(i2))){
-					e.get(i).die();
-					removeBullet(b.get(i2));
-					game.setScore(game.getScore() + e.get(i).speed);
-					removeEnemy(e.get(i));
+					if(!e.get(i).isDead()){
+						e.get(i).die();
+						removeBullet(b.get(i2));
+					}
 				}
 			}
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
-				int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 3;
-				if(h == 3){
-					removeAll();
-					game.getHealthBar().setHealth(3);
-					game.setScore(0);
-					double x = game.getPlayer().getX();
-					double y = game.getPlayer().getX();
-					game.setPlayer(new Player(x, y, game));
-					game.getPlayer().setX(((Game.WIDTH * Game.SCALE) / 2) - 16);
-					game.getPlayer().setY((Game.HEIGHT * Game.SCALE) - 52);
-					
-				}else{
-					removeEnemy(e.get(i));
-					game.getHealthBar().setHealth(h);
+				if(!e.get(i).isDead()){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 3;
+					if(h == 3){
+						removeAll();
+						game.getHealthBar().setHealth(3);
+						game.setScore(0);
+						double x = game.getPlayer().getX();
+						double y = game.getPlayer().getX();
+						game.setPlayer(new Player(x, y, game));
+						game.getPlayer().setX(((Game.WIDTH * Game.SCALE) / 2) - 16);
+						game.getPlayer().setY((Game.HEIGHT * Game.SCALE) - 52);
+						
+					}else{
+						removeEnemy(e.get(i));
+						game.getHealthBar().setHealth(h);
+					}
 				}
 			}
 		}
 		for(int i = 0; i < drops.size();i++){
 			drops.get(i).tick();
 			if(Bounds.intersectsWith(drops.get(i), game.getPlayer())){
-				if(drops.get(i).getType() == Drop.TYPE_HEALTHPACK){
-					game.getHealthBar().setHealth(game.getHealthBar().getHealth() + 1);
+				if(!drops.get(i).isDead()){
+					if(drops.get(i).getType() == Drop.TYPE_HEALTHPACK){
+						game.getHealthBar().setHealth(game.getHealthBar().getHealth() + 1);
+					}
+					if(drops.get(i).getType() == Drop.TYPE_BEAM){
+						game.getPlayer().setBeaming(true);
+					}
+					if(drops.get(i).getType() == Drop.TYPE_DIAMOND){
+						game.setScore(game.getScore() + 15);
+					}
+					removeDrop(drops.get(i));
 				}
-				if(drops.get(i).getType() == Drop.TYPE_BEAM){
-					game.getPlayer().setBeaming(true);
-				}
-				if(drops.get(i).getType() == Drop.TYPE_DIAMOND){
-					game.setScore(game.getScore() + 15);
-				}
-				removeDrop(drops.get(i));
 			}
 		}
 		}catch(Exception e){

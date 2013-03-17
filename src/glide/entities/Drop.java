@@ -7,6 +7,7 @@ public class Drop extends Entity{
 	public static final int TYPE_HEALTHPACK = 8;
 	public static final int TYPE_BEAM = 9;
 	public static final int TYPE_DIAMOND = 10;
+	private boolean dead = false;
 	public Drop(double x, double y, Game game, int Type) {
 		super(x, y, game);
 		this.setType(Type);
@@ -20,24 +21,48 @@ public class Drop extends Entity{
 	}
 	
 	int dropc = 0;
+	int deathtick = 0;
 	@Override 
 	public void tick(){
 		dropc ++;
-		if(getType() == TYPE_DIAMOND){
-			if(dropc > 180){
+		if(isDead()){
+			if(deathtick < 5){
+				this.setEntityImage(Glide.game.getTextures().des1);
+				deathtick ++;
+			}else if(deathtick >= 5 && deathtick < 10){
+				this.setEntityImage(Glide.game.getTextures().des2);
+				deathtick ++;
+			}else if(deathtick >= 10 && deathtick < 15){
+				this.setEntityImage(Glide.game.getTextures().des3);
+				deathtick ++;
+			}else if(deathtick == 15){
 				Glide.game.getController().removeDrop(this);
-				dropc = 0;
 			}
-		}else if(getType() == TYPE_BEAM){
-			if(dropc > 240){
-				Glide.game.getController().removeDrop(this);
-				dropc = 0;
-			}
-		}else if(getType() == TYPE_HEALTHPACK){
-			if(dropc > 520){
-				Glide.game.getController().removeDrop(this);
-				dropc = 0;
+		}else{
+			if(getType() == TYPE_DIAMOND){
+				if(dropc > 180){
+					die();
+				}
+			}else if(getType() == TYPE_BEAM){
+				if(dropc > 240){
+					die();
+				}
+			}else if(getType() == TYPE_HEALTHPACK){
+				if(dropc > 520){
+					die();
+				}
 			}
 		}
+	}
+	
+	public void die(){
+		setDead(true);
+	}
+	
+	public boolean isDead() {
+		return dead;
+	}
+	public void setDead(boolean dead) {
+		this.dead = dead;
 	}
 }

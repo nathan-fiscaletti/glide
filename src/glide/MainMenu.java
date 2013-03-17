@@ -30,7 +30,7 @@ public class MainMenu extends Canvas implements Runnable{
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.1a";
+	public static final String TITLE = "Glide v0.2a";
 	private boolean running = false;
 	private Thread thread;
 	
