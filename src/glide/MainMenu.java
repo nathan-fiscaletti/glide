@@ -207,6 +207,7 @@ public class MainMenu extends Canvas implements Runnable{
 			}else if(selected == 3){
 				selected = 2;
 			}
+			Glide.select.play();
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -215,8 +216,10 @@ public class MainMenu extends Canvas implements Runnable{
 			}else if(selected == 3){
 				selected = 1;
 			}
+			Glide.select.play();
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
+				Glide.enter.play();
 				Game game = new Game();
 				game.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				game.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
@@ -233,6 +236,7 @@ public class MainMenu extends Canvas implements Runnable{
 				Glide.frame.pack();
 				Glide.game.start();
 			}else if(selected == 2){
+				Glide.enter.play();
 				HTPMenu htp = new HTPMenu();
 				htp.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				htp.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));

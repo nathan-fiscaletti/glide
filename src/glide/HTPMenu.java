@@ -182,6 +182,7 @@ public class HTPMenu extends Canvas implements Runnable{
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_ENTER){
+			Glide.enter.play();
 			MainMenu mm = new MainMenu();
 			mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 			mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));

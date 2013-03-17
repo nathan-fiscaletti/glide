@@ -40,6 +40,7 @@ public class Controller {
 					if(!e.get(i).isDead()){
 						e.get(i).die();
 						removeBullet(b.get(i2));
+						Glide.explosion.play();
 					}
 				}
 			}
@@ -47,20 +48,13 @@ public class Controller {
 				if(!e.get(i).isDead()){
 					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 3;
 					if(h == 3){
-						removeAll();
-						game.getHealthBar().setHealth(3);
-						game.setScore(0);
-						double x = game.getPlayer().getX();
-						double y = game.getPlayer().getX();
-						game.setPlayer(new Player(x, y, game));
-						game.getPlayer().setX(((Glide.WIDTH * Glide.SCALE) / 2) - 16);
-						game.getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 52);
-						
+						game.lose();
 					}else{
 						removeEnemy(e.get(i));
 						game.getHealthBar().setHealth(h);
 						game.getPlayer().hurt();
 					}
+					Glide.hurt.play();
 				}
 			}
 		}
@@ -78,6 +72,7 @@ public class Controller {
 						game.setScore(game.getScore() + 15);
 					}
 					removeDrop(drops.get(i));
+					Glide.pickup.play();
 				}
 			}
 		}

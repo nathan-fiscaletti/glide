@@ -26,7 +26,7 @@ public class Player extends Entity{
 		this.setX(this.getX()+velX);
 
 		if(isBeaming()){
-			if(!Glide.game.isPaused()){
+			if(!Glide.game.isPaused()  && !Glide.game.lost()){
 				Glide.game.getController().addBullet(new Bullet(getX(), getY() - 32, Glide.game));
 				beamtick ++;
 				if(beamtick > 420){

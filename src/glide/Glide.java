@@ -2,10 +2,17 @@ package glide;
 
 
 
+
+import glide.sounds.Sound;
+
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -16,7 +23,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.3a";
+	public static final String TITLE = "Glide v0.4a";
 	
 	
 	public static JFrame frame = new JFrame(TITLE);
@@ -24,6 +31,17 @@ public class Glide {
 	public static MainMenu mm;
 	public static HTPMenu htp;
 	public static boolean fullscreen = true;
+	
+	/* sounds */
+	public static final Sound explosion = new Sound("/sounds/explode.wav");
+	public static final Sound hurt = new Sound("/sounds/hurt.wav");
+	public static final Sound pickup = new Sound("/sounds/pickup.wav");
+	public static final Sound shoot = new Sound("/sounds/shoot.wav");
+	public static final Sound select = new Sound("/sounds/select.wav");
+	public static final Sound enter = new Sound("/sounds/enter.wav");
+	public static final Sound gameover = new Sound("/sounds/gameover.wav");
+	public static final Sound dropdeath = new Sound("/sounds/dropexplode.wav");
+	
 	public static void main(String[] args){
 		if(args.length > 0){
 			if(args[0].equalsIgnoreCase("-windowed")){
@@ -61,6 +79,7 @@ public class Glide {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
 		mm.start();
 		
 		if(fullscreen){
@@ -75,8 +94,14 @@ public class Glide {
 					
 				}
 			}
-			
 		}
+		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+
+		// Create a new blank cursor.
+		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+
+		// Set the blank cursor to the JFrame.
+		frame.getContentPane().setCursor(blankCursor);
 		
 	}
 
