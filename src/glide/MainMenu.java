@@ -13,8 +13,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-
 
 
 
@@ -45,6 +43,8 @@ public class MainMenu extends Canvas implements Runnable{
 	private int score = 0;
 	
 	private int selected = 1;
+	private int tps;
+	private int fps;
 	
 	/*
 	private int level = 1;
@@ -114,7 +114,8 @@ public class MainMenu extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				//System.out.println("TPS: " + updates + " , FPS:" + frames);
+				tps = updates;
+				fps = frames;
 				updates = 0;
 				frames = 0;
 			}
@@ -293,6 +294,22 @@ public class MainMenu extends Canvas implements Runnable{
 
 	public void setTextures(Textures textures) {
 		this.textures = textures;
+	}
+
+	public int getTps() {
+		return tps;
+	}
+
+	public void setTps(int tps) {
+		this.tps = tps;
+	}
+
+	public int getFps() {
+		return fps;
+	}
+
+	public void setFps(int fps) {
+		this.fps = fps;
 	}
 	
 

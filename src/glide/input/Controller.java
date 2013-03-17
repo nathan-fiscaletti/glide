@@ -83,7 +83,7 @@ public class Controller {
 	public void spawnEnemy(){
 		r = new Random();
 		Random r2 = new Random();
-		int g = r2.nextInt(6);
+		int g = r2.nextInt(4);
 		boolean doit = (g == 3) ? true : false;
 		addEnemy(new Enemy(r.nextInt(Game.WIDTH * Game.SCALE), -5, game, doit));
 	}
