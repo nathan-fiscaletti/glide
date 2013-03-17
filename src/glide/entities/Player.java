@@ -8,6 +8,9 @@ public class Player extends Entity{
 	private double velY = 0;
 	private boolean shooting = false;
 	private boolean beaming = false;
+	private boolean hurting = false;
+	private boolean t = true;
+	private boolean t2 = true;
 
 	public Player(double x, double y, Game game){
 		super(x, y, game);
@@ -16,6 +19,7 @@ public class Player extends Entity{
 	}
 	
 	int beamtick = 0;
+	int hurttick = 0;
 	@Override
 	public void tick(){
 		this.setY(this.getY()+velY);
@@ -30,16 +34,40 @@ public class Player extends Entity{
 					beamtick = 0;
 				}
 			}
+			setEntityImage(game.getTextures().player2);
+			t = false;
+		}else if(!t){
+			setEntityImage(game.getTextures().player);
+			t = true;
+		}
+		
+		if(hurttick < 10 && isHurting()){
+			setEntityImage(game.getTextures().playerhurt);
+			t2 = false;
+			hurttick ++;
+		}else if(!t2){
+			hurttick = 0;
+			if(!isBeaming()){
+				setEntityImage(game.getTextures().player);
+			}else{
+				setEntityImage(game.getTextures().player2);
+			}
+			t2 = true;
+			setHurting(false);
 		}
 		
 		if(this.getX() < 0)
 			this.setX(0);
-		if(this.getX() >= 640 - 22)
-			this.setX(640 - 22);
+		if(this.getX() >= (Glide.WIDTH * Glide.SCALE) - 22)
+			this.setX((Glide.WIDTH * Glide.SCALE) - 22);
 		if(this.getY() <= 0)
 			this.setY(0);
-		if(this.getY() >= 480 - 32)
-			this.setY(480 - 32);
+		if(this.getY() >= (Glide.HEIGHT * Glide.SCALE) - 32)
+			this.setY((Glide.HEIGHT * Glide.SCALE) - 32);
+	}
+	
+	public void hurt(){
+		setHurting(true);
 	}
 	
 	
@@ -67,5 +95,13 @@ public class Player extends Entity{
 
 	public void setBeaming(boolean beam) {
 		this.beaming = beam;
+	}
+
+	public boolean isHurting() {
+		return hurting;
+	}
+
+	public void setHurting(boolean hurting) {
+		this.hurting = hurting;
 	}
 }

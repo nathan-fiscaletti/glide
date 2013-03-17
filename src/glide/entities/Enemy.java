@@ -15,8 +15,8 @@ public class Enemy extends Entity{
 		this.drop = drop;
 		this.setType(Entity.TYPE_ENEMY);
 		Random r = new Random();
-		speed = r.nextInt(4 - 1 + 1) + 1;
-		if(speed == 4){
+		speed = r.nextInt(5 - 1 + 1) + 1;
+		if(speed == 5){
 			this.setEntityImage(game.getTextures().enemy2);
 			this.drop = true;
 		}else{
@@ -28,7 +28,6 @@ public class Enemy extends Entity{
 	@Override
 	public void tick(){
 		if(isDead()){
-			System.out.println(deathticks);
 			if(deathticks < 5){
 				this.setEntityImage(Glide.game.getTextures().des1);
 				deathticks ++;
@@ -44,7 +43,7 @@ public class Enemy extends Entity{
 				if(drop){
 					Random r = new Random();
 					int go = r.nextInt(3);
-					if(speed == 4){
+					if(speed == 5){
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
 						return;
 					}

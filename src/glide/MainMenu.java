@@ -24,13 +24,7 @@ public class MainMenu extends Canvas implements Runnable{
 	private static final long serialVersionUID = -4093553489357496142L;
 	
 	
-	/* Dimensions for the game */
-	public static final int WIDTH = 320;
-	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 2;
-	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.2a";
 	private boolean running = false;
 	private Thread thread;
 	
@@ -62,9 +56,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
 		addKeyListener(new MenuKeyInput(this));
-		
 	}
 	
 	/* Thread Control */
@@ -148,7 +140,7 @@ public class MainMenu extends Canvas implements Runnable{
 		/* Logo */
 		int logow = logo.getWidth();
 		int logoh = logo.getHeight();
-		g.drawImage(logo, ((WIDTH * SCALE) / 2) - (logow / 2), 120, null);
+		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
 		
 		
 		/* Menu Items */
@@ -162,7 +154,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}
 		String sco = "Play";
 		int w = g.getFontMetrics().stringWidth(sco);
-		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((WIDTH * SCALE) / 2) - (w / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 49 + logoh));
+		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 49 + logoh));
 		////
 		
 		
@@ -175,7 +167,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}
 		String sco2 = "How To Play";
 		int w2 = g.getFontMetrics().stringWidth(sco2);
-		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((WIDTH * SCALE) / 2) - (w2 / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
+		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
 		///
 		
 		
@@ -188,7 +180,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}
 		String sco3 = "Exit";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((WIDTH * SCALE) / 2) - (w3 / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -226,9 +218,9 @@ public class MainMenu extends Canvas implements Runnable{
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
 				Game game = new Game();
-				game.setPreferredSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				game.setMaximumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				game.setMinimumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
+				game.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				game.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				game.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				try {
 					stop();
 				} catch (Exception e1) {
@@ -242,9 +234,9 @@ public class MainMenu extends Canvas implements Runnable{
 				Glide.game.start();
 			}else if(selected == 2){
 				HTPMenu htp = new HTPMenu();
-				htp.setPreferredSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				htp.setMaximumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				htp.setMinimumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
+				htp.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				htp.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				htp.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				
 				try{
 					stop();
@@ -285,7 +277,7 @@ public class MainMenu extends Canvas implements Runnable{
 	}
 
 	public static int getScale() {
-		return SCALE;
+		return Glide.SCALE;
 	}
 	
 	public Textures getTextures() {

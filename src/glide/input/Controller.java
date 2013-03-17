@@ -1,6 +1,7 @@
 package glide.input;
 
 import glide.Game;
+import glide.Glide;
 import glide.entities.Bullet;
 import glide.entities.Drop;
 import glide.entities.Enemy;
@@ -31,7 +32,7 @@ public class Controller {
 		try{
 		for(int i = 0; i < e.size(); i++){
 			e.get(i).tick();
-			if(e.get(i).getY() > (Game.HEIGHT * Game.SCALE)){
+			if(e.get(i).getY() > (Glide.HEIGHT * Glide.SCALE)){
 				removeEnemy(e.get(i));
 			}
 			for(int i2 = 0; i2 < b.size(); i2++){
@@ -52,12 +53,13 @@ public class Controller {
 						double x = game.getPlayer().getX();
 						double y = game.getPlayer().getX();
 						game.setPlayer(new Player(x, y, game));
-						game.getPlayer().setX(((Game.WIDTH * Game.SCALE) / 2) - 16);
-						game.getPlayer().setY((Game.HEIGHT * Game.SCALE) - 52);
+						game.getPlayer().setX(((Glide.WIDTH * Glide.SCALE) / 2) - 16);
+						game.getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 52);
 						
 					}else{
 						removeEnemy(e.get(i));
 						game.getHealthBar().setHealth(h);
+						game.getPlayer().hurt();
 					}
 				}
 			}
@@ -87,9 +89,9 @@ public class Controller {
 	public void spawnEnemy(){
 		r = new Random();
 		Random r2 = new Random();
-		int g = r2.nextInt(4);
-		boolean doit = (g == 3) ? true : false;
-		addEnemy(new Enemy(r.nextInt(Game.WIDTH * Game.SCALE), -5, game, doit));
+		int g = r2.nextInt(5);
+		boolean doit = (g == 4) ? true : false;
+		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, doit));
 	}
 	
 	public void spawnDrop(double x, double y, int type){

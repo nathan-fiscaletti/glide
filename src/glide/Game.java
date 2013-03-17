@@ -26,17 +26,11 @@ public class Game extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = -4093553489357496142L;
 	
-	/* Dimensions for the game */
-	public static final int WIDTH = 320;
-	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 2;
-	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.2a";
 	private boolean running = false;
 	private Thread thread;
 	
-	private BufferedImage image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
+	private BufferedImage image = new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
 	private BufferedImage background = null;
 	
@@ -74,7 +68,7 @@ public class Game extends Canvas implements Runnable{
 		
 		setTextures(new Textures(this));
 		
-		p = new Player(((Game.WIDTH * Game.SCALE) / 2) - 16, (Game.HEIGHT * Game.SCALE) - 52, this);
+		p = new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
 		
@@ -147,7 +141,7 @@ public class Game extends Canvas implements Runnable{
 			p.tick();
 			c.tick();
 			healthBar.tick();
-			if(adde == 60){
+			if(adde == 20){
 				this.c.spawnEnemy();
 				adde = 0;
 			}
@@ -183,8 +177,8 @@ public class Game extends Canvas implements Runnable{
 			String pause = "Press 'Escape' to resume";
 			String pause2 = "Press 'q' to return to Main Menu";
 			g.setFont(new Font("Ariel", Font.BOLD, 36));
-			g.drawChars(pause.toCharArray(), 0, pause.toCharArray().length, ((WIDTH * SCALE) / 2) - (g.getFontMetrics().stringWidth(pause) / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 38));
-			g.drawChars(pause2.toCharArray(), 0, pause2.toCharArray().length, ((WIDTH * SCALE) / 2) - (g.getFontMetrics().stringWidth(pause2) / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent()));
+			g.drawChars(pause.toCharArray(), 0, pause.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(pause) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 38));
+			g.drawChars(pause2.toCharArray(), 0, pause2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(pause2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent()));
 			g.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
 		
@@ -193,7 +187,7 @@ public class Game extends Canvas implements Runnable{
 			String status = "TPS: " + getTps() + " |  FPS: " + getFps();
 			g.setFont(new Font("Ariel", Font.BOLD, 12));
 			g.setColor(Color.ORANGE);
-			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((WIDTH * SCALE)) - (g.getFontMetrics().stringWidth(status) / 2) - 64, ((HEIGHT * SCALE)) + (g.getFontMetrics().getDescent()) - 15);
+			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status) / 2) - 64, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 15);
 		}
 		
 		////////////////////////////////////////////////////////
@@ -254,9 +248,9 @@ public class Game extends Canvas implements Runnable{
 		}else if(key == KeyEvent.VK_Q){
 			if(isPaused()){
 				MainMenu mm = new MainMenu();
-				mm.setPreferredSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				mm.setMaximumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-				mm.setMinimumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
+				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				mm.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				try {
 					stop();
 				} catch (Exception e1) {
@@ -306,7 +300,7 @@ public class Game extends Canvas implements Runnable{
 	}
 
 	public static int getScale() {
-		return SCALE;
+		return Glide.SCALE;
 	}
 
 	

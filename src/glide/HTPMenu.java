@@ -23,13 +23,7 @@ public class HTPMenu extends Canvas implements Runnable{
 	private static final long serialVersionUID = -4093553489357496142L;
 	
 	
-	/* Dimensions for the game */
-	public static final int WIDTH = 320;
-	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 2;
-	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.2a";
 	private boolean running = false;
 	private Thread thread;
 	
@@ -148,16 +142,16 @@ public class HTPMenu extends Canvas implements Runnable{
 		/* Logo */
 		int logow = logo.getWidth();
 		int logoh = logo.getHeight();
-		g.drawImage(logo, ((WIDTH * SCALE) / 2) - (logow / 2), 120, null);
+		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
 		
 		String htp = "Use the arrow keys to move your spaceship back and forth";
 		String htp2 = "Use space to shoot and destroy enemies"; 
 		String htp3 = "Pick up drops along the way, and defeat the enemy invaders!";
 		
 		g.setColor(Color.ORANGE);
-		g.drawChars(htp.toCharArray(), 0, htp.toCharArray().length, ((WIDTH * SCALE) / 2) - (g.getFontMetrics().stringWidth(htp) / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 78 + logoh));
-		g.drawChars(htp2.toCharArray(), 0, htp2.toCharArray().length, ((WIDTH * SCALE) / 2) - (g.getFontMetrics().stringWidth(htp2) / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 62 + logoh));
-		g.drawChars(htp3.toCharArray(), 0, htp3.toCharArray().length, ((WIDTH * SCALE) / 2) - (g.getFontMetrics().stringWidth(htp3) / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() - 46 + logoh));
+		g.drawChars(htp.toCharArray(), 0, htp.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 78 + logoh));
+		g.drawChars(htp2.toCharArray(), 0, htp2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 62 + logoh));
+		g.drawChars(htp3.toCharArray(), 0, htp3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp3) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 46 + logoh));
 		
 		
 		/* Menu Items */
@@ -169,7 +163,7 @@ public class HTPMenu extends Canvas implements Runnable{
 		g.setColor(Color.GREEN);
 		String sco3 = "Back";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((WIDTH * SCALE) / 2) - (w3 / 2), ((HEIGHT * SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -189,9 +183,9 @@ public class HTPMenu extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_ENTER){
 			MainMenu mm = new MainMenu();
-			mm.setPreferredSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-			mm.setMaximumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
-			mm.setMinimumSize(new Dimension(MainMenu.WIDTH * MainMenu.SCALE, MainMenu.HEIGHT * MainMenu.SCALE));
+			mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+			mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+			mm.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 			try {
 				stop();
 			} catch (Exception e1) {
@@ -210,7 +204,7 @@ public class HTPMenu extends Canvas implements Runnable{
 	}
 
 	public static int getScale() {
-		return SCALE;
+		return Glide.SCALE;
 	}
 	
 	public Textures getTextures() {
