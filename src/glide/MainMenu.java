@@ -170,17 +170,28 @@ public class MainMenu extends Canvas implements Runnable{
 		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
 		///
 		
-		
-		//Exit
+		//Options
 		///
 		if(selected == 3){
 			g.setColor(Color.GREEN);
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
+		sco2 = "Options";
+		w2 = g.getFontMetrics().stringWidth(sco2);
+		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		///
+		
+		//Exit
+		///
+		if(selected == 4){
+			g.setColor(Color.GREEN);
+		}else{
+			g.setColor(Color.DARK_GRAY);
+		}
 		String sco3 = "Exit";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -201,11 +212,13 @@ public class MainMenu extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
 			if(selected == 1){
-				selected = 3;
+				selected = 4;
 			}else if(selected == 2){
 				selected = 1;
 			}else if(selected == 3){
 				selected = 2;
+			}else if(selected == 4){
+				selected = 3;
 			}
 			Glide.select.play();
 		}else if (key == KeyEvent.VK_DOWN){
@@ -214,6 +227,8 @@ public class MainMenu extends Canvas implements Runnable{
 			}else if(selected == 2){
 				selected = 3;
 			}else if(selected == 3){
+				selected = 4;
+			}else if(selected == 4){
 				selected = 1;
 			}
 			Glide.select.play();
@@ -230,11 +245,18 @@ public class MainMenu extends Canvas implements Runnable{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				Glide.game = game;
-				Glide.frame.remove(Glide.mm);
-				Glide.frame.add(Glide.game);
-				Glide.frame.pack();
-				Glide.game.start();
+				if(!GlideSystem.isApplet){
+					Glide.game = game;
+					Glide.frame.remove(Glide.mm);
+					Glide.frame.add(Glide.game);
+					Glide.frame.pack();
+					Glide.game.start();
+				}else{
+					GlideApplet.game = game;
+					GlideApplet.frame.remove(GlideApplet.mm);
+					GlideApplet.frame.add(GlideApplet.game);
+					GlideApplet.game.start();
+				}
 			}else if(selected == 2){
 				Glide.enter.play();
 				HTPMenu htp = new HTPMenu();
@@ -247,14 +269,44 @@ public class MainMenu extends Canvas implements Runnable{
 				} catch (Exception e1){
 					e1.printStackTrace();
 				}
-				
-				Glide.htp = htp;
-				Glide.frame.remove(Glide.mm);
-				Glide.frame.add(Glide.htp);
-				Glide.frame.pack();
-				Glide.htp.start();
+				if(!GlideSystem.isApplet){
+					Glide.htp = htp;
+					Glide.frame.remove(Glide.mm);
+					Glide.frame.add(Glide.htp);
+					Glide.frame.pack();
+					Glide.htp.start();
+				}else{
+					GlideApplet.htp = htp;
+					GlideApplet.frame.remove(GlideApplet.mm);
+					GlideApplet.frame.add(GlideApplet.htp);
+					GlideApplet.htp.start();
+				}
 				
 			}else if(selected == 3){
+				Glide.enter.play();
+				OptionsMenu op = new OptionsMenu();
+				op.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				op.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				op.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				
+				try{
+					stop();
+				} catch (Exception e1){
+					e1.printStackTrace();
+				}
+				if(!GlideSystem.isApplet){
+					Glide.op = op;
+					Glide.frame.remove(Glide.mm);
+					Glide.frame.add(Glide.op);
+					Glide.frame.pack();
+					Glide.op.start();
+				}else{
+					GlideApplet.op = op;
+					GlideApplet.frame.remove(GlideApplet.mm);
+					GlideApplet.frame.add(GlideApplet.op);
+					GlideApplet.op.start();
+				}
+			}else if(selected == 4){
 				System.exit(0);
 			}
 		}

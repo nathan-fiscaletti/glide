@@ -10,6 +10,8 @@ public class Enemy extends Entity{
 	public int speed;
 	public boolean drop;
 	private boolean dead;
+	public boolean isBomb = false;
+	public int lives = 1;
 	int shootw = 120;
 	public Enemy(double x, double y, Game game, boolean drop) {
 		super(x, y, game);
@@ -21,6 +23,21 @@ public class Enemy extends Entity{
 			this.setEntityImage(game.getTextures().enemy2);
 			this.drop = true;
 			shootw = 30;
+		}else if(speed == 1){
+			Random r2 = new Random();
+			int rr = r2.nextInt(10);
+			if(rr == 5){
+				this.setEntityImage(game.getTextures().enemy3);
+				this.drop = false;
+				shootw = 10000000;
+				isBomb = true;
+				lives = 2;
+			}else{
+				Random r3 = new Random();
+				int asdf = r3.nextInt(4 - 2 + 1) + 2;
+				speed = asdf;
+				this.setEntityImage(game.getTextures().enemy);
+			}
 		}else{
 			this.setEntityImage(game.getTextures().enemy);
 		}
@@ -72,6 +89,10 @@ public class Enemy extends Entity{
 		
 	}
 
+	public void die(boolean in){
+		drop = in;
+		setDead(true);
+	}
 	public void die(){
 		setDead(true);
 	}

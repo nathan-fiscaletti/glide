@@ -61,7 +61,12 @@ public class Controller {
 			for(int i2 = 0; i2 < b.size(); i2++){
 				if(Bounds.intersectsWith(e.get(i), b.get(i2))){
 					if(!e.get(i).isDead()){
-						e.get(i).die();
+						if(e.get(i).lives == 1){
+							e.get(i).die();
+							
+						}else{
+							e.get(i).lives --;
+						}
 						removeBullet(b.get(i2));
 						Glide.explosion.play();
 					}
@@ -73,7 +78,17 @@ public class Controller {
 					if(h == 5){
 						game.lose();
 					}else{
-						removeEnemy(e.get(i));
+						if(e.get(i).isBomb){
+							h = (h > 1) ? h -1 : 5;
+							if(h == 5){
+								game.lose();
+							}
+						}
+						if(e.get(i).isBomb){
+							e.get(i).die(false);
+						}else{
+							removeEnemy(e.get(i));
+						}
 						game.getHealthBar().setHealth(h);
 						game.getPlayer().hurt();
 					}

@@ -3,7 +3,9 @@ package glide;
 
 
 
-import glide.sounds.Sound;
+
+import glide.soundsystem.Sound;
+import glide.soundsystem.Sound2;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -16,6 +18,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+
 public class Glide {
 	/* Dimensions for the game */
 	public static final int WIDTH = 400; 
@@ -23,13 +26,15 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.5a";
+	public static final String TITLE = "Glide v0.7a";
 	
 	
 	public static JFrame frame = new JFrame(TITLE);
 	public static Game game;
 	public static MainMenu mm;
 	public static HTPMenu htp;
+	public static OptionsMenu op;
+	public static boolean audio = true; 
 	public static boolean fullscreen = true;
 	
 	/* sounds */
@@ -41,13 +46,12 @@ public class Glide {
 	public static final Sound enter = new Sound("/sounds/enter.wav");
 	public static final Sound gameover = new Sound("/sounds/gameover.wav");
 	public static final Sound dropdeath = new Sound("/sounds/dropexplode.wav");
+	public static final Sound2 backgroundmusic = new Sound2("/sounds/cr.wav");
 	
 	public static void main(String[] args){
 		if(args.length > 0){
 			if(args[0].equalsIgnoreCase("-windowed")){
 				fullscreen = false;
-			}else{
-				
 			}
 		}	
 		if(fullscreen){
@@ -95,6 +99,10 @@ public class Glide {
 				}
 			}
 		}
+		
+		Glide.backgroundmusic.setVolume(-5.0f);
+		Glide.backgroundmusic.loop();
+		
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 
 		// Create a new blank cursor.
