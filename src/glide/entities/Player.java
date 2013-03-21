@@ -8,6 +8,7 @@ public class Player extends Entity{
 	private double velY = 0;
 	private boolean shooting = false;
 	private boolean beaming = false;
+	private boolean plasma = false;
 	private boolean hurting = false;
 	private boolean t = true;
 	private boolean t2 = true;
@@ -20,13 +21,16 @@ public class Player extends Entity{
 	
 	int beamtick = 0;
 	int hurttick = 0;
+	int plasmatick = 0;
 	@Override
 	public void tick(){
 		this.setY(this.getY()+velY);
 		this.setX(this.getX()+velX);
-
+		
+		
+		
 		if(isBeaming()){
-			if(!Glide.game.isPaused()  && !Glide.game.lost()){
+			if(!Glide.game.isPaused()  && !Glide.game.lost() && !Glide.game.won()){
 				Glide.game.getController().addBullet(new Bullet(getX(), getY() - 32, Glide.game));
 				beamtick ++;
 				if(beamtick > 420){
@@ -40,6 +44,21 @@ public class Player extends Entity{
 			setEntityImage(game.getTextures().player);
 			t = true;
 		}
+		
+		if(isPlasma()){
+			if(!Glide.game.isPaused() && !Glide.game.lost() && !Glide.game.won()){
+				plasmatick++;
+				if(plasmatick > 840){
+					setPlasma(false);
+					game.plasma = false;
+					plasmatick = 0;
+				}else{
+					game.plasma = true;
+				}
+					
+			}
+		}
+	
 		
 		if(hurttick < 10 && isHurting()){
 			setEntityImage(game.getTextures().playerhurt);
@@ -103,5 +122,13 @@ public class Player extends Entity{
 
 	public void setHurting(boolean hurting) {
 		this.hurting = hurting;
+	}
+
+	public boolean isPlasma() {
+		return plasma;
+	}
+
+	public void setPlasma(boolean plasma) {
+		this.plasma = plasma;
 	}
 }

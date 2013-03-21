@@ -34,15 +34,19 @@ public class Controller {
 			try{
 			eb.get(i).tick();
 			if(Bounds.intersectsWith(eb.get(i), game.getPlayer())){
-				int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-				if(h == 5){
-					game.lose();
+				if(!game.getPlayer().isPlasma()){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+					if(h == 5){
+						game.lose();
+					}else{
+						removeEnemyBullet(eb.get(i));
+						game.getHealthBar().setHealth(h);
+						game.getPlayer().hurt();
+					}
+					Glide.hurt.play();
 				}else{
 					removeEnemyBullet(eb.get(i));
-					game.getHealthBar().setHealth(h);
-					game.getPlayer().hurt();
 				}
-				Glide.hurt.play();
 			}
 			
 				if(eb.get(i).getY() > (Glide.HEIGHT * Glide.SCALE))
@@ -56,14 +60,20 @@ public class Controller {
 		for(int i = 0; i < e.size(); i++){
 			e.get(i).tick();
 			if(e.get(i).getY() > (Glide.HEIGHT * Glide.SCALE)){
-				removeEnemy(e.get(i));
+				if(e.get(i).isBomb){
+					//The bomb reached bottom of screen
+					e.get(i).blowUpBomb();
+					game.lose();
+					
+				}else{
+					removeEnemy(e.get(i));
+				}
 			}
 			for(int i2 = 0; i2 < b.size(); i2++){
 				if(Bounds.intersectsWith(e.get(i), b.get(i2))){
 					if(!e.get(i).isDead()){
 						if(e.get(i).lives == 1){
 							e.get(i).die();
-							
 						}else{
 							e.get(i).lives --;
 						}
@@ -74,25 +84,33 @@ public class Controller {
 			}
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
 				if(!e.get(i).isDead()){
-					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-					if(h == 5){
-						game.lose();
-					}else{
-						if(e.get(i).isBomb){
-							h = (h > 1) ? h -1 : 5;
-							if(h == 5){
-								game.lose();
+					if(!game.getPlayer().isPlasma()){
+						int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+						if(h == 5){
+							game.lose();
+						}else{
+							if(e.get(i).isBomb){
+									h = 5;
+									game.lose();
+							}else{
+								if(e.get(i).isBomb){
+									e.get(i).die(false);
+								}else{
+									removeEnemy(e.get(i));
+								}
 							}
+							game.getHealthBar().setHealth(h);
+							game.getPlayer().hurt();
 						}
+						Glide.hurt.play();
+					}else{
 						if(e.get(i).isBomb){
 							e.get(i).die(false);
 						}else{
-							removeEnemy(e.get(i));
+							e.get(i).die();
+							Glide.explosion.play();
 						}
-						game.getHealthBar().setHealth(h);
-						game.getPlayer().hurt();
 					}
-					Glide.hurt.play();
 				}
 			}
 		}
@@ -109,6 +127,10 @@ public class Controller {
 					if(drops.get(i).getType() == Drop.TYPE_DIAMOND){
 						game.setScore(game.getScore() + 15);
 					}
+					if(drops.get(i).getType() == Drop.TYPE_PLASMA){
+						game.getPlayer().setPlasma(true);
+						game.plasma = true;
+					}
 					removeDrop(drops.get(i));
 					Glide.pickup.play();
 				}
@@ -122,8 +144,8 @@ public class Controller {
 	public void spawnEnemy(){
 		r = new Random();
 		Random r2 = new Random();
-		int g = r2.nextInt(5);
-		boolean doit = (g == 4) ? true : false;
+		int g = r2.nextInt(3);
+		boolean doit = (g == 2) ? true : false;
 		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, doit));
 	}
 	
@@ -133,16 +155,32 @@ public class Controller {
 	
 	public void render(Graphics g){
 		for(int i = 0; i < b.size(); i++){
-			b.get(i).render(g);
+			try{
+				b.get(i).render(g);
+			}catch(Exception e){
+				
+			}
 		}
 		for(int i = 0; i < e.size(); i++){
-			e.get(i).render(g);
+			try{
+				e.get(i).render(g);
+			}catch(Exception e){
+				
+			}
 		}
 		for(int i = 0; i < drops.size(); i++){
-			drops.get(i).render(g);
+			try{
+				drops.get(i).render(g);
+			}catch(Exception e){
+				
+			}
 		}
 		for(int i = 0; i < eb.size(); i++){
-			eb.get(i).render(g);
+			try{
+				eb.get(i).render(g);
+			}catch(Exception e){
+				
+			}
 		}
 	}
 	

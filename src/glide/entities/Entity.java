@@ -17,6 +17,8 @@ public class Entity {
 	
 	public static final int TYPE_ENEMYBULLET = 11;
 	
+	public static final int TYPE_PLASMAPLAYER = 13;
+	
 	private double x;
 	private double y;
 	private int type;

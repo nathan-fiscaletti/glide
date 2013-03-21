@@ -141,7 +141,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 		int logow = logo.getWidth();
 		int logoh = logo.getHeight();
 		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
-		String op = "Optoins";
+		String op = "Options";
 		f = new Font("Ariel", Font.BOLD, 32);
 		g.setFont(f);
 		g.setColor(Color.ORANGE);
@@ -150,6 +150,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 		
 		
 		/* Menu Items */
+		
 		f = new Font("Ariel", Font.BOLD, 24);
 		g.setFont(f);
 		//Audio
@@ -159,23 +160,36 @@ public class OptionsMenu extends Canvas implements Runnable{
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
-		String sco = "Audio - " + ((Glide.audio) ? "Enabled" : "Disabled");
+		String sco = "Music - " + ((Glide.music) ? "Enabled" : "Disabled");
 		w = g.getFontMetrics().stringWidth(sco);
 		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 49 + logoh));
 		////
 		//
 		
+		//Sounds
+			/////
+			if(selected == 2){
+				g.setColor(Color.GREEN);
+			}else{
+				g.setColor(Color.DARK_GRAY);
+			}
+			sco = "Sounds - " + ((Glide.sounds) ? "Enabled" : "Disabled");
+			w = g.getFontMetrics().stringWidth(sco);
+			g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh - 13));
+			////
+			//
+		
 		
 		//Back
 		///
-		if(selected == 2){
+		if(selected == 3){
 			g.setColor(Color.GREEN);
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
 		String sco3 = "Back";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 49));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -196,26 +210,37 @@ public class OptionsMenu extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
 			if(selected == 1){
-				selected = 2;
+				selected = 3;
 			}else if(selected == 2){
 				selected = 1;
+			}else if(selected == 3){
+				selected = 2;
 			}
 			Glide.select.play();
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
 			}else if(selected == 2){
+				selected = 3;
+			}else if(selected == 3){
 				selected = 1;
 			}
 			Glide.select.play();
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
-				if(Glide.audio){
-					mute();
+				if(Glide.music){
+					muteMusic();
 				}else{
-					unmute();
+					unmuteMusic();
 				}
 			}else if(selected == 2){
+				if(Glide.sounds){
+					muteSounds();
+				}else{
+					unmuteSounds();
+				}
+			}else if(selected == 3){
+
 				Glide.enter.play();
 				MainMenu mm = new MainMenu();
 				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
@@ -239,18 +264,26 @@ public class OptionsMenu extends Canvas implements Runnable{
 					GlideApplet.frame.add(GlideApplet.mm);
 					GlideApplet.mm.start();
 				}
+
 			}
 		}
 		
 
 	}
-	public void mute(){
-		Glide.audio = false;
+	public void muteMusic(){
+		Glide.music = false;
 		Glide.backgroundmusic.setVolume(-1000.0f);
 	}
-	public void unmute(){
-		Glide.audio = true;
+	public void unmuteMusic(){
+		Glide.music = true;
 		Glide.backgroundmusic.setVolume(-5.0f);
+	}
+	
+	public void muteSounds(){
+		Glide.sounds = false;
+	}
+	public void unmuteSounds(){
+		Glide.sounds = true;
 	}
 	public void keyReleased(KeyEvent e){
 		/*

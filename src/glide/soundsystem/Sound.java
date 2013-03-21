@@ -23,7 +23,7 @@ public class Sound {
 		try{
 			new Thread(){
 				public void run(){
-					if(Glide.audio){
+					if(Glide.sounds){
 						clip.play();
 					}
 				}

@@ -2,6 +2,7 @@ package glide;
 
 import glide.entities.Bullet;
 import glide.entities.HealthBar;
+import glide.entities.Plasma;
 import glide.entities.Player;
 import glide.input.Controller;
 import glide.input.KeyInput;
@@ -39,6 +40,7 @@ public class Game extends Canvas implements Runnable{
 	private Player p;
 	private Controller c;
 	private HealthBar healthBar;
+	private Plasma plasmae;
 	
 	private Textures textures;
 	
@@ -47,7 +49,16 @@ public class Game extends Canvas implements Runnable{
 	private boolean status = true;
 	private boolean lost = false;
 	private boolean won = false;
+	public boolean plasma = false;
 	
+	/* Bomb Spawning */
+	public int bsc = 0;
+	
+	
+	/*
+	 * private int level = 6;
+	 * private int lv2 = 5;
+	 */
 	private int level = 6;
 	private int lv2 = 5;
 	
@@ -75,8 +86,7 @@ public class Game extends Canvas implements Runnable{
 		p = (GlideSystem.isApplet) ? new Player(((GlideApplet.WIDTH * GlideApplet.SCALE) / 2) - 16, (GlideApplet.HEIGHT * GlideApplet.SCALE) - 52, this) : new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
-		
-		
+		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
 	}
 	
 	/* Thread Control */
@@ -139,15 +149,32 @@ public class Game extends Canvas implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	int adde = -120;
+	int adde = -60;
 	int lvlup = 0;
+	//5 ticks = lvl10
+	
+	int lvl10 = 120;
+	int lvl9 = 90;
+	int lvl8 = 60;
+	int lvl7 = 45;
+	int lvl6 = 30;
+	int lvl4 = 25;
+	int lvl3 = 20;
+	int lvl2 = 10;
+	int lvl1 = 5;
+	
+	int curlvl = 120;
 	
 	private void tick(){
 		if(!isPaused() && !lost() && !won()){
 			p.tick();
 			c.tick();
+			plasmae.tick();
 			healthBar.tick();
-			if(adde == level * lv2){
+			lvlup ++;
+			adde++;
+			System.out.println("ADDE: " + adde + ", CURLVL: " + curlvl);
+			if(adde == curlvl){
 				this.c.spawnEnemy();
 				adde = 0;
 			}
@@ -162,12 +189,38 @@ public class Game extends Canvas implements Runnable{
 					}
 				}
 				lvlup = 0;
+				//When you're doing it?..
+				curlvl = clu(curlvl);
+				adde = 0;
 			}
-			lvlup ++;
-			adde++;
 		}
 	}
 	
+	
+	
+	private int clu(int in){
+		if(in == 120)
+			return 90;
+		if(in == 90)
+			return 60;
+		if(in == 60)
+			return 45;
+		if (in == 45)
+			return 30;
+		if (in == 30)
+			return 25;
+		if (in == 25)
+			return 20;
+		if (in == 20)
+			return 15;
+		if (in == 15)
+			return 10;
+		if (in == 10)
+			return 5;
+		
+		return 120;
+		
+	}
 	private void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
@@ -181,7 +234,13 @@ public class Game extends Canvas implements Runnable{
 		
 		g.drawImage(background, 0, 0, null);
 		
+		
 		p.render(g);
+		if(plasma){
+			plasmae.setX(p.getX());
+			plasmae.setY(p.getY());
+			plasmae.render(g);
+		}
 		c.render(g);
 		
 		g.setFont(new Font("Ariel", Font.BOLD, 24));
@@ -303,11 +362,6 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	
-
-	
-	public Game() {
-		
-	}
 	public int getScore() {
 		return score;
 	}

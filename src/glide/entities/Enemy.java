@@ -19,28 +19,25 @@ public class Enemy extends Entity{
 		this.setType(Entity.TYPE_ENEMY);
 		Random r = new Random();
 		speed = r.nextInt(5 - 1 + 1) + 1;
-		if(speed == 5){
-			this.setEntityImage(game.getTextures().enemy2);
-			this.drop = true;
-			shootw = 30;
-		}else if(speed == 1){
-			Random r2 = new Random();
-			int rr = r2.nextInt(10);
-			if(rr == 5){
-				this.setEntityImage(game.getTextures().enemy3);
-				this.drop = false;
-				shootw = 10000000;
-				isBomb = true;
-				lives = 2;
+		if(game.bsc == 50){
+			this.setEntityImage(game.getTextures().enemy3);
+			this.drop = false;
+			shootw = 10000000;
+			isBomb = true;
+			speed = 1;
+			lives = 15;
+			game.bsc = -1;
+			setX((Glide.WIDTH * Glide.SCALE) / 2 - 32);
+		}else{
+			if(speed == 5){
+				this.setEntityImage(game.getTextures().enemy2);
+				this.drop = true;
+				shootw = 30;
 			}else{
-				Random r3 = new Random();
-				int asdf = r3.nextInt(4 - 2 + 1) + 2;
-				speed = asdf;
 				this.setEntityImage(game.getTextures().enemy);
 			}
-		}else{
-			this.setEntityImage(game.getTextures().enemy);
-		}
+		}	
+		game.bsc ++;
 	}
 	
 	int deathticks = 0;
@@ -66,11 +63,13 @@ public class Enemy extends Entity{
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
 						return;
 					}
-					boolean go = r.nextBoolean();
-					if(go){
+					int go = r.nextInt(4);
+					if(go == 1){
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_HEALTHPACK);
-					}else{
+					}else if (go == 2){
 						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_BEAM);
+					}else if(go == 3){
+						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_PLASMA);
 					}
 				}
 			}
@@ -103,6 +102,10 @@ public class Enemy extends Entity{
 
 	public void setDead(boolean dead) {
 		this.dead = dead;
+	}
+
+	public void blowUpBomb() {
+		//Blow up the bomb		
 	}
 	
 

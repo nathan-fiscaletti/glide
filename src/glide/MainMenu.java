@@ -115,7 +115,6 @@ public class MainMenu extends Canvas implements Runnable{
 		try {
 			stop();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
