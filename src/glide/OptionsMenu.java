@@ -178,18 +178,31 @@ public class OptionsMenu extends Canvas implements Runnable{
 			g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh - 13));
 			////
 			//
+			
+    	//Sounds
+		/////
+			if(selected == 3){
+				g.setColor(Color.GREEN);
+			}else{
+				g.setColor(Color.DARK_GRAY);
+			}
+			sco = "Controls";
+			w = g.getFontMetrics().stringWidth(sco);
+			g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 24));
+			////
+			//
 		
 		
 		//Back
 		///
-		if(selected == 3){
+		if(selected == 4){
 			g.setColor(Color.GREEN);
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
 		String sco3 = "Back";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 49));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 73));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -210,11 +223,13 @@ public class OptionsMenu extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
 			if(selected == 1){
-				selected = 3;
+				selected = 4;
 			}else if(selected == 2){
 				selected = 1;
 			}else if(selected == 3){
 				selected = 2;
+			}else if(selected == 4){
+				selected = 3;
 			}
 			Glide.select.play();
 		}else if (key == KeyEvent.VK_DOWN){
@@ -223,6 +238,8 @@ public class OptionsMenu extends Canvas implements Runnable{
 			}else if(selected == 2){
 				selected = 3;
 			}else if(selected == 3){
+				selected = 4;
+			}else if(selected == 4){
 				selected = 1;
 			}
 			Glide.select.play();
@@ -240,6 +257,31 @@ public class OptionsMenu extends Canvas implements Runnable{
 					unmuteSounds();
 				}
 			}else if(selected == 3){
+				//Controls screen
+				Glide.enter.play();
+				ControlsMenu cm = new ControlsMenu();
+				cm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				cm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				cm.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				try {
+					stop();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if(!GlideSystem.isApplet){
+					Glide.cm = cm;
+					Glide.frame.remove(Glide.op);
+					Glide.frame.add(Glide.cm);
+					Glide.frame.pack();
+					Glide.cm.start();
+				}else{
+					Glide.cm = cm;
+					Glide.frame.remove(Glide.op);
+					Glide.frame.add(Glide.cm);
+					Glide.cm.start();
+				}
+			}else if(selected == 4){
 
 				Glide.enter.play();
 				MainMenu mm = new MainMenu();
@@ -259,10 +301,10 @@ public class OptionsMenu extends Canvas implements Runnable{
 					Glide.frame.pack();
 					Glide.mm.start();
 				}else{
-					GlideApplet.mm = mm;
-					GlideApplet.frame.remove(GlideApplet.op);
-					GlideApplet.frame.add(GlideApplet.mm);
-					GlideApplet.mm.start();
+					Glide.mm = mm;
+					Glide.frame.remove(Glide.op);
+					Glide.frame.add(Glide.mm);
+					Glide.mm.start();
 				}
 
 			}

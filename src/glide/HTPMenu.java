@@ -200,10 +200,10 @@ public class HTPMenu extends Canvas implements Runnable{
 				Glide.frame.pack();
 				Glide.mm.start();
 			}else{
-				GlideApplet.mm = mm;
-				GlideApplet.frame.remove(GlideApplet.htp);
-				GlideApplet.frame.add(GlideApplet.mm);
-				GlideApplet.mm.start();
+				Glide.mm = mm;
+				Glide.frame.remove(Glide.htp);
+				Glide.frame.add(Glide.mm);
+				Glide.mm.start();
 			}
 		}
 	}

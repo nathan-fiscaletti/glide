@@ -8,6 +8,7 @@ public class Drop extends Entity{
 	public static final int TYPE_BEAM = 9;
 	public static final int TYPE_DIAMOND = 10;
 	public static final int TYPE_PLASMA = 12;
+	public static final int TYPE_MDB = 15;
 	private boolean dead = false;
 	public Drop(double x, double y, Game game, int Type) {
 		super(x, y, game);
@@ -20,6 +21,8 @@ public class Drop extends Entity{
 			this.setEntityImage(game.getTextures().diamond);
 		}else if(Type == Drop.TYPE_PLASMA){
 			this.setEntityImage(game.getTextures().plasma);
+		}else if(Type == Drop.TYPE_MDB){
+			this.setEntityImage(game.getTextures().mdppickup);
 		}
 	}
 	
@@ -47,7 +50,7 @@ public class Drop extends Entity{
 				if(dropc > 180){
 					die();
 				}
-			}else if(getType() == TYPE_BEAM || getType() == TYPE_PLASMA){
+			}else if(getType() == TYPE_BEAM || getType() == TYPE_PLASMA || getType() == TYPE_MDB){
 				if(dropc > 240){
 					die();
 				}

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 
 
-public class MainMenu extends Canvas implements Runnable{
+public class ControlsMenu extends Canvas implements Runnable{
 
 	/**
 	 * Generated Serial Version UID
@@ -56,7 +56,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		addKeyListener(new MenuKeyInput(this));
+		addKeyListener(new ControlsMenuKeyListener(this));
 	}
 	
 	/* Thread Control */
@@ -134,63 +134,41 @@ public class MainMenu extends Canvas implements Runnable{
 
 		g.drawImage(background, 0, 0, null);
 		Font f = new Font("Ariel", Font.BOLD, 24);
-		g.setFont(f);
-		
-		/* Logo */
 		int logow = logo.getWidth();
 		int logoh = logo.getHeight();
 		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
 		
+		g.setFont(f);
+		g.setColor(Color.ORANGE);
+		
+		/* Logo */
+		String op = "Controls";
+		f = new Font("Ariel", Font.BOLD, 32);
+		g.setFont(f);
+		g.setColor(Color.ORANGE);
+		int w = g.getFontMetrics().stringWidth(op);
+		g.drawChars(op.toCharArray(), 0, op.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 130 + logoh));
+		
 		
 		/* Menu Items */
-		
-		//Play
-		/////
-		if(selected == 1){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
+		f = new Font("Ariel", Font.BOLD, 24);
+		g.setFont(f);
+
+		BufferedImageLoader loader = new BufferedImageLoader();
+		BufferedImage controlls = null;
+		try {
+			  controlls = loader.loadImage("/images/keys/controlls.png");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		String sco = "Play";
-		int w = g.getFontMetrics().stringWidth(sco);
-		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 49 + logoh));
-		////
-		
-		
-		//How to play
-		///
-		if(selected == 2){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
-		String sco2 = "How To Play";
-		int w2 = g.getFontMetrics().stringWidth(sco2);
-		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
-		///
-		
-		//Options
-		///
-		if(selected == 3){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
-		sco2 = "Options";
-		w2 = g.getFontMetrics().stringWidth(sco2);
-		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
-		///
-		
+		g.drawImage(controlls, ((Glide.WIDTH * Glide.SCALE) / 2) - (controlls.getWidth() / 2), 120 + logoh + 24 + 40, this);
 		//Exit
 		///
-		if(selected == 4){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
-		String sco3 = "Exit";
+		g.setColor(Color.GREEN);
+		String sco3 = "Back";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), (controlls.getHeight() + 24 + 18 + 140 + logoh + 40));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -232,81 +210,28 @@ public class MainMenu extends Canvas implements Runnable{
 			}
 			Glide.select.play();
 		}else if(key == KeyEvent.VK_ENTER){
-			if(selected == 1){
-				Glide.enter.play();
-				Game game = new Game();
-				game.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				game.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				game.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				try {
-					stop();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if(!GlideSystem.isApplet){
-					Glide.game = game;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.game);
-					Glide.frame.pack();
-					Glide.game.start();
-				}else{
-					Glide.game = game;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.game);
-					Glide.game.start();
-				}
-			}else if(selected == 2){
-				Glide.enter.play();
-				HTPMenu htp = new HTPMenu();
-				htp.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				htp.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				htp.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				
-				try{
-					stop();
-				} catch (Exception e1){
-					e1.printStackTrace();
-				}
-				if(!GlideSystem.isApplet){
-					Glide.htp = htp;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.htp);
-					Glide.frame.pack();
-					Glide.htp.start();
-				}else{
-					Glide.htp = htp;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.htp);
-					Glide.htp.start();
-				}
-				
-			}else if(selected == 3){
-				Glide.enter.play();
-				OptionsMenu op = new OptionsMenu();
-				op.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				op.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				op.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				
-				try{
-					stop();
-				} catch (Exception e1){
-					e1.printStackTrace();
-				}
-				if(!GlideSystem.isApplet){
-					Glide.op = op;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.op);
-					Glide.frame.pack();
-					Glide.op.start();
-				}else{
-					Glide.op = op;
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(Glide.op);
-					Glide.op.start();
-				}
-			}else if(selected == 4){
-				System.exit(0);
+			Glide.enter.play();
+			OptionsMenu op = new OptionsMenu();
+			op.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+			op.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+			op.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+			
+			try{
+				stop();
+			} catch (Exception e1){
+				e1.printStackTrace();
+			}
+			if(!GlideSystem.isApplet){
+				Glide.op = op;
+				Glide.frame.remove(Glide.cm);
+				Glide.frame.add(Glide.op);
+				Glide.frame.pack();
+				Glide.op.start();
+			}else{
+				Glide.op = op;
+				Glide.frame.remove(Glide.cm);
+				Glide.frame.add(Glide.op);
+				Glide.op.start();
 			}
 		}
 		

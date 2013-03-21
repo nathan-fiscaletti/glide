@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable{
 	/* Game Properties */
 	private boolean running = false;
 	private Thread thread;
-	private BufferedImage image = (GlideSystem.isApplet) ? new BufferedImage(GlideApplet.WIDTH,GlideApplet.HEIGHT,BufferedImage.TYPE_INT_RGB) : new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
+	private BufferedImage image = (GlideSystem.isApplet) ? new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB) : new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
 	private BufferedImage background = null;
 	
@@ -50,6 +50,9 @@ public class Game extends Canvas implements Runnable{
 	private boolean lost = false;
 	private boolean won = false;
 	public boolean plasma = false;
+	public BufferedImageLoader loader = new BufferedImageLoader();
+	/* Multi Directional Bombs */
+	public int mdbs = 5;
 	
 	/* Bomb Spawning */
 	public int bsc = 0;
@@ -71,7 +74,7 @@ public class Game extends Canvas implements Runnable{
 
 	public void init(){
 		requestFocus();
-		BufferedImageLoader loader = new BufferedImageLoader();
+		
 		try{
 			spriteSheet = loader.loadImage("/images/sprite_sheet.png");
 			background = loader.loadImage("/images/mm_b.png");
@@ -83,7 +86,7 @@ public class Game extends Canvas implements Runnable{
 		
 		setTextures(new Textures(this));
 		
-		p = (GlideSystem.isApplet) ? new Player(((GlideApplet.WIDTH * GlideApplet.SCALE) / 2) - 16, (GlideApplet.HEIGHT * GlideApplet.SCALE) - 52, this) : new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
+		p = (GlideSystem.isApplet) ? new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this) : new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
@@ -179,6 +182,7 @@ public class Game extends Canvas implements Runnable{
 				adde = 0;
 			}
 			if(lvlup == 1800){
+				this.c.spawnBomb();
 				if(level != 1){
 					level --;
 				}else{
@@ -250,6 +254,15 @@ public class Game extends Canvas implements Runnable{
 		
 		healthBar.render(g);
 		
+		int out = 32;
+		for(int i = 0;i < mdbs;i++){
+			g.drawImage(this.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			out = out + 32;
+		}
+		if(mdbs == 5){
+			g.drawImage(textures.max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+		}
+		
 		int lvli = 0;
 		if(level == 6 && lv2 == 5){
 			lvli = 1;
@@ -289,10 +302,11 @@ public class Game extends Canvas implements Runnable{
 		
 		/* status */
 		if(isStatus()){
-			String status = "TPS: " + getTps() + " -  FPS: " + getFps();
-			g.setFont(new Font("Ariel", Font.BOLD, 12));
+			int bz = getController().b.size() + getController().eb.size() + getController().mdb.size();
+			String status = "DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
+			g.setFont(new Font("Ariel", Font.BOLD, 10));
 			g.setColor(Color.ORANGE);
-			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status) / 2) - 64, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 15);
+			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 18, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 15);
 		}
 		
 		/* lost */
@@ -435,17 +449,23 @@ public class Game extends Canvas implements Runnable{
 					Glide.frame.pack();
 					Glide.mm.start();
 				}else{
-					GlideApplet.mm = mm;
-					GlideApplet.frame.remove(GlideApplet.game);
-					GlideApplet.frame.add(GlideApplet.mm);
-					GlideApplet.mm.start();
+					Glide.mm = mm;
+					Glide.frame.remove(Glide.game);
+					Glide.frame.add(Glide.mm);
+					Glide.mm.start();
 				}
+			}
+		}else if(key == KeyEvent.VK_X){
+			if(mdbs > 0){
+				getController().shootMDB(this.getPlayer().getX(), this.getPlayer().getY());
+				mdbs--;
 			}
 		}else if(key == KeyEvent.VK_ENTER){
 			if(lost() || won()){
 				getController().removeAll();
 				getHealthBar().setHealth(5);
 				setScore(0);
+				mdbs = 3;
 				double x = getPlayer().getX();
 				double y = getPlayer().getX();
 				setPlayer(new Player(x, y, this));

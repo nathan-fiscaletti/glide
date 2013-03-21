@@ -26,7 +26,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.8a";
+	public static final String TITLE = "Glide v0.9a";
 	
 	
 	public static JFrame frame = new JFrame(TITLE);
@@ -34,6 +34,7 @@ public class Glide {
 	public static MainMenu mm;
 	public static HTPMenu htp;
 	public static OptionsMenu op;
+	public static ControlsMenu cm;
 	public static boolean sounds = true;
 	public static boolean music = true;
 	public static boolean fullscreen = true;

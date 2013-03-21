@@ -13,6 +13,7 @@ public class Entity {
 	public static final int TYPE_METEORSMALL = 4;
 	
 	public static final int TYPE_BULLET = 6;
+	public static final int TYPE_MULTIDIRECTIONALBULLET = 14;
 	public static final int TYPE_HEALTHBAR = 7;
 	
 	public static final int TYPE_ENEMYBULLET = 11;

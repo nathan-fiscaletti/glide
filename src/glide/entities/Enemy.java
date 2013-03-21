@@ -13,13 +13,13 @@ public class Enemy extends Entity{
 	public boolean isBomb = false;
 	public int lives = 1;
 	int shootw = 120;
-	public Enemy(double x, double y, Game game, boolean drop) {
+	public Enemy(double x, double y, Game game, boolean drop, boolean bomb) {
 		super(x, y, game);
 		this.drop = drop;
 		this.setType(Entity.TYPE_ENEMY);
 		Random r = new Random();
 		speed = r.nextInt(5 - 1 + 1) + 1;
-		if(game.bsc == 50){
+		if(bomb){
 			this.setEntityImage(game.getTextures().enemy3);
 			this.drop = false;
 			shootw = 10000000;
@@ -58,19 +58,21 @@ public class Enemy extends Entity{
 				game.setScore(game.getScore() + speed);
 				Glide.game.getController().removeEnemy(this);
 				if(drop){
-					Random r = new Random();
-					if(speed == 5){
-						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
-						return;
-					}
-					int go = r.nextInt(4);
-					if(go == 1){
-						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_HEALTHPACK);
-					}else if (go == 2){
-						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_BEAM);
-					}else if(go == 3){
-						this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_PLASMA);
-					}
+						Random r = new Random();
+						if(speed == 5){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+							return;
+						}
+						int go = r.nextInt(21);
+						if(go < 5){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_HEALTHPACK);
+						}else if (go > 5 && go < 10){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_BEAM);
+						}else if(go > 10 && go < 15){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_PLASMA);
+						}else if(go > 15 && go <= 20){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_MDB);
+						}
 				}
 			}
 		}else{
