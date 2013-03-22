@@ -9,7 +9,7 @@ public class Textures {
 	
 	public BufferedImage player,enemy,enemy2,enemy3,bullet,enemybullet,healthbar1,healthbar2,healthbar3,
 						 healthbar4,healthbar5,healthpack,beam, diamond,des1,des2,des3,player2,playerhurt,
-						 plasma,plasmaplayer,mdbullet,mdppickup,max;
+						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp;
 	
 	private SpriteSheet sprite_sheet = null;
 	public Textures(Game game){
@@ -42,5 +42,6 @@ public class Textures {
 		plasmaplayer = sprite_sheet.grabImage(1, 4, 32, 32);
 		mdppickup = sprite_sheet.grabImage(5,5,32,32);
 		max = sprite_sheet.grabImage(6, 1, 32, 32);
+		bombsp = sprite_sheet.grabImage(5, 6, 32, 32);
 	}
 }

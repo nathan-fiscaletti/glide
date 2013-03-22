@@ -50,7 +50,6 @@ public class Sound2 {
 	}
 	
 	public void setVolume(float i){
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(i);
+		((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(i);
 	}
 }

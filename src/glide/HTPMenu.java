@@ -149,9 +149,15 @@ public class HTPMenu extends Canvas implements Runnable{
 		String htp3 = "Pick up drops along the way, and defeat the enemy invaders!";
 		
 		g.setColor(Color.ORANGE);
-		g.drawChars(htp.toCharArray(), 0, htp.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 78 + logoh));
-		g.drawChars(htp2.toCharArray(), 0, htp2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 62 + logoh));
-		g.drawChars(htp3.toCharArray(), 0, htp3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(htp3) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 46 + logoh));
+		BufferedImageLoader l = new BufferedImageLoader();
+		BufferedImage ht = null;
+		try {
+			ht = l.loadImage("/images/htp.png");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawImage(ht, ((Glide.WIDTH * Glide.SCALE) / 2) - (ht.getWidth() / 2), 250, this);
 		
 		
 		/* Menu Items */

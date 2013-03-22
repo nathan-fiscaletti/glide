@@ -26,7 +26,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.9a";
+	public static final String TITLE = "Glide v0.9.11a";
 	
 	
 	public static JFrame frame = new JFrame(TITLE);
@@ -49,6 +49,8 @@ public class Glide {
 	public static final Sound gameover = new Sound("/sounds/gameover.wav");
 	public static final Sound dropdeath = new Sound("/sounds/dropexplode.wav");
 	public static final Sound2 backgroundmusic = new Sound2("/sounds/cr.wav");
+	
+	
 	
 	public static void main(String[] args){
 		if(args.length > 0){

@@ -6,15 +6,17 @@ import glide.entities.Plasma;
 import glide.entities.Player;
 import glide.input.Controller;
 import glide.input.KeyInput;
-import glide.soundsystem.Sound;
 import glide.spritehandles.BufferedImageLoader;
 import glide.spritehandles.Textures;
 
+import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -51,8 +53,9 @@ public class Game extends Canvas implements Runnable{
 	private boolean won = false;
 	public boolean plasma = false;
 	public BufferedImageLoader loader = new BufferedImageLoader();
-	/* Multi Directional Bombs */
+	/* Multi Directional Bombs / Bombs caught - Countrs */
 	public int mdbs = 5;
+	public int boc = 0;
 	
 	/* Bomb Spawning */
 	public int bsc = 0;
@@ -86,7 +89,7 @@ public class Game extends Canvas implements Runnable{
 		
 		setTextures(new Textures(this));
 		
-		p = (GlideSystem.isApplet) ? new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this) : new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
+		p = new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104, this);
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
@@ -155,16 +158,6 @@ public class Game extends Canvas implements Runnable{
 	int adde = -60;
 	int lvlup = 0;
 	//5 ticks = lvl10
-	
-	int lvl10 = 120;
-	int lvl9 = 90;
-	int lvl8 = 60;
-	int lvl7 = 45;
-	int lvl6 = 30;
-	int lvl4 = 25;
-	int lvl3 = 20;
-	int lvl2 = 10;
-	int lvl1 = 5;
 	
 	int curlvl = 120;
 	
@@ -254,14 +247,37 @@ public class Game extends Canvas implements Runnable{
 		
 		healthBar.render(g);
 		
+		
+		
+		//int wid1 = 192 + 65 + 20 + 27;
+		int wid1 = (Glide.WIDTH * Glide.SCALE) - 20;
+		int hit1 = ((Glide.HEIGHT * Glide.SCALE) - 60);
+		int rectx1 = 10;
+		int recty1 = (Glide.HEIGHT * Glide.SCALE) - 50; 
+		g.setColor(Color.WHITE);		
+		Graphics2D g2d = (Graphics2D)g;
+		Stroke os = g2d.getStroke();
+		g2d.setStroke(new BasicStroke(5));
+		g2d.drawRoundRect(rectx1, recty1, wid1, hit1, 10, 10);
+		g2d.setStroke(os);
+		g.setColor(Color.GREEN);
+		
+		
 		int out = 32;
 		for(int i = 0;i < mdbs;i++){
 			g.drawImage(this.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 			out = out + 32;
 		}
+		
+		String c = String.valueOf(boc); 
+		
 		if(mdbs == 5){
 			g.drawImage(textures.max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
+		
+		
+		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 192 + 65, (Glide.HEIGHT * Glide.SCALE) - 17);
+		g.drawImage(this.getTextures().bombsp, 192 + 32 + 45, (Glide.HEIGHT * Glide.SCALE) - 40, null);
 		
 		int lvli = 0;
 		if(level == 6 && lv2 == 5){
@@ -306,7 +322,7 @@ public class Game extends Canvas implements Runnable{
 			String status = "DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
 			g.setFont(new Font("Ariel", Font.BOLD, 10));
 			g.setColor(Color.ORANGE);
-			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 18, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 15);
+			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 28, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 22);
 		}
 		
 		/* lost */
@@ -470,9 +486,10 @@ public class Game extends Canvas implements Runnable{
 				double y = getPlayer().getX();
 				setPlayer(new Player(x, y, this));
 				getPlayer().setX(((Glide.WIDTH * Glide.SCALE) / 2) - 16);
-				getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 52);
+				getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 104);
 				level = 6;
 				lv2 = 5;
+				curlvl = 120;
 				restartAfterLost();
 			}
 		}

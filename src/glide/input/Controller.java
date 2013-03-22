@@ -81,6 +81,9 @@ public class Controller {
 				if(Bounds.intersectsWith(e.get(i), b.get(i2))){
 					if(!e.get(i).isDead()){
 						if(e.get(i).lives == 1){
+							if(e.get(i).isBomb){
+								game.boc ++;
+							}
 							e.get(i).die();
 						}else{
 							e.get(i).lives --;
@@ -93,6 +96,9 @@ public class Controller {
 			for(int i3 = 0; i3 < mdb.size(); i3 ++){
 				if(Bounds.intersectsWith(e.get(i), mdb.get(i3))){
 					if(!e.get(i).isDead()){
+						if(e.get(i).isBomb){
+							game.boc ++;
+						}
 						e.get(i).die();
 						removeMDBullet(mdb.get(i3));
 						Glide.explosion.play();
@@ -122,6 +128,9 @@ public class Controller {
 						Glide.hurt.play();
 					}else{
 						if(e.get(i).isBomb){
+							if(e.get(i).isBomb){
+								game.boc ++;
+							}
 							e.get(i).die(false);
 						}else{
 							e.get(i).die();

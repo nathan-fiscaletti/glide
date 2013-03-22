@@ -74,6 +74,7 @@ public class Enemy extends Entity{
 							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_MDB);
 						}
 				}
+				
 			}
 		}else{
 			shoot ++;
