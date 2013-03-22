@@ -6,16 +6,21 @@ package glide;
 
 import glide.soundsystem.Sound;
 import glide.soundsystem.Sound2;
+import glide.spritehandles.BufferedImageLoader;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 
@@ -26,8 +31,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.9.11a";
-	
+	public static final String TITLE = "Glide v0.9.12a";
 	
 	public static JFrame frame = new JFrame(TITLE);
 	public static Game game;
@@ -38,6 +42,7 @@ public class Glide {
 	public static boolean sounds = true;
 	public static boolean music = true;
 	public static boolean fullscreen = true;
+	
 	
 	/* sounds */
 	public static final Sound explosion = new Sound("/sounds/explode.wav");
@@ -71,21 +76,23 @@ public class Glide {
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
+		
 		mm = new MainMenu();
 		mm.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		mm.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		mm.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		
 		frame = new JFrame(TITLE);
 		frame.add(mm);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
+		frame.setIconImage(new ImageIcon(Glide.class.getClass().getResource("/images/icon.png")).getImage());
 		frame.setVisible(true);
 		
 		mm.start();
