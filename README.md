@@ -2,6 +2,9 @@
 * * *
 My First Java Game (Just to get my feet wet)
 
+### Change log
+https://github.com/thefiscster510/glide/commits/master
+
 ### Download (v0.9.12a)
 
 Windows: https://dl.dropbox.com/u/74343404/Glide.exe 
