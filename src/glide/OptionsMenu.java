@@ -318,7 +318,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 	}
 	public void unmuteMusic(){
 		Glide.music = true;
-		Glide.backgroundmusic.setVolume(-5.0f);
+		Glide.backgroundmusic.setVolume(-15.0f);
 	}
 	
 	public void muteSounds(){

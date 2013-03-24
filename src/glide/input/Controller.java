@@ -34,7 +34,11 @@ public class Controller {
 			}
 		}
 		for(int i = 0; i < b.size(); i++){
-			b.get(i).tick();
+			try{
+				b.get(i).tick();
+			}catch(Exception e){
+				
+			}
 			if(b.get(i).getY() < 0)
 				removeBullet(b.get(i));
 		}
@@ -63,8 +67,7 @@ public class Controller {
 			}catch(Exception ex){
 				
 			}
-		}
-		try{
+		}	try{
 		for(int i = 0; i < e.size(); i++){
 			e.get(i).tick();
 			if(e.get(i).getY() > (Glide.HEIGHT * Glide.SCALE)){
@@ -82,7 +85,13 @@ public class Controller {
 					if(!e.get(i).isDead()){
 						if(e.get(i).lives == 1){
 							if(e.get(i).isBomb){
-								game.boc ++;
+								if(game.boc == 9){
+									game.boc ++;
+									game.win();
+								}else{
+									game.boc ++;
+								}
+								
 							}
 							e.get(i).die();
 						}else{
@@ -100,7 +109,7 @@ public class Controller {
 							game.boc ++;
 						}
 						e.get(i).die();
-						removeMDBullet(mdb.get(i3));
+						///removeMDBullet(mdb.get(i3));
 						Glide.explosion.play();
 					}
 				}

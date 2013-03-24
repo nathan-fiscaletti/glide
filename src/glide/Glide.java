@@ -31,7 +31,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.9.12a";
+	public static final String TITLE = "Glide v0.9.14a";
 	
 	public static JFrame frame = new JFrame(TITLE);
 	public static Game game;
@@ -111,7 +111,7 @@ public class Glide {
 			}
 		}
 		
-		Glide.backgroundmusic.setVolume(-5.0f);
+		Glide.backgroundmusic.setVolume(-15.0f);
 		Glide.backgroundmusic.loop();
 		
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);

@@ -9,7 +9,7 @@ public class Textures {
 	
 	public BufferedImage player,enemy,enemy2,enemy3,bullet,enemybullet,healthbar1,healthbar2,healthbar3,
 						 healthbar4,healthbar5,healthpack,beam, diamond,des1,des2,des3,player2,playerhurt,
-						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp;
+						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp,meteor1,meteor2,meteor3,smallmeteor1,smallmeteor2;
 	
 	private SpriteSheet sprite_sheet = null;
 	public Textures(Game game){
@@ -43,5 +43,10 @@ public class Textures {
 		mdppickup = sprite_sheet.grabImage(5,5,32,32);
 		max = sprite_sheet.grabImage(6, 1, 32, 32);
 		bombsp = sprite_sheet.grabImage(5, 6, 32, 32);
+		meteor1 = sprite_sheet.grabImage(7, 1, 32, 32);
+		meteor2 = sprite_sheet.grabImage(7, 2, 32, 32);
+		meteor3 = sprite_sheet.grabImage(7, 3, 32, 32);
+		smallmeteor1 = sprite_sheet.grabImage(7, 4, 32, 32);
+		smallmeteor2 = sprite_sheet.grabImage(7, 5, 32, 32);
 	}
 }

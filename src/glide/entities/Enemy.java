@@ -12,7 +12,7 @@ public class Enemy extends Entity{
 	private boolean dead;
 	public boolean isBomb = false;
 	public int lives = 1;
-	int shootw = 120;
+	int shootw = 30;
 	public Enemy(double x, double y, Game game, boolean drop, boolean bomb) {
 		super(x, y, game);
 		this.drop = drop;
@@ -32,7 +32,7 @@ public class Enemy extends Entity{
 			if(speed == 5){
 				this.setEntityImage(game.getTextures().enemy2);
 				this.drop = true;
-				shootw = 30;
+				shootw = 15;
 			}else{
 				this.setEntityImage(game.getTextures().enemy);
 			}

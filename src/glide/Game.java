@@ -51,6 +51,7 @@ public class Game extends Canvas implements Runnable{
 	private boolean status = true;
 	private boolean lost = false;
 	private boolean won = false;
+	private boolean cheats = true;
 	public boolean plasma = false;
 	public BufferedImageLoader loader = new BufferedImageLoader();
 	/* Multi Directional Bombs / Bombs caught - Countrs */
@@ -78,6 +79,7 @@ public class Game extends Canvas implements Runnable{
 	public void init(){
 		requestFocus();
 		
+		
 		try{
 			spriteSheet = loader.loadImage("/images/sprite_sheet.png");
 			background = loader.loadImage("/images/mm_b.png");
@@ -93,6 +95,19 @@ public class Game extends Canvas implements Runnable{
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
+		if(cheats){
+		Thread t = new Thread(){
+			@Override
+			public void run(){
+				while(true){
+					mdbs = 5;
+					plasma = true;
+					getPlayer().setPlasma(true);
+					getPlayer().setBeaming(true);
+				}
+			}
+		};t.start();
+		}
 	}
 	
 	/* Thread Control */
@@ -169,7 +184,6 @@ public class Game extends Canvas implements Runnable{
 			healthBar.tick();
 			lvlup ++;
 			adde++;
-			System.out.println("ADDE: " + adde + ", CURLVL: " + curlvl);
 			if(adde == curlvl){
 				this.c.spawnEnemy();
 				adde = 0;
@@ -182,7 +196,7 @@ public class Game extends Canvas implements Runnable{
 					if(lv2 != 1){
 						lv2 --;
 					}else{
-						this.win();
+						
 					}
 				}
 				lvlup = 0;
@@ -481,12 +495,13 @@ public class Game extends Canvas implements Runnable{
 				getController().removeAll();
 				getHealthBar().setHealth(5);
 				setScore(0);
-				mdbs = 3;
+				mdbs = 5;
 				double x = getPlayer().getX();
 				double y = getPlayer().getX();
 				setPlayer(new Player(x, y, this));
 				getPlayer().setX(((Glide.WIDTH * Glide.SCALE) / 2) - 16);
 				getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 104);
+				boc = 0;
 				level = 6;
 				lv2 = 5;
 				curlvl = 120;
