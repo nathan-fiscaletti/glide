@@ -31,7 +31,8 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String TITLE = "Glide v0.9.14a";
+	public static final String version = "v0.9.20a";
+	public static final String TITLE = "Glide " + version;
 	
 	public static JFrame frame = new JFrame(TITLE);
 	public static Game game;

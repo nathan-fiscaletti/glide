@@ -2,8 +2,10 @@ package glide;
 
 import glide.entities.Bullet;
 import glide.entities.HealthBar;
+import glide.entities.Meteor;
 import glide.entities.Plasma;
 import glide.entities.Player;
+import glide.entities.SmallMeteor;
 import glide.input.Controller;
 import glide.input.KeyInput;
 import glide.spritehandles.BufferedImageLoader;
@@ -26,9 +28,6 @@ import java.io.IOException;
 
 public class Game extends Canvas implements Runnable{
 
-	/**
-	 * Generated Serial Version UID
-	 */
 	private static final long serialVersionUID = -4093553489357496142L;
 	
 	/* Game Properties */
@@ -43,7 +42,6 @@ public class Game extends Canvas implements Runnable{
 	private Controller c;
 	private HealthBar healthBar;
 	private Plasma plasmae;
-	
 	private Textures textures;
 	
 	private int score = 0;
@@ -51,7 +49,7 @@ public class Game extends Canvas implements Runnable{
 	private boolean status = true;
 	private boolean lost = false;
 	private boolean won = false;
-	private boolean cheats = true;
+	private boolean cheats = false;
 	public boolean plasma = false;
 	public BufferedImageLoader loader = new BufferedImageLoader();
 	/* Multi Directional Bombs / Bombs caught - Countrs */
@@ -61,11 +59,6 @@ public class Game extends Canvas implements Runnable{
 	/* Bomb Spawning */
 	public int bsc = 0;
 	
-	
-	/*
-	 * private int level = 6;
-	 * private int lv2 = 5;
-	 */
 	private int level = 6;
 	private int lv2 = 5;
 	
@@ -171,8 +164,8 @@ public class Game extends Canvas implements Runnable{
 		}
 	}
 	int adde = -60;
+	int addm = 0;
 	int lvlup = 0;
-	//5 ticks = lvl10
 	
 	int curlvl = 120;
 	
@@ -184,9 +177,14 @@ public class Game extends Canvas implements Runnable{
 			healthBar.tick();
 			lvlup ++;
 			adde++;
+			addm ++;
 			if(adde == curlvl){
 				this.c.spawnEnemy();
 				adde = 0;
+			}
+			if(addm == (int)(curlvl / 2)){
+				this.c.spawnMeteor();
+				addm = 0;
 			}
 			if(lvlup == 1800){
 				this.c.spawnBomb();
@@ -200,9 +198,9 @@ public class Game extends Canvas implements Runnable{
 					}
 				}
 				lvlup = 0;
-				//When you're doing it?..
 				curlvl = clu(curlvl);
 				adde = 0;
+				addm = 0;
 			}
 		}
 	}
@@ -260,9 +258,7 @@ public class Game extends Canvas implements Runnable{
 		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, 20, 40);
 		
 		healthBar.render(g);
-		
-		
-		
+
 		//int wid1 = 192 + 65 + 20 + 27;
 		int wid1 = (Glide.WIDTH * Glide.SCALE) - 20;
 		int hit1 = ((Glide.HEIGHT * Glide.SCALE) - 60);
@@ -333,7 +329,7 @@ public class Game extends Canvas implements Runnable{
 		/* status */
 		if(isStatus()){
 			int bz = getController().b.size() + getController().eb.size() + getController().mdb.size();
-			String status = "DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
+			String status = "MOS: " + (getController().meteors.size() + getController().small_meteors.size())  + " DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
 			g.setFont(new Font("Ariel", Font.BOLD, 10));
 			g.setColor(Color.ORANGE);
 			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 28, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 22);

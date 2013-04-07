@@ -60,7 +60,17 @@ public class Enemy extends Entity{
 				if(drop){
 						Random r = new Random();
 						if(speed == 5){
-							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+							Random dia = new Random();
+							int diacatch = dia.nextInt(4);
+							if(diacatch == 1){
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+							}else if(diacatch == 2){
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND2);
+							}else if(diacatch == 3){
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND3);
+							}else{
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+							}
 							return;
 						}
 						int go = r.nextInt(21);

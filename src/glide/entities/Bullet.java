@@ -12,6 +12,6 @@ public class Bullet extends Entity{
 	}
 	@Override
 	public void tick(){
-		this.setY(this.getY() - 10);
+		this.setY(this.getY() - 20);
 	}
 }

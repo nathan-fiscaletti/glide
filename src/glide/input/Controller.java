@@ -6,7 +6,9 @@ import glide.entities.Bullet;
 import glide.entities.Drop;
 import glide.entities.Enemy;
 import glide.entities.EnemyBullet;
+import glide.entities.Meteor;
 import glide.entities.MultiDirectionalBullet;
+import glide.entities.SmallMeteor;
 import glide.spritehandles.Bounds;
 
 import java.awt.Graphics;
@@ -20,6 +22,11 @@ public class Controller {
 	public LinkedList<Enemy> e = new LinkedList<Enemy>();
 	public LinkedList<Drop> drops = new LinkedList<Drop>();
 	public LinkedList<MultiDirectionalBullet> mdb = new LinkedList<MultiDirectionalBullet>();
+	
+	/* Meteors */
+	public LinkedList<Meteor> meteors = new LinkedList<Meteor>();
+	public LinkedList<SmallMeteor> small_meteors = new LinkedList<SmallMeteor>();
+	
 	Random r = new Random();
 	Game game;
 	public Controller(Game game){
@@ -27,6 +34,7 @@ public class Controller {
 	}
 	
 	public void tick(){
+		try{
 		for(int i = 0; i < mdb.size(); i++){
 			mdb.get(i).tick();
 			if(mdb.get(i).getX() < 0 || mdb.get(i).getY() < 0 || mdb.get(i).getY() > (Glide.HEIGHT * Glide.SCALE) || mdb.get(i).getX() > (Glide.WIDTH * Glide.SCALE)){
@@ -162,6 +170,12 @@ public class Controller {
 					if(drops.get(i).getType() == Drop.TYPE_DIAMOND){
 						game.setScore(game.getScore() + 15);
 					}
+					if(drops.get(i).getType() == Drop.TYPE_DIAMOND2){
+						game.getHealthBar().setHealth(5);
+					}
+					if(drops.get(i).getType() == Drop.TYPE_DIAMOND3){
+						game.mdbs = 5;
+					}
 					if(drops.get(i).getType() == Drop.TYPE_PLASMA){
 						game.getPlayer().setPlasma(true);
 						game.plasma = true;
@@ -179,7 +193,98 @@ public class Controller {
 		}catch(Exception e){
 			
 		}
-		
+		for(int i = 0; i < meteors.size(); i++){
+			meteors.get(i).tick();
+			if(meteors.get(i).getY() > (Glide.HEIGHT * Glide.SCALE)){
+				removeMeteor(meteors.get(i));
+			}
+			try{
+			if(Bounds.intersectsWith(meteors.get(i), game.getPlayer())){
+				removeMeteor(meteors.get(i));
+				if(!game.getPlayer().isPlasma()){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+					if(h == 5){
+						game.lose();
+					}else{
+						game.getHealthBar().setHealth(h);
+						game.getPlayer().hurt();
+						Glide.hurt.play();
+					}
+				}else{
+					Glide.explosion.play();
+				}
+			}
+			}catch(Exception e){}
+			try{
+			for(int i2 = 0; i2 < b.size(); i2++){
+				
+					if(Bounds.intersectsWith(meteors.get(i), b.get(i2))){
+					
+						removeBullet(b.get(i2));
+						meteors.get(i).die();
+						Glide.explosion.play();
+					
+					}
+			}
+			}catch(Exception e){}
+			try{
+			for(int i3 = 0; i3 < mdb.size(); i3 ++){
+				
+					if(Bounds.intersectsWith(meteors.get(i), mdb.get(i3))){
+					
+						///removeMDBullet(mdb.get(i3));
+							meteors.get(i).die();
+							Glide.explosion.play();
+					
+					}
+			}
+			}catch(Exception e){}
+			
+		}
+		for(int i = 0; i < small_meteors.size(); i++){
+			small_meteors.get(i).tick();
+			if(small_meteors.get(i).getY() > (Glide.HEIGHT * Glide.SCALE))
+				removeSmallMeteor(small_meteors.get(i));
+			if(Bounds.intersectsWith(small_meteors.get(i), game.getPlayer())){
+				removeSmallMeteor(small_meteors.get(i));
+				if(!game.getPlayer().isPlasma()){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
+					if(h == 5){
+						game.lose();
+					}else{
+						game.getHealthBar().setHealth(h);
+						game.getPlayer().hurt();
+						Glide.hurt.play();
+					}
+				}else{
+					Glide.explosion.play();
+				}
+			}
+			
+			for(int i2 = 0; i2 < b.size(); i2++){
+				try{
+					if(Bounds.intersectsWith(small_meteors.get(i), b.get(i2))){
+					
+						//removeBullet(b.get(i2));
+						removeSmallMeteor(small_meteors.get(i));
+						Glide.explosion.play();
+					
+					}
+				}catch(Exception e){}
+			}
+			for(int i3 = 0; i3 < mdb.size(); i3 ++){
+				try{
+					if(Bounds.intersectsWith(small_meteors.get(i), mdb.get(i3))){
+					
+						///removeMDBullet(mdb.get(i3));
+							removeSmallMeteor(small_meteors.get(i));
+							Glide.explosion.play();
+					
+					}
+				}catch(Exception e){}
+			}
+		}
+	}catch(Exception e){System.out.println("Error: " + e.getMessage());}
 	}
 	public void spawnEnemy(){
 		r = new Random();
@@ -189,6 +294,15 @@ public class Controller {
 	public void spawnBomb(){
 		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, false, true));
 	}
+	public void spawnDrop(double x, double y, int type){
+		addDrop(new Drop(x, y, game, type));
+	}
+	public void spawnMeteor(){
+		r = new Random();
+		Random r2 = new Random();
+		addMeteor(new Meteor(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game));
+	}
+	
 	public void shootMDB(double x, double y){
 		MultiDirectionalBullet m = new MultiDirectionalBullet(x, y, this.game, 1);
 		MultiDirectionalBullet m1 = new MultiDirectionalBullet(x, y, this.game, 2);
@@ -208,14 +322,26 @@ public class Controller {
 		addMDBullet(m7);
 	}
 	
-	public void spawnDrop(double x, double y, int type){
-		addDrop(new Drop(x, y, game, type));
-	}
+	
 	
 	public void render(Graphics g){
 		for(int i = 0; i < b.size(); i++){
 			try{
 				b.get(i).render(g);
+			}catch(Exception e){
+				
+			}
+		}
+		for(int i = 0; i < meteors.size(); i++){
+			try{
+				meteors.get(i).render(g);
+			}catch(Exception e){
+				
+			}
+		}
+		for(int i = 0; i < small_meteors.size(); i++){
+			try{
+				small_meteors.get(i).render(g);
 			}catch(Exception e){
 				
 			}
@@ -248,6 +374,7 @@ public class Controller {
 				
 			}
 		}
+		
 	}
 	
 	public void addBullet(Bullet block){
@@ -283,6 +410,22 @@ public class Controller {
 		drops.remove(block);
 	}
 	
+	public void addMeteor(Meteor m){
+		meteors.add(m);
+	}
+	
+	public void removeMeteor(Meteor m){
+		meteors.remove(m);
+	}
+	
+	public void addSmallMeteor(SmallMeteor m){
+		small_meteors.add(m);
+	}
+	
+	public void removeSmallMeteor(SmallMeteor m){
+		small_meteors.remove(m);
+	}
+	
 	public void removeAll(){
 		while(e.size() > 0)
 			e.remove();
@@ -292,6 +435,12 @@ public class Controller {
 			drops.remove();
 		while(eb.size() > 0){
 			eb.remove();
+		}
+		while(meteors.size() > 0){
+			meteors.remove();
+		}
+		while(small_meteors.size() > 0){
+			small_meteors.remove();
 		}
 	}
 }

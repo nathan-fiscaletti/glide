@@ -140,7 +140,12 @@ public class MainMenu extends Canvas implements Runnable{
 		int logow = logo.getWidth();
 		int logoh = logo.getHeight();
 		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
-		
+		f = new Font("Ariel", Font.BOLD, 12);
+		g.setFont(f);
+		g.setColor(Color.GREEN);
+		g.drawChars(Glide.version.toCharArray(), 0, Glide.version.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Glide.version) / 2), 130 + logoh);
+		f = new Font("Ariel", Font.BOLD, 24);
+		g.setFont(f);
 		
 		/* Menu Items */
 		

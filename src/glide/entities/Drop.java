@@ -9,6 +9,8 @@ public class Drop extends Entity{
 	public static final int TYPE_DIAMOND = 10;
 	public static final int TYPE_PLASMA = 12;
 	public static final int TYPE_MDB = 15;
+	public static final int TYPE_DIAMOND2 = 20;
+	public static final int TYPE_DIAMOND3 = 21;
 	private boolean dead = false;
 	public Drop(double x, double y, Game game, int Type) {
 		super(x, y, game);
@@ -23,6 +25,10 @@ public class Drop extends Entity{
 			this.setEntityImage(game.getTextures().plasma);
 		}else if(Type == Drop.TYPE_MDB){
 			this.setEntityImage(game.getTextures().mdppickup);
+		}else if(Type == Drop.TYPE_DIAMOND2){
+			this.setEntityImage(game.getTextures().diamond2);
+		}else if(Type == Drop.TYPE_DIAMOND3){
+			this.setEntityImage(game.getTextures().diamond3);
 		}
 	}
 	

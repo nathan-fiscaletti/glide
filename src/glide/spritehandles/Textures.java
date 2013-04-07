@@ -8,8 +8,9 @@ import java.awt.image.BufferedImage;
 public class Textures {
 	
 	public BufferedImage player,enemy,enemy2,enemy3,bullet,enemybullet,healthbar1,healthbar2,healthbar3,
-						 healthbar4,healthbar5,healthpack,beam, diamond,des1,des2,des3,player2,playerhurt,
-						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp,meteor1,meteor2,meteor3,smallmeteor1,smallmeteor2;
+						 healthbar4,healthbar5,healthpack,beam, diamond, diamond2, diamond3, des1,des2,des3,player2,playerhurt,
+						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp,meteor1,meteor2,meteor3,meteor4,
+						 meteor5,meteor6,smallmeteor1,smallmeteor2,smallmeteor3,smallmeteor4,smallmeteor5,smallmeteor6;
 	
 	private SpriteSheet sprite_sheet = null;
 	public Textures(Game game){
@@ -34,7 +35,7 @@ public class Textures {
 		healthbar5 = sprite_sheet.grabImage(3,5,32,32);
 		healthpack = sprite_sheet.grabImage(5, 1, 32,32);
 		beam = sprite_sheet.grabImage(5, 2, 32,32);
-		diamond = sprite_sheet.grabImage(5, 3, 32,32);
+		
 		des1 = sprite_sheet.grabImage(1, 8, 32,32);
 		des2 = sprite_sheet.grabImage(2, 8, 32,32);
 		des3 = sprite_sheet.grabImage(3, 8, 32,32);
@@ -43,10 +44,27 @@ public class Textures {
 		mdppickup = sprite_sheet.grabImage(5,5,32,32);
 		max = sprite_sheet.grabImage(6, 1, 32, 32);
 		bombsp = sprite_sheet.grabImage(5, 6, 32, 32);
-		meteor1 = sprite_sheet.grabImage(7, 1, 32, 32);
-		meteor2 = sprite_sheet.grabImage(7, 2, 32, 32);
-		meteor3 = sprite_sheet.grabImage(7, 3, 32, 32);
-		smallmeteor1 = sprite_sheet.grabImage(7, 4, 32, 32);
-		smallmeteor2 = sprite_sheet.grabImage(7, 5, 32, 32);
+		
+		
+		/* Meteors */
+		meteor1 = sprite_sheet.grabImage(1, 7, 32, 32);
+		meteor2 = sprite_sheet.grabImage(2, 7, 32, 32);
+		meteor3 = sprite_sheet.grabImage(3, 7, 32, 32);
+		meteor4 = sprite_sheet.grabImage(1, 6, 32, 32);
+		meteor5 = sprite_sheet.grabImage(2, 6, 32, 32);
+		meteor6 = sprite_sheet.grabImage(3, 6, 32, 32);
+		
+		/* Small Meteors */
+		smallmeteor1 = sprite_sheet.grabImage(4, 7, 32, 32);
+		smallmeteor2 = sprite_sheet.grabImage(5, 7, 32, 32);
+		smallmeteor3 = sprite_sheet.grabImage(4, 6, 32, 32);
+		smallmeteor4 = sprite_sheet.grabImage(6, 7, 32, 32);
+		smallmeteor5 = sprite_sheet.grabImage(7, 7, 32, 32);
+		smallmeteor6 = sprite_sheet.grabImage(8, 7, 32, 32);
+		
+		/* Diamonds */
+		diamond = sprite_sheet.grabImage(5, 3, 32,32);
+		diamond2 = sprite_sheet.grabImage(6, 3, 32, 32);
+		diamond3 = sprite_sheet.grabImage(7, 3, 32, 32);
 	}
 }
