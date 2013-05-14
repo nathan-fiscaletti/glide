@@ -8,7 +8,7 @@ public class HealthBar extends Entity{
 	public HealthBar(double x, double y, Game game) {
 		super(x, y, game);
 		this.game = game;
-		this.setType(Entity.TYPE_HEALTHBAR);
+		this.setType(Entity.Type.HEALTHBAR);
 		this.setEntityImage(game.getTextures().healthbar1);
 	}
 	@Override

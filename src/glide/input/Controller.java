@@ -6,6 +6,7 @@ import glide.entities.Bullet;
 import glide.entities.Drop;
 import glide.entities.Enemy;
 import glide.entities.EnemyBullet;
+import glide.entities.Entity;
 import glide.entities.Meteor;
 import glide.entities.MultiDirectionalBullet;
 import glide.entities.SmallMeteor;
@@ -34,6 +35,20 @@ public class Controller {
 	}
 	
 	public void tick(){
+		if(Game.mdb_cheat){
+			game.mdbs = 5;
+		}
+		if(Game.shield_cheat){
+			game.plasma = true;
+			game.getPlayer().setPlasma(true);
+		}
+		if(Game.beam_cheat){
+			game.getPlayer().setBeaming(true);
+		}
+		if(Game.cod_cheat){
+			game.cods = game.max_cods;
+		}
+		
 		try{
 		for(int i = 0; i < mdb.size(); i++){
 			mdb.get(i).tick();
@@ -54,7 +69,7 @@ public class Controller {
 			try{
 			eb.get(i).tick();
 			if(Bounds.intersectsWith(eb.get(i), game.getPlayer())){
-				if(!game.getPlayer().isPlasma()){
+				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
 					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
 					if(h == 5){
 						game.lose();
@@ -124,7 +139,7 @@ public class Controller {
 			}
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
 				if(!e.get(i).isDead()){
-					if(!game.getPlayer().isPlasma()){
+					if(!game.getPlayer().isPlasma() && !Game.health_cheat){
 						int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
 						if(h == 5){
 							game.lose();
@@ -156,33 +171,35 @@ public class Controller {
 					}
 				}
 			}
+			if(Bounds.intersectsWith(game.circle, e.get(i)) && game.isCircling()){
+				e.get(i).die();
+			}
+			
 		}
 		for(int i = 0; i < drops.size();i++){
 			drops.get(i).tick();
 			if(Bounds.intersectsWith(drops.get(i), game.getPlayer())){
 				if(!drops.get(i).isDead()){
-					if(drops.get(i).getType() == Drop.TYPE_HEALTHPACK){
+					if(drops.get(i).getType() == Entity.Type.HEALTHPACK){
 						game.getHealthBar().setHealth(game.getHealthBar().getHealth() + 1);
-					}
-					if(drops.get(i).getType() == Drop.TYPE_BEAM){
+					}else if(drops.get(i).getType() == Entity.Type.BEAM){
 						game.getPlayer().setBeaming(true);
-					}
-					if(drops.get(i).getType() == Drop.TYPE_DIAMOND){
+					}else if(drops.get(i).getType() == Entity.Type.DIAMOND){
 						game.setScore(game.getScore() + 15);
-					}
-					if(drops.get(i).getType() == Drop.TYPE_DIAMOND2){
+					}else if(drops.get(i).getType() == Entity.Type.DIAMOND2){
 						game.getHealthBar().setHealth(5);
-					}
-					if(drops.get(i).getType() == Drop.TYPE_DIAMOND3){
+					}else if(drops.get(i).getType() == Entity.Type.DIAMOND3){
 						game.mdbs = 5;
-					}
-					if(drops.get(i).getType() == Drop.TYPE_PLASMA){
+					}else if(drops.get(i).getType() == Entity.Type.PLASMA){
 						game.getPlayer().setPlasma(true);
 						game.plasma = true;
-					}
-					if(drops.get(i).getType() == Drop.TYPE_MDB){
+					}else if(drops.get(i).getType() == Entity.Type.MDB){
 						if(game.mdbs < 5){
 							game.mdbs++;
+						}
+					}else if(drops.get(i).getType() == Entity.Type.COD){
+						if(game.cods < game.max_cods){
+							game.cods ++;
 						}
 					}
 					removeDrop(drops.get(i));
@@ -201,7 +218,7 @@ public class Controller {
 			try{
 			if(Bounds.intersectsWith(meteors.get(i), game.getPlayer())){
 				removeMeteor(meteors.get(i));
-				if(!game.getPlayer().isPlasma()){
+				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
 					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
 					if(h == 5){
 						game.lose();
@@ -239,6 +256,9 @@ public class Controller {
 					}
 			}
 			}catch(Exception e){}
+			if(Bounds.intersectsWith(game.circle, meteors.get(i)) && game.isCircling()){
+				meteors.get(i).die();
+			}
 			
 		}
 		for(int i = 0; i < small_meteors.size(); i++){
@@ -283,6 +303,10 @@ public class Controller {
 					}
 				}catch(Exception e){}
 			}
+			if(Bounds.intersectsWith(game.circle, small_meteors.get(i)) && game.isCircling()){
+				removeSmallMeteor(small_meteors.get(i));
+				Glide.explosion.play();
+			}
 		}
 	}catch(Exception e){System.out.println("Error: " + e.getMessage());}
 	}
@@ -294,7 +318,7 @@ public class Controller {
 	public void spawnBomb(){
 		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, false, true));
 	}
-	public void spawnDrop(double x, double y, int type){
+	public void spawnDrop(double x, double y, Entity.Type type){
 		addDrop(new Drop(x, y, game, type));
 	}
 	public void spawnMeteor(){
@@ -433,14 +457,13 @@ public class Controller {
 			b.remove();
 		while(drops.size() > 0)
 			drops.remove();
-		while(eb.size() > 0){
+		while(eb.size() > 0)
 			eb.remove();
-		}
-		while(meteors.size() > 0){
+		while (mdb.size() > 0)
+			mdb.remove();
+		while(meteors.size() > 0)
 			meteors.remove();
-		}
-		while(small_meteors.size() > 0){
+		while(small_meteors.size() > 0)
 			small_meteors.remove();
-		}
 	}
 }

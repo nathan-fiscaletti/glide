@@ -3,6 +3,7 @@ package glide.spritehandles;
 import glide.entities.Entity;
 
 import java.awt.Rectangle;
+import java.awt.Shape;
 
 
 public class Bounds {
@@ -14,5 +15,12 @@ public class Bounds {
 		r2.setBounds((int)b.getX(), (int)b.getY(), b.getEntityImage().getWidth(), b.getEntityImage().getHeight());
 		
 		return (r.intersects(r2));
+	}
+	
+	public static boolean intersectsWith(Shape a, Entity b){
+		Rectangle r2 = new Rectangle();
+		r2.setBounds((int)b.getX(), (int)b.getY(), b.getEntityImage().getWidth(), b.getEntityImage().getHeight());
+		
+		return (a.intersects(r2));
 	}
 }

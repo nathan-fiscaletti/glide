@@ -16,7 +16,7 @@ public class Enemy extends Entity{
 	public Enemy(double x, double y, Game game, boolean drop, boolean bomb) {
 		super(x, y, game);
 		this.drop = drop;
-		this.setType(Entity.TYPE_ENEMY);
+		this.setType(Entity.Type.ENEMY);
 		Random r = new Random();
 		speed = r.nextInt(5 - 1 + 1) + 1;
 		if(bomb){
@@ -63,25 +63,28 @@ public class Enemy extends Entity{
 							Random dia = new Random();
 							int diacatch = dia.nextInt(4);
 							if(diacatch == 1){
-								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.DIAMOND);
 							}else if(diacatch == 2){
-								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND2);
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.DIAMOND2);
 							}else if(diacatch == 3){
-								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND3);
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.DIAMOND3);
 							}else{
-								this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_DIAMOND);
+								this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.DIAMOND);
 							}
 							return;
 						}
-						int go = r.nextInt(21);
+						int go = r.nextInt(26);
 						if(go < 5){
-							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_HEALTHPACK);
-						}else if (go > 5 && go < 10){
-							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_BEAM);
-						}else if(go > 10 && go < 15){
-							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_PLASMA);
+							this.game.getController().spawnDrop(this.getX(), this.getY(),Entity.Type.HEALTHPACK);
+						}else if (go > 5 && go <= 10){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.BEAM);
+						}else if(go > 10 && go <= 15){
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.PLASMA);
 						}else if(go > 15 && go <= 20){
-							this.game.getController().spawnDrop(this.getX(), this.getY(), Drop.TYPE_MDB);
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.MDB);
+						}else if(go > 23 && go <= 25){
+							//Rarest Drop
+							this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.COD);
 						}
 				}
 				

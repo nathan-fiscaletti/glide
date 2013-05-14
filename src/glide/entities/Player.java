@@ -15,7 +15,7 @@ public class Player extends Entity{
 
 	public Player(double x, double y, Game game){
 		super(x, y, game);
-		this.setType(Entity.TYPE_PLAYER);
+		this.setType(Entity.Type.PLAYER);
 		this.setEntityImage(game.getTextures().player);
 	}
 	

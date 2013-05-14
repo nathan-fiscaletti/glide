@@ -4,31 +4,29 @@ import glide.Game;
 import glide.Glide;
 
 public class Drop extends Entity{
-	public static final int TYPE_HEALTHPACK = 8;
-	public static final int TYPE_BEAM = 9;
-	public static final int TYPE_DIAMOND = 10;
-	public static final int TYPE_PLASMA = 12;
-	public static final int TYPE_MDB = 15;
-	public static final int TYPE_DIAMOND2 = 20;
-	public static final int TYPE_DIAMOND3 = 21;
+	
+	
+	
 	private boolean dead = false;
-	public Drop(double x, double y, Game game, int Type) {
+	public Drop(double x, double y, Game game, Entity.Type type) {
 		super(x, y, game);
-		this.setType(Type);
-		if(Type == Drop.TYPE_HEALTHPACK){
+		this.setType(type);
+		if(type == Entity.Type.HEALTHPACK){
 			this.setEntityImage(game.getTextures().healthpack);
-		}else if(Type == Drop.TYPE_BEAM){
+		}else if(type == Entity.Type.BEAM){
 			this.setEntityImage(game.getTextures().beam);
-		}else if(Type == Drop.TYPE_DIAMOND){
+		}else if(type == Entity.Type.DIAMOND){
 			this.setEntityImage(game.getTextures().diamond);
-		}else if(Type == Drop.TYPE_PLASMA){
+		}else if(type == Entity.Type.PLASMA){
 			this.setEntityImage(game.getTextures().plasma);
-		}else if(Type == Drop.TYPE_MDB){
+		}else if(type == Entity.Type.MDB){
 			this.setEntityImage(game.getTextures().mdppickup);
-		}else if(Type == Drop.TYPE_DIAMOND2){
+		}else if(type == Entity.Type.DIAMOND2){
 			this.setEntityImage(game.getTextures().diamond2);
-		}else if(Type == Drop.TYPE_DIAMOND3){
+		}else if(type == Entity.Type.DIAMOND3){
 			this.setEntityImage(game.getTextures().diamond3);
+		}else if(type == Entity.Type.COD){
+			this.setEntityImage(game.getTextures().cod_pickup);
 		}
 	}
 	
@@ -52,15 +50,15 @@ public class Drop extends Entity{
 				Glide.game.getController().removeDrop(this);
 			}
 		}else{
-			if(getType() == TYPE_DIAMOND){
+			if(getType() == Entity.Type.DIAMOND || getType() == Entity.Type.COD){
 				if(dropc > 180){
 					die();
 				}
-			}else if(getType() == TYPE_BEAM || getType() == TYPE_PLASMA || getType() == TYPE_MDB){
+			}else if(getType() == Entity.Type.BEAM || getType() == Entity.Type.PLASMA || getType() == Entity.Type.MDB){
 				if(dropc > 240){
 					die();
 				}
-			}else if(getType() == TYPE_HEALTHPACK){
+			}else if(getType() == Entity.Type.HEALTHPACK){
 				if(dropc > 520){
 					die();
 				}

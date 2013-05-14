@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -251,12 +253,46 @@ public class MainMenu extends Canvas implements Runnable{
 				}
 				if(!GlideSystem.isApplet){
 					Glide.game = game;
+					Glide.game.addFocusListener(new FocusListener(){
+						
+						@Override
+						public void focusLost(FocusEvent arg0) {
+							if(Glide.game != null){
+								if(!Glide.game.won() && !Glide.game.lost() && !Glide.game.cheating()){
+									Glide.game.pause();
+								}
+							}
+						}
+
+						@Override
+						public void focusGained(FocusEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+					});
 					Glide.frame.remove(Glide.mm);
 					Glide.frame.add(Glide.game);
 					Glide.frame.pack();
 					Glide.game.start();
 				}else{
 					Glide.game = game;
+					Glide.game.addFocusListener(new FocusListener(){
+						
+						@Override
+						public void focusLost(FocusEvent arg0) {
+							if(Glide.game != null){
+								Glide.game.pause();
+							}
+						}
+
+						@Override
+						public void focusGained(FocusEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+					});
 					Glide.frame.remove(Glide.mm);
 					Glide.frame.add(Glide.game);
 					Glide.game.start();

@@ -6,7 +6,7 @@ import glide.Glide;
 public class EnemyBullet extends Entity {
 	public EnemyBullet(double x, double y, Game game){
 		super(x, y, game);
-		this.setType(Entity.TYPE_ENEMYBULLET);
+		this.setType(Entity.Type.ENEMYBULLET);
 		this.setEntityImage(game.getTextures().enemybullet);
 		Glide.shoot.play();
 	}

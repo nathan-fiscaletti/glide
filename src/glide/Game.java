@@ -18,17 +18,35 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 
 
 public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = -4093553489357496142L;
+	
+	/* Cheats */
+		public static boolean mdb_cheat = false;
+		public static boolean beam_cheat = false;
+		public static boolean shield_cheat = false;
+		public static boolean health_cheat = false;
+		public static boolean cod_cheat = false;
+		
+		public String cheatString = "";
+		public String cheatError = "";
+	/* End Cheats */
+	
+		
+		
 	
 	/* Game Properties */
 	private boolean running = false;
@@ -49,10 +67,11 @@ public class Game extends Canvas implements Runnable{
 	private boolean status = true;
 	private boolean lost = false;
 	private boolean won = false;
-	private boolean cheats = false;
+	private boolean cheat = false;
 	public boolean plasma = false;
 	public BufferedImageLoader loader = new BufferedImageLoader();
-	/* Multi Directional Bombs / Bombs caught - Countrs */
+	
+	/* Multi Directional Bombs / Bombs caught - Counters */
 	public int mdbs = 5;
 	public int boc = 0;
 	
@@ -67,6 +86,18 @@ public class Game extends Canvas implements Runnable{
 	private int tps;
 	private int fps;
 	
+	/* Giant Circle Shit */
+	public int cods = 2;
+	public int max_cods = 2;
+	private boolean circling;
+	public Shape circle = new Ellipse2D.Float();
+	float circle_width = 0;
+	float circle_height = 0;
+	/* Center */
+	float circle_x = ((Glide.WIDTH * Glide.SCALE) / 2) - (circle_width / 2);
+	float circle_y = ((Glide.HEIGHT * Glide.SCALE) / 2) - (circle_height / 2);
+	float pcx = 0;
+	float pcy = 0;
 	
 
 	public void init(){
@@ -88,19 +119,6 @@ public class Game extends Canvas implements Runnable{
 		c = new Controller(this);
 		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
-		if(cheats){
-		Thread t = new Thread(){
-			@Override
-			public void run(){
-				while(true){
-					mdbs = 5;
-					plasma = true;
-					getPlayer().setPlasma(true);
-					getPlayer().setBeaming(true);
-				}
-			}
-		};t.start();
-		}
 	}
 	
 	/* Thread Control */
@@ -120,7 +138,6 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		running = false;
-
 	}
 	/* End Thread Control */
 	
@@ -159,7 +176,6 @@ public class Game extends Canvas implements Runnable{
 		try {
 			stop();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -170,7 +186,7 @@ public class Game extends Canvas implements Runnable{
 	int curlvl = 120;
 	
 	private void tick(){
-		if(!isPaused() && !lost() && !won()){
+		if(!isPaused() && !lost() && !won() && !cheating()){
 			p.tick();
 			c.tick();
 			plasmae.tick();
@@ -182,7 +198,7 @@ public class Game extends Canvas implements Runnable{
 				this.c.spawnEnemy();
 				adde = 0;
 			}
-			if(addm == (int)(curlvl / 2)){
+			if(addm == (int)(45)){
 				this.c.spawnMeteor();
 				addm = 0;
 			}
@@ -201,6 +217,15 @@ public class Game extends Canvas implements Runnable{
 				curlvl = clu(curlvl);
 				adde = 0;
 				addm = 0;
+			}
+			if(isCircling()){
+				circle_width = circle_width + 20;
+				circle_height = circle_width + 20;
+				circle_x = pcx - (circle_width / 2);
+				circle_y = pcy - (circle_height / 2);
+				if(circle_width > (Glide.WIDTH * Glide.SCALE) * 2){
+					stopCircling();
+				}
 			}
 		}
 	}
@@ -238,6 +263,8 @@ public class Game extends Canvas implements Runnable{
 		}
 		Graphics g = bs.getDrawGraphics();
 		////////////////////////////////////////////////////////
+		
+		
 		
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		
@@ -278,16 +305,23 @@ public class Game extends Canvas implements Runnable{
 			g.drawImage(this.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 			out = out + 32;
 		}
-		
-		String c = String.valueOf(boc); 
-		
 		if(mdbs == 5){
 			g.drawImage(textures.max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
 		
+		out = 257;
+		for(int i = 0;i < cods; i++){
+			g.drawImage(this.getTextures().cod, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			out = out + 32;
+		}
+		if(cods == 2){
+			g.drawImage(textures.max_cod, 321, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+		}
 		
-		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 192 + 65, (Glide.HEIGHT * Glide.SCALE) - 17);
-		g.drawImage(this.getTextures().bombsp, 192 + 32 + 45, (Glide.HEIGHT * Glide.SCALE) - 40, null);
+		String c = String.valueOf(boc); 
+		
+		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 385, (Glide.HEIGHT * Glide.SCALE) - 17);
+		g.drawImage(this.getTextures().bombsp, 385 + g.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 40, null);
 		
 		int lvli = 0;
 		if(level == 6 && lv2 == 5){
@@ -374,7 +408,7 @@ public class Game extends Canvas implements Runnable{
 			String lose3 = "Press 'Enter' to start over";
 			String lose4 = "Press 'q' to return to Main Menu";
 			String lose5 = "Level: " + lvli;
-			//Lose border
+			//win border
 			int wid = (g.getFontMetrics().stringWidth(lose4) + 4);
 			int hit = (g.getFontMetrics().getDescent()) + 52 + 26 + 118 + 4;
 			int rectx = ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(lose) / 2) + 60;
@@ -396,6 +430,35 @@ public class Game extends Canvas implements Runnable{
 			g.drawChars(lose4.toCharArray(), 0, lose4.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(lose4) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 26));
 			g.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
+		
+		/* cheat menu */
+		if(cheating()){
+			
+			String Title = "Enter Cheat Code";
+			String message = "Press 'enter' to submit cheat. Press 'escape' to return to game.";
+			g.setFont(new Font("Ariel", Font.BOLD, 24));
+			
+			g.setColor(Color.ORANGE);
+			g.drawChars(Title.toCharArray(), 0, Title.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Title) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 40));
+			g.setColor(Color.GREEN);
+			g.setFont(new Font("Ariel", Font.BOLD, 12));
+			g.drawChars(message.toCharArray(), 0, message.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(message) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 20));
+			g.setColor(Color.RED);
+			g.drawChars(cheatError.toCharArray(), 0, cheatError.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(cheatError) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent()));
+			g.setFont(new Font("Ariel", Font.BOLD, 12));
+			g.setColor(Color.YELLOW);
+			g.drawChars(cheatString.toCharArray(), 0, cheatString.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(cheatString) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 20));
+		}
+		
+		g.setColor(Color.RED);
+		
+		if(isCircling()){
+			g.setColor(Color.GREEN);
+			circle = new Ellipse2D.Float(circle_x, circle_y, circle_width, circle_height);
+			((Graphics2D)g).draw(circle);
+			g.setColor(Color.RED);
+		}
+		
 		////////////////////////////////////////////////////////
 		g.dispose();
 		bs.show();
@@ -412,31 +475,31 @@ public class Game extends Canvas implements Runnable{
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
-			if(!isPaused() && !lost()){
+			if(!isPaused() && !lost() && !cheating()){
 				this.getPlayer().setVelocityY(-3);
 			}
 		}else if(key == KeyEvent.VK_LEFT){
-			if(!isPaused() && !lost()){
+			if(!isPaused() && !lost() && !cheating()){
 				this.getPlayer().setVelocityX(-3);
 			}
 		}else if(key == KeyEvent.VK_DOWN){
-			if(!isPaused() && !lost()){
+			if(!isPaused() && !lost() && !cheating()){
 				this.getPlayer().setVelocityY(3);
 			}
 		}else if(key == KeyEvent.VK_RIGHT){
-			if(!isPaused() && !lost()){	
+			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(3);
 			}
 		}else if(key == KeyEvent.VK_Z){
-			if(!isPaused() && !lost()){	
+			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(-10);
 			}
 		}else if(key == KeyEvent.VK_C){ 
-			if(!isPaused() && !lost()){	
+			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(10);
 			}
 		}else if(key == KeyEvent.VK_SPACE && !getPlayer().isShooting()){
-			if(!isPaused() && !lost()){
+			if(!isPaused() && !lost() && !cheating()){
 				if(!getPlayer().isBeaming()){
 					c.addBullet(new Bullet(p.getX(), p.getY() - 32, this));
 					getPlayer().setShooting(true);
@@ -444,8 +507,10 @@ public class Game extends Canvas implements Runnable{
 			}
 		}else if(key == KeyEvent.VK_ESCAPE){
 			if(!isPaused()){
-				if(!lost()){
+				if(!lost() && !cheating()){
 					pause();
+				}else if(cheating()){
+					stopCheating();
 				}
 			}else{
 				resume();
@@ -457,7 +522,7 @@ public class Game extends Canvas implements Runnable{
 				setStatus(false);
 			}
 		}else if(key == KeyEvent.VK_Q){
-			if(isPaused() || lost() || won()){
+			if((isPaused() || lost() || won()) && !cheating()){
 				MainMenu mm = new MainMenu();
 				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
@@ -465,7 +530,6 @@ public class Game extends Canvas implements Runnable{
 				try {
 					stop();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if(!GlideSystem.isApplet){
@@ -482,16 +546,19 @@ public class Game extends Canvas implements Runnable{
 				}
 			}
 		}else if(key == KeyEvent.VK_X){
+			if(!won() && !lost() && !isPaused() && !cheating())
 			if(mdbs > 0){
 				getController().shootMDB(this.getPlayer().getX(), this.getPlayer().getY());
 				mdbs--;
 			}
 		}else if(key == KeyEvent.VK_ENTER){
-			if(lost() || won()){
+			if((lost() || won()) && !cheating()){
 				getController().removeAll();
+				stopCircling();
 				getHealthBar().setHealth(5);
 				setScore(0);
 				mdbs = 5;
+				cods = 2;
 				double x = getPlayer().getX();
 				double y = getPlayer().getX();
 				setPlayer(new Player(x, y, this));
@@ -502,37 +569,105 @@ public class Game extends Canvas implements Runnable{
 				lv2 = 5;
 				curlvl = 120;
 				restartAfterLost();
+			}else if(!cheating() && !won() && !lost() && !isPaused()){
+				cheat();
+			}else if(cheating()){
+				if(cheatString.equalsIgnoreCase("20120614")){
+					cheatString = "";
+					if(beam_cheat){
+						cheatError = "De-Activated Beam Cheat!";
+						beam_cheat = false;
+					}else{
+						cheatError = "Activated Beam Cheat!";
+						beam_cheat = true;
+					}
+				}else if(cheatString.equalsIgnoreCase("19951122")){
+					cheatString = "";
+					if(shield_cheat){
+						cheatError = "De-Activated Shield Cheat!";
+						shield_cheat = false;
+					}else{
+						cheatError = "Activated Shield Cheat!";
+						shield_cheat = true;
+					}
+				}else if(cheatString.equalsIgnoreCase("11232013")){
+					cheatString = "";
+					if(health_cheat){
+						cheatError = "Deactivated Health Cheat!";
+						health_cheat = false;
+					}else{
+						cheatError = "Activated Health Cheat!";
+						health_cheat = true;
+					}
+				}else if(cheatString.equalsIgnoreCase("26435")){
+					cheatString = "";
+					if(mdb_cheat){
+						cheatError = "Deactivated MDB Cheat!";
+						mdb_cheat = false;
+					}else{
+						cheatError = "Activated MDB Cheat!";
+						mdb_cheat = true;
+					}
+				}else if(cheatString.equalsIgnoreCase("4568353669")){
+					cheatString="";
+					if(cod_cheat){
+						cheatError = "Deactivated Sweeper-Detonator Cheat!";
+						cod_cheat = false;
+					}else{
+						cheatError = "Activated Sweeper-Detonator Cheat!";
+						cod_cheat = true;
+					}
+				}else{
+					//Bad Cheat //TODO
+					cheatError = "Bad Cheat";
+					cheatString = "";
+				}
+			}
+		}else if(key == KeyEvent.VK_0 || key == KeyEvent.VK_1 || key == KeyEvent.VK_2 || key == KeyEvent.VK_3 || key == KeyEvent.VK_4 || key == KeyEvent.VK_5 || key == KeyEvent.VK_6 || key == KeyEvent.VK_7 || key == KeyEvent.VK_8 || key == KeyEvent.VK_9){
+			if(!lost() && !won() && !isPaused() && cheating()){
+				cheatString += KeyEvent.getKeyText(key);
+			}
+		}else if(key == KeyEvent.VK_BACK_SPACE){
+			if(!lost() && !won() && !isPaused() && cheating()){
+				if(cheatString.length() > 0){
+					cheatString = cheatString.substring(0,cheatString.length()-1);
+				}
+			}
+		}else if(key == KeyEvent.VK_V){
+			if(cods > 0 && !isCircling()){
+				startCircling((float)this.getPlayer().getX(), (float)this.getPlayer().getY());
+				cods -=1;
 			}
 		}
 	}
 	public void keyReleased(KeyEvent e){
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
-			if(!isPaused()  && !lost()){
+			if(!isPaused()  && !lost() && !cheating()){
 				this.getPlayer().setVelocityY(0);
 			}
 		}else if(key == KeyEvent.VK_LEFT){
-			if(!isPaused()  && !lost()){
+			if(!isPaused()  && !lost() && !cheating()){
 				this.getPlayer().setVelocityX(0);
 			}
 		}else if(key == KeyEvent.VK_DOWN){
-			if(!isPaused()  && !lost()){
+			if(!isPaused()  && !lost() && !cheating()){
 				this.getPlayer().setVelocityY(0);
 			}
 		}else if(key == KeyEvent.VK_RIGHT){
-			if(!isPaused()  && !lost()){
+			if(!isPaused()  && !lost() && !cheating()){
 				this.getPlayer().setVelocityX(0);
 			}
 		}else if(key == KeyEvent.VK_Z){
-			if(!isPaused() && !lost()){	
+			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(0);
 			}
 		}else if(key == KeyEvent.VK_C){ 
-			if(!isPaused() && !lost()){	
+			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(0);
 			}
 		}else if(key == KeyEvent.VK_SPACE){
-			if(!isPaused()  && !lost()){
+			if(!isPaused()  && !lost() && !cheating()){
 				if(!getPlayer().isBeaming()){
 					getPlayer().setShooting(false);
 				}
@@ -627,6 +762,7 @@ public class Game extends Canvas implements Runnable{
 	
 	public void restartAfterLost(){
 		this.lost = false;
+		this.won = false;
 	}
 	
 	public void win(){
@@ -635,6 +771,36 @@ public class Game extends Canvas implements Runnable{
 	
 	public boolean won(){
 		return this.won;
+	}
+	
+	public boolean cheating(){
+		return this.cheat;
+	}
+	
+	public void cheat(){
+		this.cheat = true;
+	}
+	
+	public void stopCheating(){
+		this.cheat = false;	
+		cheatError = "";
+		cheatString = "";
+	}
+	
+	public boolean isCircling() {
+		return circling;
+	}
+
+	public void stopCircling() {
+		this.circling = false;
+		this.circle_width = 0;
+		this.circle_height = 0;
+	}
+	
+	public void startCircling(float x, float y){
+		this.pcx = x;
+		this.pcy = y;
+		this.circling = true;
 	}
 
 

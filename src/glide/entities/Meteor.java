@@ -9,7 +9,7 @@ public class Meteor extends Entity{
 	int speed = 1 + (int)(Math.random()*3);
 	public Meteor(double x, double y, Game game) {
 		super(x, y, game);
-		this.setType(TYPE_METEORBIG);
+		this.setType(Entity.Type.METEORBIG);
 		this.setEntityImage(EI());
 		
 		//Make small or no..

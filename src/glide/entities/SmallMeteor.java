@@ -11,7 +11,7 @@ public class SmallMeteor extends Entity{
 	
 	public SmallMeteor(double x, double y, Game game) {
 		super(x, y, game);
-		this.setType(TYPE_METEORSMALL);
+		this.setType(Entity.Type.METEORSMALL);
 		this.setEntityImage(EI());
 	}
 	

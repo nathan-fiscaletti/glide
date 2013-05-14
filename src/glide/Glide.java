@@ -16,6 +16,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -31,7 +33,7 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String version = "v0.9.20a";
+	public static final String version = "v1.0.31b";
 	public static final String TITLE = "Glide " + version;
 	
 	public static JFrame frame = new JFrame(TITLE);
@@ -106,13 +108,15 @@ public class Glide {
 			if(dm != null){
 				try{
 					vc.setDisplayMode(dm);
-				}catch(Exception ex){
-					
-				}
+				}catch(Exception ex){}
 			}
+		}else{
+			
+			
+			
 		}
 		
-		Glide.backgroundmusic.setVolume(-15.0f);
+		Glide.backgroundmusic.setVolume(-25.0f);
 		Glide.backgroundmusic.loop();
 		
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);

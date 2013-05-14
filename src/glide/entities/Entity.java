@@ -7,22 +7,16 @@ import java.awt.image.BufferedImage;
 
 
 public class Entity {
-	public static final int TYPE_PLAYER = 1;
-	public static final int TYPE_ENEMY = 2;
-	public static final int TYPE_METEORBIG = 3;
-	public static final int TYPE_METEORSMALL = 4;
-	
-	public static final int TYPE_BULLET = 6;
-	public static final int TYPE_MULTIDIRECTIONALBULLET = 14;
-	public static final int TYPE_HEALTHBAR = 7;
-	
-	public static final int TYPE_ENEMYBULLET = 11;
-	
-	public static final int TYPE_PLASMAPLAYER = 13;
+	public static enum Type {
+		//Drop Types
+		HEALTHPACK,BEAM,DIAMOND,PLASMA,MDB,DIAMOND2,DIAMOND3,COD,
+		//Entity Types
+		PLAYER,ENEMY,METEORBIG,METEORSMALL,BULLET,MULTIDIRECTIONALBULLET,HEALTHBAR,ENEMYBULLET,PLASMAPLAYER;
+	}
 	
 	private double x;
 	private double y;
-	private int type;
+	private Entity.Type type;
 	protected Game game;
 	private BufferedImage entityImage;
 	public Entity(double x, double y, Game game){
@@ -41,10 +35,10 @@ public class Entity {
 	
 	//////////////////////////////////////////////
 	
-	public int getType() {
+	public Entity.Type getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(Entity.Type type) {
 		this.type = type;
 	}
 	public double getX() {
