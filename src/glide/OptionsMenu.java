@@ -246,15 +246,15 @@ public class OptionsMenu extends Canvas implements Runnable{
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
 				if(Glide.music){
-					muteMusic();
+					Glide.muteMusic();
 				}else{
-					unmuteMusic();
+					Glide.unmuteMusic();
 				}
 			}else if(selected == 2){
 				if(Glide.sounds){
-					muteSounds();
+					Glide.muteSounds();
 				}else{
-					unmuteSounds();
+					Glide.unmuteSounds();
 				}
 			}else if(selected == 3){
 				//Controls screen
@@ -312,21 +312,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 		
 
 	}
-	public void muteMusic(){
-		Glide.music = false;
-		Glide.backgroundmusic.setVolume(-1000.0f);
-	}
-	public void unmuteMusic(){
-		Glide.music = true;
-		Glide.backgroundmusic.setVolume(-15.0f);
-	}
 	
-	public void muteSounds(){
-		Glide.sounds = false;
-	}
-	public void unmuteSounds(){
-		Glide.sounds = true;
-	}
 	public void keyReleased(KeyEvent e){
 		/*
 		int key = e.getKeyCode();

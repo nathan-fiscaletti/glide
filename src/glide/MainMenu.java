@@ -2,6 +2,7 @@ package glide;
 
 import glide.spritehandles.BufferedImageLoader;
 import glide.spritehandles.Textures;
+import glide.versioning.Updater;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -14,6 +15,8 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 
@@ -42,6 +45,10 @@ public class MainMenu extends Canvas implements Runnable{
 	private int tps;
 	private int fps;
 	
+	String update = "You running the latest version!";
+	String update2 = "";
+	Color update_color = Color.GREEN;
+	
 	/*
 	private int level = 1;
 	*/
@@ -65,6 +72,22 @@ public class MainMenu extends Canvas implements Runnable{
 	public synchronized void start(){
 		if(running){
 			return;
+		}
+		
+		Updater updater = null;
+		
+		
+		try {
+			updater = new Updater(new URL("http://glide.fiscalleti.com/glide.v"));
+		} catch (Exception e) {
+			update = "There was an error while checking for update. Are you connected to the internet?";
+			update_color = Color.RED;
+		}
+		
+		if(updater != null && updater.needsUpdate()){
+			update = "There is an update available for version " + updater.getLatestVersion().getVersion() + " Build " + updater.getLatestVersion().getBuild() + "!";
+			update2 = "Update at " + updater.getLatestVersion().getUpdateURL();
+			update_color = Color.YELLOW;
 		}
 		
 		running = true;
@@ -146,6 +169,14 @@ public class MainMenu extends Canvas implements Runnable{
 		g.setFont(f);
 		g.setColor(Color.GREEN);
 		g.drawChars(Glide.version.toCharArray(), 0, Glide.version.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Glide.version) / 2), 130 + logoh);
+		
+		/* Updater */
+		g.setColor(update_color);
+		g.drawChars(update.toCharArray(), 0, update.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(update) / 2), 152 + logoh);
+		g.drawChars(update2.toCharArray(), 0, update2.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(update2) / 2), 174 + logoh);
+		/* End Updater */
+		
+		g.setColor(Color.GREEN);
 		f = new Font("Ariel", Font.BOLD, 24);
 		g.setFont(f);
 		

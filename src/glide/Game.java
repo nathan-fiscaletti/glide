@@ -78,8 +78,7 @@ public class Game extends Canvas implements Runnable{
 	/* Bomb Spawning */
 	public int bsc = 0;
 	
-	private int level = 6;
-	private int lv2 = 5;
+	private int level = 1;
 	
 	
 	/* status */
@@ -204,14 +203,13 @@ public class Game extends Canvas implements Runnable{
 			}
 			if(lvlup == 1800){
 				this.c.spawnBomb();
-				if(level != 1){
-					level --;
+				if(level != 10)
+				{
+					level ++;
 				}else{
-					if(lv2 != 1){
-						lv2 --;
-					}else{
-						
-					}
+					if(boc == 10){
+							win();
+					}	
 				}
 				lvlup = 0;
 				curlvl = clu(curlvl);
@@ -251,6 +249,8 @@ public class Game extends Canvas implements Runnable{
 			return 10;
 		if (in == 10)
 			return 5;
+		if (in == 5)
+			return 2;
 		
 		return 120;
 		
@@ -323,28 +323,7 @@ public class Game extends Canvas implements Runnable{
 		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 385, (Glide.HEIGHT * Glide.SCALE) - 17);
 		g.drawImage(this.getTextures().bombsp, 385 + g.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 40, null);
 		
-		int lvli = 0;
-		if(level == 6 && lv2 == 5){
-			lvli = 1;
-		}else if(level == 5 && lv2 == 5){
-			lvli = 2;
-		}else if(level == 4 && lv2 == 5){
-			lvli = 3;
-		}else if(level == 3 && lv2 == 5){
-			lvli = 4;
-		}else if(level == 2 && lv2 == 5){
-			lvli = 5;
-		}else if(level == 1 && lv2 == 5){
-			lvli = 6;
-		}else if(lv2 == 4){
-			lvli = 7;
-		}else if(lv2 == 3){
-			lvli = 8;
-		}else if(lv2 == 2){
-			lvli = 9;
-		}else if(lv2 == 1){
-			lvli = 10;
-		}
+		int lvli = level;
 		
 		String lvl = "Level: " + lvli;
 		g.setColor(Color.ORANGE);
@@ -354,9 +333,15 @@ public class Game extends Canvas implements Runnable{
 		if(isPaused()){
 			String pause = "Press 'Escape' to resume";
 			String pause2 = "Press 'q' to return to Main Menu";
+			String sounds = "Press 'z' to " + ((Glide.sounds) ? "disable" : "enable") + " sounds";
+			String music = "Press 'c' to " + ((Glide.music) ? "disable" : "enable") + " music";
+			
 			g.setFont(new Font("Ariel", Font.BOLD, 36));
 			g.drawChars(pause.toCharArray(), 0, pause.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(pause) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 38));
 			g.drawChars(pause2.toCharArray(), 0, pause2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(pause2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent()));
+			g.setFont(new Font("Ariel", Font.BOLD, 18));
+			g.drawChars(sounds.toCharArray(), 0, sounds.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 4) - (g.getFontMetrics().stringWidth(sounds) / 4) - 20, ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 100));
+			g.drawChars(music.toCharArray(), 0, music.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) - (Glide.WIDTH * Glide.SCALE) / 4) - (g.getFontMetrics().stringWidth(music) - (g.getFontMetrics().stringWidth(pause2) / 4)), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 100));
 			g.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
 		
@@ -493,10 +478,22 @@ public class Game extends Canvas implements Runnable{
 		}else if(key == KeyEvent.VK_Z){
 			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(-10);
+			}else if(isPaused() && !lost() && ! cheating()){
+				if(Glide.sounds){
+					Glide.muteSounds();
+				}else{
+					Glide.unmuteSounds();
+				}
 			}
 		}else if(key == KeyEvent.VK_C){ 
 			if(!isPaused() && !lost() && !cheating()){	
 				this.getPlayer().setVelocityX(10);
+			}else if(isPaused() && !lost() && ! cheating()){
+				if(Glide.music){
+					Glide.muteMusic();
+				}else{
+					Glide.unmuteMusic();
+				}
 			}
 		}else if(key == KeyEvent.VK_SPACE && !getPlayer().isShooting()){
 			if(!isPaused() && !lost() && !cheating()){
@@ -565,8 +562,7 @@ public class Game extends Canvas implements Runnable{
 				getPlayer().setX(((Glide.WIDTH * Glide.SCALE) / 2) - 16);
 				getPlayer().setY((Glide.HEIGHT * Glide.SCALE) - 104);
 				boc = 0;
-				level = 6;
-				lv2 = 5;
+				level = 1;
 				curlvl = 120;
 				restartAfterLost();
 			}else if(!cheating() && !won() && !lost() && !isPaused()){

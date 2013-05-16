@@ -108,13 +108,10 @@ public class Controller {
 					if(!e.get(i).isDead()){
 						if(e.get(i).lives == 1){
 							if(e.get(i).isBomb){
-								if(game.boc == 9){
-									game.boc ++;
+								game.boc ++;
+								if(game.boc == 10){
 									game.win();
-								}else{
-									game.boc ++;
 								}
-								
 							}
 							e.get(i).die();
 						}else{
@@ -130,6 +127,9 @@ public class Controller {
 					if(!e.get(i).isDead()){
 						if(e.get(i).isBomb){
 							game.boc ++;
+							if(game.boc == 10){
+								game.win();
+							}
 						}
 						e.get(i).die();
 						///removeMDBullet(mdb.get(i3));
@@ -162,6 +162,9 @@ public class Controller {
 						if(e.get(i).isBomb){
 							if(e.get(i).isBomb){
 								game.boc ++;
+								if(game.boc == 10){
+									game.win();
+								}
 							}
 							e.get(i).die(false);
 						}else{
@@ -172,6 +175,12 @@ public class Controller {
 				}
 			}
 			if(Bounds.intersectsWith(game.circle, e.get(i)) && game.isCircling()){
+				if(e.get(i).isBomb){
+					game.boc ++;
+					if(game.boc == 10){
+						game.win();
+					}
+				}
 				e.get(i).die();
 			}
 			

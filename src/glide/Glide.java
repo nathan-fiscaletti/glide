@@ -7,6 +7,7 @@ package glide;
 import glide.soundsystem.Sound;
 import glide.soundsystem.Sound2;
 import glide.spritehandles.BufferedImageLoader;
+import glide.versioning.Version;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -33,8 +34,8 @@ public class Glide {
 	public static final int SCALE = 2;
 	
 	/* Game Properties */
-	public static final String version = "v1.0.31b";
-	public static final String TITLE = "Glide " + version;
+	public static final String version = Version.getAppVersion() + " [Build: " + Version.getAppBuild() + "]";
+	public static final String TITLE = "Glide - " + version;
 	
 	public static JFrame frame = new JFrame(TITLE);
 	public static Game game;
@@ -127,6 +128,22 @@ public class Glide {
 		// Set the blank cursor to the JFrame.
 		frame.getContentPane().setCursor(blankCursor);
 		
+	}
+	
+	public static void muteMusic(){
+		Glide.music = false;
+		Glide.backgroundmusic.setVolume(-1000.0f);
+	}
+	public static void unmuteMusic(){
+		Glide.music = true;
+		Glide.backgroundmusic.setVolume(-25.0f);
+	}
+	
+	public static void muteSounds(){
+		Glide.sounds = false;
+	}
+	public static void unmuteSounds(){
+		Glide.sounds = true;
 	}
 
 }
