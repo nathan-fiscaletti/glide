@@ -70,8 +70,8 @@ public class Controller {
 			eb.get(i).tick();
 			if(Bounds.intersectsWith(eb.get(i), game.getPlayer())){
 				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
-					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-					if(h == 5){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
+					if(h == 8){
 						game.lose();
 					}else{
 						removeEnemyBullet(eb.get(i));
@@ -140,12 +140,12 @@ public class Controller {
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
 				if(!e.get(i).isDead()){
 					if(!game.getPlayer().isPlasma() && !Game.health_cheat){
-						int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-						if(h == 5){
+						int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
+						if(h == 8){
 							game.lose();
 						}else{
 							if(e.get(i).isBomb){
-									h = 5;
+									h = 8;
 									game.lose();
 							}else{
 								if(e.get(i).isBomb){
@@ -176,12 +176,17 @@ public class Controller {
 			}
 			if(Bounds.intersectsWith(game.circle, e.get(i)) && game.isCircling()){
 				if(e.get(i).isBomb){
-					game.boc ++;
-					if(game.boc == 10){
-						game.win();
+					if(e.get(i).isBomb && !e.get(i).isDead()){
+						game.boc ++;
+						if(game.boc == 10){
+							game.win();
+						}
 					}
+					e.get(i).die(false);
+				}else{
+					e.get(i).die();
+					Glide.explosion.play();
 				}
-				e.get(i).die();
 			}
 			
 		}
@@ -196,7 +201,7 @@ public class Controller {
 					}else if(drops.get(i).getType() == Entity.Type.DIAMOND){
 						game.setScore(game.getScore() + 15);
 					}else if(drops.get(i).getType() == Entity.Type.DIAMOND2){
-						game.getHealthBar().setHealth(5);
+						game.getHealthBar().setHealth(8);
 					}else if(drops.get(i).getType() == Entity.Type.DIAMOND3){
 						game.mdbs = 5;
 					}else if(drops.get(i).getType() == Entity.Type.PLASMA){
@@ -228,8 +233,8 @@ public class Controller {
 			if(Bounds.intersectsWith(meteors.get(i), game.getPlayer())){
 				removeMeteor(meteors.get(i));
 				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
-					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-					if(h == 5){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
+					if(h == 8){
 						game.lose();
 					}else{
 						game.getHealthBar().setHealth(h);
@@ -277,8 +282,8 @@ public class Controller {
 			if(Bounds.intersectsWith(small_meteors.get(i), game.getPlayer())){
 				removeSmallMeteor(small_meteors.get(i));
 				if(!game.getPlayer().isPlasma()){
-					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 5;
-					if(h == 5){
+					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
+					if(h == 8){
 						game.lose();
 					}else{
 						game.getHealthBar().setHealth(h);
@@ -317,7 +322,7 @@ public class Controller {
 				Glide.explosion.play();
 			}
 		}
-	}catch(Exception e){System.out.println("Error: " + e.getMessage());}
+	}catch(Exception e){}
 	}
 	public void spawnEnemy(){
 		r = new Random();

@@ -1,8 +1,12 @@
 package glide.entities;
 
 import glide.Game;
+import glide.Glide;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 
@@ -30,8 +34,9 @@ public class Entity {
 	}
 	
 	public void render(Graphics g){
-		g.drawImage(getEntityImage(), (int)getX(), (int)getY(), null);
+		g.drawImage(this.getEntityImage(), (int)getX(), (int)getY(), null);
 	}
+	
 	
 	//////////////////////////////////////////////
 	

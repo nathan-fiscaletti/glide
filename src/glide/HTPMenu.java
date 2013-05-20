@@ -27,8 +27,7 @@ public class HTPMenu extends Canvas implements Runnable{
 	private boolean running = false;
 	private Thread thread;
 	
-	private BufferedImage background = null;
-	private BufferedImage logo = null;
+	private BufferedImage logo;
 	
 	
 	private Textures textures;
@@ -51,7 +50,6 @@ public class HTPMenu extends Canvas implements Runnable{
 		requestFocus();
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try{
-			background = loader.loadImage("/images/mm_b.png");
 			logo = loader.loadImage("/images/logo.png");
 		}catch(IOException e){
 			e.printStackTrace();
@@ -123,7 +121,8 @@ public class HTPMenu extends Canvas implements Runnable{
 	}
 	int adde = 0;
 	private void tick(){
-		
+		Glide.b1y+=Glide.backgroundSpeed;
+		Glide.b2y+=Glide.backgroundSpeed;
 	}
 	
 	private void render(){
@@ -135,7 +134,19 @@ public class HTPMenu extends Canvas implements Runnable{
 		Graphics g = bs.getDrawGraphics();
 		////////////////////////////////////////////////////////
 
-		g.drawImage(background, 0, 0, null);
+		if(Glide.b1y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b1y = Glide.b2y - Glide.background.getHeight();
+		}
+		
+		if(Glide.b2y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b2y = Glide.b1y - Glide.background2.getHeight();
+		}
+			
+		
+		g.drawImage(Glide.background, 0, (int)Glide.b1y, null);
+		
+		g.drawImage(Glide.background2, 0, (int)Glide.b2y, null);
+		
 		Font f = new Font("Ariel", Font.BOLD, 16);
 		g.setFont(f);
 		

@@ -2,10 +2,8 @@ package glide;
 
 import glide.entities.Bullet;
 import glide.entities.HealthBar;
-import glide.entities.Meteor;
 import glide.entities.Plasma;
 import glide.entities.Player;
-import glide.entities.SmallMeteor;
 import glide.input.Controller;
 import glide.input.KeyInput;
 import glide.spritehandles.BufferedImageLoader;
@@ -25,8 +23,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import javax.swing.JOptionPane;
 
 
 
@@ -53,7 +49,6 @@ public class Game extends Canvas implements Runnable{
 	private Thread thread;
 	private BufferedImage image = (GlideSystem.isApplet) ? new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB) : new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
-	private BufferedImage background = null;
 	
 	
 	private Player p;
@@ -98,6 +93,11 @@ public class Game extends Canvas implements Runnable{
 	float pcx = 0;
 	float pcy = 0;
 	
+	/* Power Ups */
+	public int shield = 0;
+	public int beam = 0;
+	
+	
 
 	public void init(){
 		requestFocus();
@@ -105,7 +105,6 @@ public class Game extends Canvas implements Runnable{
 		
 		try{
 			spriteSheet = loader.loadImage("/images/sprite_sheet.png");
-			background = loader.loadImage("/images/mm_b.png");
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -116,8 +115,9 @@ public class Game extends Canvas implements Runnable{
 		
 		p = new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104, this);
 		c = new Controller(this);
-		healthBar = new HealthBar(this.getWidth() - 52, 20, this);
+		healthBar = new HealthBar((this.getWidth() / 2) - (this.getTextures().healthbar1.getWidth() / 2), this.getHeight() - (this.getTextures().healthbar1.getHeight() + 10), this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
+		Glide.backgroundSpeed = 7;
 	}
 	
 	/* Thread Control */
@@ -186,6 +186,8 @@ public class Game extends Canvas implements Runnable{
 	
 	private void tick(){
 		if(!isPaused() && !lost() && !won() && !cheating()){
+			Glide.b1y+=Glide.backgroundSpeed;
+			Glide.b2y+=Glide.backgroundSpeed;
 			p.tick();
 			c.tick();
 			plasmae.tick();
@@ -265,11 +267,18 @@ public class Game extends Canvas implements Runnable{
 		////////////////////////////////////////////////////////
 		
 		
-		
+		/* Background Scroller */
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		
-		g.drawImage(background, 0, 0, null);
-		
+		if(Glide.b1y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b1y = Glide.b2y - Glide.background.getHeight();
+		}
+		if(Glide.b2y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b2y = Glide.b1y - Glide.background2.getHeight();
+		}
+		g.drawImage(Glide.background, 0, (int)Glide.b1y, null);
+		g.drawImage(Glide.background2, 0, (int)Glide.b2y, null);
+		/* End Background Scroller */
 		
 		p.render(g);
 		if(plasma){
@@ -280,26 +289,34 @@ public class Game extends Canvas implements Runnable{
 		c.render(g);
 		
 		g.setFont(new Font("Ariel", Font.BOLD, 24));
-		g.setColor(Color.GREEN);
-		String sco = "Score: " + score;
-		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, 20, 40);
 		
 		healthBar.render(g);
 
-		//int wid1 = 192 + 65 + 20 + 27;
+		/* HUD Container */
 		int wid1 = (Glide.WIDTH * Glide.SCALE) - 20;
 		int hit1 = ((Glide.HEIGHT * Glide.SCALE) - 60);
 		int rectx1 = 10;
-		int recty1 = (Glide.HEIGHT * Glide.SCALE) - 50; 
+		int recty1 = (Glide.HEIGHT * Glide.SCALE) - 50;
 		g.setColor(Color.WHITE);		
 		Graphics2D g2d = (Graphics2D)g;
 		Stroke os = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(5));
 		g2d.drawRoundRect(rectx1, recty1, wid1, hit1, 10, 10);
+		//int wid2 = (wid1 / 2) - 45;
+		//int hit2 = 50;
+		//int rectx2 = rectx1 + 10;
+		//int recty2 = recty1 - 50;
+		//g2d.drawRoundRect(rectx2, recty2, wid2, hit2, 10, 10);
+		//int wid3 = (wid1 / 2) - 45;
+		//int hit3 = 50;
+		//int rectx3 = (Glide.WIDTH * Glide.SCALE) - wid3;
+		//int recty3 = recty1 - 50;
+		//g2d.drawRoundRect(rectx3, recty3, wid3, hit3, 10, 10);
 		g2d.setStroke(os);
 		g.setColor(Color.GREEN);
+		/* End HUD Container */
 		
-		
+		/* MDBs */
 		int out = 32;
 		for(int i = 0;i < mdbs;i++){
 			g.drawImage(this.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
@@ -309,6 +326,7 @@ public class Game extends Canvas implements Runnable{
 			g.drawImage(textures.max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
 		
+		/* CODs */
 		out = 257;
 		for(int i = 0;i < cods; i++){
 			g.drawImage(this.getTextures().cod, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
@@ -318,17 +336,82 @@ public class Game extends Canvas implements Runnable{
 			g.drawImage(textures.max_cod, 321, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
 		
-		String c = String.valueOf(boc); 
-		
-		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 385, (Glide.HEIGHT * Glide.SCALE) - 17);
-		g.drawImage(this.getTextures().bombsp, 385 + g.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 40, null);
-		
+		/* Lvl / Score */
+		g.setFont(new Font("Ariel", Font.BOLD, 18));
 		int lvli = level;
-		
 		String lvl = "Level: " + lvli;
 		g.setColor(Color.ORANGE);
-		g.drawChars(lvl.toCharArray(), 0, lvl.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(lvl) / 2), 40);
+		g.drawChars(lvl.toCharArray(), 0, lvl.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (g.getFontMetrics().stringWidth(lvl) * 2) + 50, (Glide.HEIGHT * Glide.SCALE) - 67);
 		g.setColor(Color.GREEN);
+		String sco = "Score: " + score;
+		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (g.getFontMetrics().stringWidth(sco) * 3), (Glide.HEIGHT * Glide.SCALE) - 67);
+		
+		
+		/* Bomb Counter */
+		String c = String.valueOf(boc); 
+		
+		g.drawChars(c.toCharArray(), 0, c.toCharArray().length, 32, (Glide.HEIGHT * Glide.SCALE) - 67);
+		g.drawImage(this.getTextures().bombsp, 32 + g.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		
+		/* Power Ups */
+		int statsoffset = 64 + g.getFontMetrics().stringWidth(c);
+		g.setFont(new Font("Ariel", Font.BOLD, 24));
+		if(this.getPlayer().isBeaming()){
+			BufferedImage beamer = getTextures().beam;
+			BufferedImage level = getTextures().powerbar1;
+			if(beam == 1){
+				level = getTextures().powerbar5;
+			}else if(beam == 2){
+				level = getTextures().powerbar4;
+			}else if(beam == 3){
+				level = getTextures().powerbar3;
+			}else if(beam == 4){
+				level = getTextures().powerbar2;
+			}else if(beam == 5){
+				level = getTextures().powerbar1;
+			}
+			
+			g.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			g.drawImage(level, 32 + 34 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		}else{
+			BufferedImage beamer = getTextures().grayscale_beam;
+			g.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		}
+		
+		if(this.plasma && this.getPlayer().isPlasma()){
+			BufferedImage shielded = getTextures().plasma;
+			BufferedImage level = getTextures().powerbar1;
+			if(shield == 1){
+				level = getTextures().powerbar5;
+			}else if(shield == 2){
+				level = getTextures().powerbar4;
+			}else if(shield == 3){
+				level = getTextures().powerbar3;
+			}else if(shield == 4){
+				level = getTextures().powerbar2;
+			}else if(shield == 5){
+				level = getTextures().powerbar1;
+			}
+			
+			g.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			g.drawImage(level, 134 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		}else{
+			BufferedImage shielded = getTextures().grayscale_sheild;
+			g.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		}
+		
+		
+		/* status */
+		if(isStatus()){
+			int bz = getController().b.size() + getController().eb.size() + getController().mdb.size();
+			String status = "MOS: " + (getController().meteors.size() + getController().small_meteors.size())  + " DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
+			g.setFont(new Font("Ariel", Font.BOLD, 10));
+			g.setColor(Color.ORANGE);
+			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 40, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 22);
+		}
+		
+		/*//////////////// MENUS / DIALOGS ////////////////////*/
+		
 		/* pause menu */
 		if(isPaused()){
 			String pause = "Press 'Escape' to resume";
@@ -343,15 +426,6 @@ public class Game extends Canvas implements Runnable{
 			g.drawChars(sounds.toCharArray(), 0, sounds.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 4) - (g.getFontMetrics().stringWidth(sounds) / 4) - 20, ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 100));
 			g.drawChars(music.toCharArray(), 0, music.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) - (Glide.WIDTH * Glide.SCALE) / 4) - (g.getFontMetrics().stringWidth(music) - (g.getFontMetrics().stringWidth(pause2) / 4)), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + 100));
 			g.setFont(new Font("Ariel", Font.BOLD, 24));
-		}
-		
-		/* status */
-		if(isStatus()){
-			int bz = getController().b.size() + getController().eb.size() + getController().mdb.size();
-			String status = "MOS: " + (getController().meteors.size() + getController().small_meteors.size())  + " DOS: "+getController().drops.size()+" - BOS: "+bz+" - EOS: " + getController().e.size() + " - TPS: " + getTps() + " -  FPS: " + getFps();
-			g.setFont(new Font("Ariel", Font.BOLD, 10));
-			g.setColor(Color.ORANGE);
-			g.drawChars(status.toCharArray(), 0, status.toCharArray().length, ((Glide.WIDTH * Glide.SCALE)) - (g.getFontMetrics().stringWidth(status)) - 28, ((Glide.HEIGHT * Glide.SCALE)) + (g.getFontMetrics().getDescent()) - 22);
 		}
 		
 		/* lost */
@@ -461,23 +535,23 @@ public class Game extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
 			if(!isPaused() && !lost() && !cheating()){
-				this.getPlayer().setVelocityY(-3);
+				this.getPlayer().setVelocityY(-getPlayer().speed);
 			}
 		}else if(key == KeyEvent.VK_LEFT){
 			if(!isPaused() && !lost() && !cheating()){
-				this.getPlayer().setVelocityX(-3);
+				this.getPlayer().setVelocityX(-getPlayer().speed);
 			}
 		}else if(key == KeyEvent.VK_DOWN){
 			if(!isPaused() && !lost() && !cheating()){
-				this.getPlayer().setVelocityY(3);
+				this.getPlayer().setVelocityY(getPlayer().speed);
 			}
 		}else if(key == KeyEvent.VK_RIGHT){
 			if(!isPaused() && !lost() && !cheating()){	
-				this.getPlayer().setVelocityX(3);
+				this.getPlayer().setVelocityX(getPlayer().speed);
 			}
 		}else if(key == KeyEvent.VK_Z){
 			if(!isPaused() && !lost() && !cheating()){	
-				this.getPlayer().setVelocityX(-10);
+				this.getPlayer().setVelocityX(-Player.boostSpeed);
 			}else if(isPaused() && !lost() && ! cheating()){
 				if(Glide.sounds){
 					Glide.muteSounds();
@@ -487,7 +561,7 @@ public class Game extends Canvas implements Runnable{
 			}
 		}else if(key == KeyEvent.VK_C){ 
 			if(!isPaused() && !lost() && !cheating()){	
-				this.getPlayer().setVelocityX(10);
+				this.getPlayer().setVelocityX(Player.boostSpeed);
 			}else if(isPaused() && !lost() && ! cheating()){
 				if(Glide.music){
 					Glide.muteMusic();
@@ -520,27 +594,25 @@ public class Game extends Canvas implements Runnable{
 			}
 		}else if(key == KeyEvent.VK_Q){
 			if((isPaused() || lost() || won()) && !cheating()){
-				MainMenu mm = new MainMenu();
-				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				mm.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				try {
-					stop();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				if(!GlideSystem.isApplet){
+					MainMenu mm;
+					Glide.backgroundSpeed = 1;
+					mm = new MainMenu();
+					mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					mm.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					try {
+						stop();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					Glide.mm = mm;
+				
+				
 					Glide.frame.remove(Glide.game);
 					Glide.frame.add(Glide.mm);
 					Glide.frame.pack();
 					Glide.mm.start();
-				}else{
-					Glide.mm = mm;
-					Glide.frame.remove(Glide.game);
-					Glide.frame.add(Glide.mm);
-					Glide.mm.start();
-				}
+				
 			}
 		}else if(key == KeyEvent.VK_X){
 			if(!won() && !lost() && !isPaused() && !cheating())
@@ -552,7 +624,7 @@ public class Game extends Canvas implements Runnable{
 			if((lost() || won()) && !cheating()){
 				getController().removeAll();
 				stopCircling();
-				getHealthBar().setHealth(5);
+				getHealthBar().setHealth(8);
 				setScore(0);
 				mdbs = 5;
 				cods = 2;

@@ -33,9 +33,8 @@ public class MainMenu extends Canvas implements Runnable{
 	private boolean running = false;
 	private Thread thread;
 	
-	private BufferedImage background = null;
 	private BufferedImage logo = null;
-	
+
 	
 	private Textures textures;
 	
@@ -45,9 +44,6 @@ public class MainMenu extends Canvas implements Runnable{
 	private int tps;
 	private int fps;
 	
-	String update = "You running the latest version!";
-	String update2 = "";
-	Color update_color = Color.GREEN;
 	
 	/*
 	private int level = 1;
@@ -60,7 +56,6 @@ public class MainMenu extends Canvas implements Runnable{
 		requestFocus();
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try{
-			background = loader.loadImage("/images/mm_b.png");
 			logo = loader.loadImage("/images/logo.png");
 		}catch(IOException e){
 			e.printStackTrace();
@@ -73,23 +68,28 @@ public class MainMenu extends Canvas implements Runnable{
 		if(running){
 			return;
 		}
+		if(!Glide.checkedForUpdate){
+			Updater updater = null;
+			if(Updater.internetCheck()){
+				try {
+					updater = new Updater(new URL("http://glide.fiscalleti.com/glide.v"));
+				} catch (Exception e) {
+					Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
+					Glide.update_color = Color.RED;
+				}
 		
-		Updater updater = null;
-		
-		
-		try {
-			updater = new Updater(new URL("http://glide.fiscalleti.com/glide.v"));
-		} catch (Exception e) {
-			update = "There was an error while checking for update. Are you connected to the internet?";
-			update_color = Color.RED;
+				if(updater != null && updater.needsUpdate()){
+					Glide.update = "There is an update available for version " + updater.getLatestVersion().getVersion() + " Build " + updater.getLatestVersion().getBuild() + "!";
+					Glide.update2 = "Update at " + updater.getLatestVersion().getUpdateURL();
+					Glide.update_color = Color.YELLOW;
+					Glide.TITLE = Glide.TITLE + " ~ !!UPDATE AVAILABLE!!";
+				}
+			}else{
+				Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
+				Glide.update_color = Color.RED;
+			}
+			Glide.checkedForUpdate = true;
 		}
-		
-		if(updater != null && updater.needsUpdate()){
-			update = "There is an update available for version " + updater.getLatestVersion().getVersion() + " Build " + updater.getLatestVersion().getBuild() + "!";
-			update2 = "Update at " + updater.getLatestVersion().getUpdateURL();
-			update_color = Color.YELLOW;
-		}
-		
 		running = true;
 		thread = new Thread(this);
 		thread.start();
@@ -113,7 +113,7 @@ public class MainMenu extends Canvas implements Runnable{
 		final double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
-		
+		Glide.frame.setTitle(Glide.TITLE);
 		int updates = 0;
 		int frames = 0;
 		long timer = System.currentTimeMillis();
@@ -145,7 +145,8 @@ public class MainMenu extends Canvas implements Runnable{
 	}
 	int adde = 0;
 	private void tick(){
-		
+			Glide.b1y+=Glide.backgroundSpeed;
+			Glide.b2y+=Glide.backgroundSpeed;
 	}
 	
 	private void render(){
@@ -157,7 +158,25 @@ public class MainMenu extends Canvas implements Runnable{
 		Graphics g = bs.getDrawGraphics();
 		////////////////////////////////////////////////////////
 
-		g.drawImage(background, 0, 0, null);
+		
+		//b1y = First Image y position
+		//b2y = Second Image Y Position
+		
+		if(Glide.b1y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b1y = Glide.b2y - Glide.background.getHeight();
+		}
+		
+		if(Glide.b2y >= (Glide.HEIGHT * Glide.SCALE)){
+			Glide.b2y = Glide.b1y - Glide.background2.getHeight();
+		}
+			
+		
+		g.drawImage(Glide.background, 0, (int)Glide.b1y, null);
+		
+		g.drawImage(Glide.background2, 0, (int)Glide.b2y, null);
+		
+		
+		
 		Font f = new Font("Ariel", Font.BOLD, 24);
 		g.setFont(f);
 		
@@ -171,9 +190,9 @@ public class MainMenu extends Canvas implements Runnable{
 		g.drawChars(Glide.version.toCharArray(), 0, Glide.version.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Glide.version) / 2), 130 + logoh);
 		
 		/* Updater */
-		g.setColor(update_color);
-		g.drawChars(update.toCharArray(), 0, update.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(update) / 2), 152 + logoh);
-		g.drawChars(update2.toCharArray(), 0, update2.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(update2) / 2), 174 + logoh);
+		g.setColor(Glide.update_color);
+		g.drawChars(Glide.update.toCharArray(), 0, Glide.update.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Glide.update) / 2), 152 + logoh);
+		g.drawChars(Glide.update2.toCharArray(), 0, Glide.update2.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (g.getFontMetrics().stringWidth(Glide.update2) / 2), 174 + logoh);
 		/* End Updater */
 		
 		g.setColor(Color.GREEN);

@@ -29,10 +29,10 @@ public class Version implements Serializable{
 	
 	
 	public static String getAppVersion(){
-		return "v1.0.32b";
+		return "v1.0.35b";
 	}
 	
 	public static int getAppBuild(){
-		return 106;
+		return 221;
 	}
 }
