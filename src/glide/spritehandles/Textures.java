@@ -1,6 +1,6 @@
 package glide.spritehandles;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 
 import java.awt.image.BufferedImage;
 
@@ -13,7 +13,7 @@ public class Textures {
 						 meteor5,meteor6,smallmeteor1,smallmeteor2,smallmeteor3,smallmeteor4,smallmeteor5,smallmeteor6,cod,cod_pickup,max_cod,grayscale_beam, grayscale_sheild;
 	
 	private SpriteSheet sprite_sheet = null;
-	public Textures(Game game){
+	public Textures(SinglePlayerGame game){
 		sprite_sheet = new SpriteSheet(game.getSpriteSheet());
 		getTextures();
 	}

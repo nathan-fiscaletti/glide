@@ -36,11 +36,11 @@ public class Glide {
 	public static String TITLE = "Glide - " + version;
 	
 	public static JFrame frame = new JFrame(TITLE);
-	public static Game game;
 	public static MainMenu mm;
 	public static HTPMenu htp;
 	public static OptionsMenu op;
 	public static ControlsMenu cm;
+	public static SinglePlayerGame game;
 	public static boolean sounds = true;
 	public static boolean music = true;
 	public static boolean fullscreen = true;
@@ -73,6 +73,34 @@ public class Glide {
 	public static float b1y = 0;
 	public static float b2y = 0;
 	public static int backgroundSpeed = 1;
+	
+	/* Cheats */
+	public static boolean mdb_cheat = false;
+	public static boolean beam_cheat = false;
+	public static boolean shield_cheat = false;
+	public static boolean health_cheat = false;
+	public static boolean cod_cheat = false;
+	
+	/* Difficulty */
+	public static enum Difficulty {
+		Easy, Normal, Hard, Expert;
+	} public static Difficulty difficulty = Difficulty.Normal;
+	public static Color getDifficultyColor(Difficulty difficulty){
+		switch(difficulty){
+			case Easy:
+				return Color.GREEN;
+			case Expert:
+				return Color.RED;
+			case Hard:
+				return Color.ORANGE;
+			case Normal:
+				return Color.BLUE;
+			default:
+				return Color.WHITE;
+		}
+	}
+	
+
 	
 	
 	public static void main(String[] args){

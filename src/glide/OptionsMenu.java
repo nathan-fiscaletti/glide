@@ -1,5 +1,6 @@
 package glide;
 
+import glide.Glide.Difficulty;
 import glide.spritehandles.BufferedImageLoader;
 import glide.spritehandles.Textures;
 
@@ -42,6 +43,8 @@ public class OptionsMenu extends Canvas implements Runnable{
 	/*
 	private int level = 1;
 	*/
+	
+	
 	
 	
 	
@@ -165,6 +168,8 @@ public class OptionsMenu extends Canvas implements Runnable{
 		
 		f = new Font("Ariel", Font.BOLD, 24);
 		g.setFont(f);
+		
+		
 		//Audio
 		/////
 		if(selected == 1){
@@ -191,7 +196,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 			////
 			//
 			
-    	//Sounds
+    	//Controls
 		/////
 			if(selected == 3){
 				g.setColor(Color.GREEN);
@@ -203,18 +208,39 @@ public class OptionsMenu extends Canvas implements Runnable{
 			g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 24));
 			////
 			//
+
+		//Difficulty
+		/////
+			if(selected == 4){
+				g.setColor(Color.GREEN);
+			}else{
+				g.setColor(Color.DARK_GRAY);
+			}
+			sco = "Difficulty - ";
+			String sco2 = Glide.difficulty.toString();
+			
+			
+			w = g.getFontMetrics().stringWidth(sco);
+			int w2 = g.getFontMetrics().stringWidth(sco2);
+			g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - ((w + w2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 59));
+			g.setColor(Glide.getDifficultyColor(Glide.difficulty));
+			g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - ((w + w2) / 2) + w, ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 59));
+			g.setColor(Color.GREEN);
+			////
+			//
+
 		
 		
 		//Back
 		///
-		if(selected == 4){
+		if(selected == 5){
 			g.setColor(Color.GREEN);
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
 		String sco3 = "Back";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 73));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 108));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -235,13 +261,15 @@ public class OptionsMenu extends Canvas implements Runnable{
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_UP){
 			if(selected == 1){
-				selected = 4;
+				selected = 5;
 			}else if(selected == 2){
 				selected = 1;
 			}else if(selected == 3){
 				selected = 2;
 			}else if(selected == 4){
 				selected = 3;
+			}else if(selected == 5){
+				selected = 4;
 			}
 			Glide.select.play();
 		}else if (key == KeyEvent.VK_DOWN){
@@ -252,6 +280,8 @@ public class OptionsMenu extends Canvas implements Runnable{
 			}else if(selected == 3){
 				selected = 4;
 			}else if(selected == 4){
+				selected = 5;
+			}else if(selected == 5){
 				selected = 1;
 			}
 			Glide.select.play();
@@ -294,7 +324,17 @@ public class OptionsMenu extends Canvas implements Runnable{
 					Glide.cm.start();
 				}
 			}else if(selected == 4){
-
+				Glide.enter.play();
+				if(Glide.difficulty == Difficulty.Easy){
+					Glide.difficulty = Difficulty.Normal;
+				}else if(Glide.difficulty == Difficulty.Normal){
+					Glide.difficulty = Difficulty.Hard;
+				}else if(Glide.difficulty == Difficulty.Hard){
+					Glide.difficulty = Difficulty.Expert;
+				}else if(Glide.difficulty == Difficulty.Expert){
+					Glide.difficulty = Difficulty.Easy;
+				}
+			}else if(selected == 5){
 				Glide.enter.play();
 				MainMenu mm = new MainMenu();
 				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));

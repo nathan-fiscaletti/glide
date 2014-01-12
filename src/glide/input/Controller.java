@@ -1,6 +1,6 @@
 package glide.input;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 import glide.Glide;
 import glide.entities.Bullet;
 import glide.entities.Drop;
@@ -29,23 +29,23 @@ public class Controller {
 	public LinkedList<SmallMeteor> small_meteors = new LinkedList<SmallMeteor>();
 	
 	Random r = new Random();
-	Game game;
-	public Controller(Game game){
+	SinglePlayerGame game;
+	public Controller(SinglePlayerGame game){
 		this.game = game;
 	}
 	
 	public void tick(){
-		if(Game.mdb_cheat){
+		if(Glide.mdb_cheat){
 			game.mdbs = 5;
 		}
-		if(Game.shield_cheat){
+		if(Glide.shield_cheat){
 			game.plasma = true;
 			game.getPlayer().setPlasma(true);
 		}
-		if(Game.beam_cheat){
+		if(Glide.beam_cheat){
 			game.getPlayer().setBeaming(true);
 		}
-		if(Game.cod_cheat){
+		if(Glide.cod_cheat){
 			game.cods = game.max_cods;
 		}
 		
@@ -69,7 +69,7 @@ public class Controller {
 			try{
 			eb.get(i).tick();
 			if(Bounds.intersectsWith(eb.get(i), game.getPlayer())){
-				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
+				if(!game.getPlayer().isPlasma() && !Glide.health_cheat){
 					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
 					if(h == 8){
 						game.lose();
@@ -139,7 +139,7 @@ public class Controller {
 			}
 			if(Bounds.intersectsWith(e.get(i), game.getPlayer())){
 				if(!e.get(i).isDead()){
-					if(!game.getPlayer().isPlasma() && !Game.health_cheat){
+					if(!game.getPlayer().isPlasma() && !Glide.health_cheat){
 						int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
 						if(h == 8){
 							game.lose();
@@ -232,7 +232,7 @@ public class Controller {
 			try{
 			if(Bounds.intersectsWith(meteors.get(i), game.getPlayer())){
 				removeMeteor(meteors.get(i));
-				if(!game.getPlayer().isPlasma() && !Game.health_cheat){
+				if(!game.getPlayer().isPlasma() && !Glide.health_cheat){
 					int h = (game.getHealthBar().getHealth() > 1) ? game.getHealthBar().getHealth() - 1 : 8;
 					if(h == 8){
 						game.lose();
@@ -337,7 +337,6 @@ public class Controller {
 	}
 	public void spawnMeteor(){
 		r = new Random();
-		Random r2 = new Random();
 		addMeteor(new Meteor(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game));
 	}
 	

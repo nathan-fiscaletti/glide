@@ -15,8 +15,8 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+
 
 
 
@@ -72,7 +72,7 @@ public class MainMenu extends Canvas implements Runnable{
 			Updater updater = null;
 			if(Updater.internetCheck()){
 				try {
-					updater = new Updater(new URL("http://glide.fiscalleti.com/glide.v"));
+					updater = new Updater(new URL("http://www.visualisticstudios.com/glide/glide.v"));
 				} catch (Exception e) {
 					Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
 					Glide.update_color = Color.RED;
@@ -216,14 +216,26 @@ public class MainMenu extends Canvas implements Runnable{
 		
 		//How to play
 		///
+		if(selected == 9001){
+			g.setColor(Color.GREEN);
+		}else{
+			g.setColor(Color.DARK_GRAY);
+		}
+		String sco2 = "Multiplayer (Coming soon)";
+		int w2 = g.getFontMetrics().stringWidth(sco2);
+		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
+				///
+		
+		//How to play
+		///
 		if(selected == 2){
 			g.setColor(Color.GREEN);
 		}else{
 			g.setColor(Color.DARK_GRAY);
 		}
-		String sco2 = "How To Play";
-		int w2 = g.getFontMetrics().stringWidth(sco2);
-		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
+		sco2 = "How To Play";
+		w2 = g.getFontMetrics().stringWidth(sco2);
+		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh + 25));
 		///
 		
 		//Options
@@ -235,7 +247,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}
 		sco2 = "Options";
 		w2 = g.getFontMetrics().stringWidth(sco2);
-		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh));
+		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25));
 		///
 		
 		//Exit
@@ -247,7 +259,7 @@ public class MainMenu extends Canvas implements Runnable{
 		}
 		String sco3 = "Exit";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
-		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25));
+		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25 + 25));
 		///
 		
 		////////////////////////////////////////////////////////
@@ -291,10 +303,10 @@ public class MainMenu extends Canvas implements Runnable{
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
 				Glide.enter.play();
-				Game game = new Game();
-				game.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				game.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-				game.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				Glide.game = new SinglePlayerGame();
+				Glide.game.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				Glide.game.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+				Glide.game.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				try {
 					stop();
 				} catch (Exception e1) {
@@ -302,7 +314,7 @@ public class MainMenu extends Canvas implements Runnable{
 					e1.printStackTrace();
 				}
 				if(!GlideSystem.isApplet){
-					Glide.game = game;
+					
 					Glide.game.addFocusListener(new FocusListener(){
 						
 						@Override
@@ -326,7 +338,6 @@ public class MainMenu extends Canvas implements Runnable{
 					Glide.frame.pack();
 					Glide.game.start();
 				}else{
-					Glide.game = game;
 					Glide.game.addFocusListener(new FocusListener(){
 						
 						@Override
@@ -347,6 +358,28 @@ public class MainMenu extends Canvas implements Runnable{
 					Glide.frame.add(Glide.game);
 					Glide.game.start();
 				}
+			}else if(selected == 2){
+				/* === Multiplayer ===
+				Glide.enter.play();
+				String ip = (String)JOptionPane.showInputDialog(this, "Input Server IP");
+				if(ip != null && ip.length() > 0){
+					MultiPlayerGame mpg = new MultiPlayerGame();
+					mpg.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					mpg.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					mpg.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
+					try{
+						stop();
+					} catch (Exception e1){
+						e1.printStackTrace();
+					}
+					Glide.frame.remove(Glide.mm);
+					Glide.frame.add(mpg);
+					Glide.frame.pack();
+					mpg.start();
+				}else{
+					JOptionPane.showMessageDialog(this, "Bad server ip");
+				}
+				*/
 			}else if(selected == 2){
 				Glide.enter.play();
 				HTPMenu htp = new HTPMenu();

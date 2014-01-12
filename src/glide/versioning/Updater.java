@@ -4,21 +4,18 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Random;
 
 public class Updater {
 	private URL online;
 	private Version onlineVersion;
 	
 	private boolean needsUpdate = false;
-	private String updateURL;
 	public Updater(URL url) throws IOException, ClassNotFoundException{
 		this.online = url;
 		init();
@@ -75,9 +72,10 @@ public class Updater {
 	public static boolean internetCheck()
     {
         try {
-            URL url = new URL("http://glide.fiscalleti.com/");
+            URL url = new URL("http://www.visualisticstudios.com/");
             HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
-            Object objData = urlConnect.getContent();
+            @SuppressWarnings("unused")
+			Object objData = urlConnect.getContent();
         } catch (UnknownHostException e) {
             return false;
         }

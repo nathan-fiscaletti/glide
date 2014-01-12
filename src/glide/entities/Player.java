@@ -1,6 +1,6 @@
 package glide.entities;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 import glide.Glide;
 
 public class Player extends Entity{
@@ -19,7 +19,7 @@ public class Player extends Entity{
 	
 	public int speed = Player.normalSpeed;
 
-	public Player(double x, double y, Game game){
+	public Player(double x, double y, SinglePlayerGame game){
 		super(x, y, game);
 		this.setType(Entity.Type.PLAYER);
 		this.setEntityImage(game.getTextures().player);
@@ -36,23 +36,23 @@ public class Player extends Entity{
 		
 		
 		if(isBeaming()){
-			if(!Glide.game.isPaused()  && !Glide.game.lost() && !Glide.game.won()){
+			if(!this.game.isPaused()  && !this.game.lost() && !this.game.won()){
 				speed = Player.beemSpeed;
-				Glide.game.getController().addBullet(new Bullet(getX(), getY() - 32, Glide.game));
+				this.game.getController().addBullet(new Bullet(getX(), getY() - 32, this.game));
 				beamtick ++;
 				if(beamtick == 60){
-					Glide.game.beam = 4;
+					this.game.beam = 4;
 				}else if(beamtick == 120){
-					Glide.game.beam = 3;
+					this.game.beam = 3;
 				}else if (beamtick == 180){
-					Glide.game.beam = 2;
+					this.game.beam = 2;
 				}else if (beamtick == 240){
-					Glide.game.beam = 1;
+					this.game.beam = 1;
 				}else if(beamtick == 300){
 					speed = Player.normalSpeed;
 					setBeaming(false);
 					beamtick = 0;
-					Glide.game.beam = 0;
+					this.game.beam = 0;
 				}
 			}
 			setEntityImage(game.getTextures().player2);
@@ -63,26 +63,26 @@ public class Player extends Entity{
 		}
 		
 		if(isPlasma()){
-			if(!Glide.game.isPaused() && !Glide.game.lost() && !Glide.game.won()){
+			if(!this.game.isPaused() && !this.game.lost() && !this.game.won()){
 				plasmatick++;
 				
 				if(plasmatick == 60){
-					Glide.game.shield = 4;
+					this.game.shield = 4;
 					game.plasma = true;
 				}else if(plasmatick == 120){
-					Glide.game.shield = 3;
+					this.game.shield = 3;
 					game.plasma = true;
 				}else if (plasmatick == 180){
-					Glide.game.shield = 2;
+					this.game.shield = 2;
 					game.plasma = true;
 				}else if (plasmatick == 240){
-					Glide.game.shield = 1;
+					this.game.shield = 1;
 					game.plasma = true;
 				}else if(plasmatick == 300){
 					setPlasma(false);
 					game.plasma = false;
 					plasmatick = 0;
-					Glide.game.shield = 0;
+					this.game.shield = 0;
 				}
 			}
 		}
@@ -142,7 +142,7 @@ public class Player extends Entity{
 
 	public void setBeaming(boolean beam) {
 		this.beaming = beam;
-		Glide.game.beam = (beam) ? 5 : 0;
+		this.game.beam = (beam) ? 5 : 0;
 		if(beam){
 			this.beamtick = 0;
 		}
@@ -162,7 +162,7 @@ public class Player extends Entity{
 
 	public void setPlasma(boolean plasma) {
 		this.plasma = plasma;
-		Glide.game.shield = (plasma) ? 5 : 0;
+		this.game.shield = (plasma) ? 5 : 0;
 		if(plasma){
 			this.plasmatick = 0;
 		}

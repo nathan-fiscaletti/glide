@@ -3,7 +3,6 @@ package glide.versioning;
 import java.io.Serializable;
 
 public class Version implements Serializable{
-	
 	private int build;
 	private String version;
 	private String updateURL;
@@ -29,10 +28,10 @@ public class Version implements Serializable{
 	
 	
 	public static String getAppVersion(){
-		return "v1.0.37b";
+		return "v1.0.59b";
 	}
 	
 	public static int getAppBuild(){
-		return 239;
+		return 312;
 	}
 }

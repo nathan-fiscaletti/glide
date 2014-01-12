@@ -1,6 +1,6 @@
 package glide.input;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -8,9 +8,9 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter{
 	
-	Game game;
+	SinglePlayerGame game;
 	
-	public KeyInput (Game game){
+	public KeyInput (SinglePlayerGame game){
 		this.game = game;
 	}
 	

@@ -1,13 +1,13 @@
 package glide.entities;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 
 public class MultiDirectionalBullet extends Entity{
 	
 	public int tofro;
 	public int speed = 5;
 	
-	public MultiDirectionalBullet(double x, double y, Game game, int tofro) {
+	public MultiDirectionalBullet(double x, double y, SinglePlayerGame game, int tofro) {
 		super(x, y, game);
 		this.setEntityImage(game.getTextures().mdbullet);
 		this.setType(Entity.Type.MULTIDIRECTIONALBULLET);

@@ -1,35 +1,62 @@
 package glide.entities;
 
-import glide.Game;
+import glide.Glide.Difficulty;
+import glide.SinglePlayerGame;
 import glide.Glide;
 
 import java.util.Random;
 
 
 public class Enemy extends Entity{
-	public int speed;
+	public int highSpeed;
+	public int lowSpeed;
 	public boolean drop;
 	private boolean dead;
 	public boolean isBomb = false;
 	public int lives = 1;
+	
+	private int worth = 1;
+	
+	private int plusOrMinus = (new Random().nextBoolean()) ? -1 : 1;
+	
+	
 	int shootw = 30;
-	public Enemy(double x, double y, Game game, boolean drop, boolean bomb) {
+	public Enemy(double x, double y, SinglePlayerGame game, boolean drop, boolean bomb) {
 		super(x, y, game);
 		this.drop = drop;
 		this.setType(Entity.Type.ENEMY);
-		Random r = new Random();
-		speed = r.nextInt(5 - 1 + 1) + 1;
 		if(bomb){
 			this.setEntityImage(game.getTextures().enemy3);
 			this.drop = false;
 			shootw = 10000000;
+			
+			
+			
+			int isGold = (new Random().nextInt(5 - 1 + 1) + 1);
+			
+			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
+			lowSpeed = 1;
+			
+			
+			if(isGold == 5){
+				highSpeed = 5;
+				lowSpeed = 5;
+			}
+			
+			worth = isGold;
+			
+			
 			isBomb = true;
-			speed = 1;
+			highSpeed = 1;
+			lowSpeed = 1;
 			lives = 15;
 			game.bsc = -1;
 			setX((Glide.WIDTH * Glide.SCALE) / 2 - 32);
+			plusOrMinus = 0;
 		}else{
-			if(speed == 5){
+			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
+			lowSpeed = 1;
+			if(highSpeed == 5){
 				this.setEntityImage(game.getTextures().enemy2);
 				this.drop = true;
 				shootw = 15;
@@ -46,20 +73,20 @@ public class Enemy extends Entity{
 	public void tick(){
 		if(isDead()){
 			if(deathticks < 5){
-				this.setEntityImage(Glide.game.getTextures().des1);
+				this.setEntityImage(this.game.getTextures().des1);
 				deathticks ++;
 			}else if(deathticks >= 3 && deathticks < 5){
-				this.setEntityImage(Glide.game.getTextures().des2);
+				this.setEntityImage(this.game.getTextures().des2);
 				deathticks ++;
 			}else if(deathticks >= 5 && deathticks < 10){
-				this.setEntityImage(Glide.game.getTextures().des3);
+				this.setEntityImage(this.game.getTextures().des3);
 				deathticks ++;
 			}else if(deathticks == 10){
-				game.setScore(game.getScore() + speed);
-				Glide.game.getController().removeEnemy(this);
+				game.setScore(game.getScore() + worth);
+				this.game.getController().removeEnemy(this);
 				if(drop){
 						Random r = new Random();
-						if(speed == 5){
+						if(highSpeed == 5){
 							Random dia = new Random();
 							int diacatch = dia.nextInt(4);
 							if(diacatch == 1){
@@ -99,7 +126,16 @@ public class Enemy extends Entity{
 				shoot = 0;
 			}
 			
-			setY(getY() + speed);
+			int sp = new Random().nextInt(highSpeed - lowSpeed + 1) + lowSpeed;
+			
+			setY(getY() + sp);
+			
+			/* Difficulty Definer */
+			if(Glide.difficulty == Difficulty.Hard && !isBomb){
+				setX(getX() + (1 * plusOrMinus));
+			}else if(Glide.difficulty == Difficulty.Expert && !isBomb){
+				setX(getX() + ((sp) * plusOrMinus));
+			}
 		}
 		
 	}

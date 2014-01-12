@@ -1,11 +1,11 @@
 package glide.entities;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 
 public class HealthBar extends Entity{
 	private int health = 8;
-	private Game game;
-	public HealthBar(double x, double y, Game game) {
+	private SinglePlayerGame game;
+	public HealthBar(double x, double y, SinglePlayerGame game) {
 		super(x, y, game);
 		this.game = game;
 		this.setType(Entity.Type.HEALTHBAR);

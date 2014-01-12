@@ -1,10 +1,10 @@
 package glide.entities;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 import glide.Glide;
 
 public class Bullet extends Entity{
-	public Bullet(double x, double y, Game game){
+	public Bullet(double x, double y, SinglePlayerGame game){
 		super(x, y, game);
 		this.setType(Entity.Type.BULLET);
 		this.setEntityImage(game.getTextures().bullet);

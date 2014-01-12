@@ -1,16 +1,14 @@
 package glide.entities;
 
-import glide.Game;
-import glide.Glide;
+import glide.SinglePlayerGame;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 
 public class Entity {
+	
+	//Static enumerators
 	public static enum Type {
 		//Drop Types
 		HEALTHPACK,BEAM,DIAMOND,PLASMA,MDB,DIAMOND2,DIAMOND3,COD,
@@ -18,59 +16,63 @@ public class Entity {
 		PLAYER,ENEMY,METEORBIG,METEORSMALL,BULLET,MULTIDIRECTIONALBULLET,HEALTHBAR,ENEMYBULLET,PLASMAPLAYER;
 	}
 	
+	
+	
+	//Declares
 	private double x;
 	private double y;
 	private Entity.Type type;
-	protected Game game;
+	protected SinglePlayerGame game;
 	private BufferedImage entityImage;
-	public Entity(double x, double y, Game game){
+	
+	
+	
+	//Constructor
+	public Entity(double x, double y, SinglePlayerGame game){
 		this.x = x;
 		this.y = y;
 		this.game = game;
 	}
 	
-	public void tick(){
-		
-	}
+	
+	
+	//Render & tick
+	public void tick(){}
 	
 	public void render(Graphics g){
 		g.drawImage(this.getEntityImage(), (int)getX(), (int)getY(), null);
 	}
 	
 	
-	//////////////////////////////////////////////
 	
+	/* Getters and setters */
 	public Entity.Type getType() {
-		return type;
+		return this.type;
 	}
 	public void setType(Entity.Type type) {
 		this.type = type;
 	}
 	public double getX() {
-		return x;
+		return this.x;
 	}
 	public void setX(double x) {
 		this.x = x;
 	}
 	public double getY() {
-		return y;
+		return this.y;
 	}
 	public void setY(double y) {
 		this.y = y;
 	}
-	
-	public Game getGame() {
-		return game;
+	public SinglePlayerGame getGame() {
+		return this.game;
 	}
-
-	public void setGame(Game game) {
+	public void setGame(SinglePlayerGame game) {
 		this.game = game;
 	}
-
 	public BufferedImage getEntityImage() {
-		return entityImage;
+		return this.entityImage;
 	}
-
 	public void setEntityImage(BufferedImage entityImage) {
 		this.entityImage = entityImage;
 	}

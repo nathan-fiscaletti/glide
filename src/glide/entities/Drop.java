@@ -1,6 +1,6 @@
 package glide.entities;
 
-import glide.Game;
+import glide.SinglePlayerGame;
 import glide.Glide;
 
 public class Drop extends Entity{
@@ -8,7 +8,7 @@ public class Drop extends Entity{
 	
 	
 	private boolean dead = false;
-	public Drop(double x, double y, Game game, Entity.Type type) {
+	public Drop(double x, double y, SinglePlayerGame game, Entity.Type type) {
 		super(x, y, game);
 		this.setType(type);
 		if(type == Entity.Type.HEALTHPACK){
@@ -37,17 +37,17 @@ public class Drop extends Entity{
 		dropc ++;
 		if(isDead()){
 			if(deathtick < 5){
-				this.setEntityImage(Glide.game.getTextures().des1);
+				this.setEntityImage(this.game.getTextures().des1);
 				deathtick ++;
 			}else if(deathtick >= 5 && deathtick < 10){
-				this.setEntityImage(Glide.game.getTextures().des2);
+				this.setEntityImage(this.game.getTextures().des2);
 				deathtick ++;
 			}else if(deathtick >= 10 && deathtick < 15){
-				this.setEntityImage(Glide.game.getTextures().des3);
+				this.setEntityImage(this.game.getTextures().des3);
 				deathtick ++;
 			}else if(deathtick == 15){
 				Glide.dropdeath.play();
-				Glide.game.getController().removeDrop(this);
+				this.game.getController().removeDrop(this);
 			}
 		}else{
 			if(getType() == Entity.Type.DIAMOND || getType() == Entity.Type.COD){
