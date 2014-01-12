@@ -359,28 +359,6 @@ public class MainMenu extends Canvas implements Runnable{
 					Glide.game.start();
 				}
 			}else if(selected == 2){
-				/* === Multiplayer ===
-				Glide.enter.play();
-				String ip = (String)JOptionPane.showInputDialog(this, "Input Server IP");
-				if(ip != null && ip.length() > 0){
-					MultiPlayerGame mpg = new MultiPlayerGame();
-					mpg.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-					mpg.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-					mpg.setMinimumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
-					try{
-						stop();
-					} catch (Exception e1){
-						e1.printStackTrace();
-					}
-					Glide.frame.remove(Glide.mm);
-					Glide.frame.add(mpg);
-					Glide.frame.pack();
-					mpg.start();
-				}else{
-					JOptionPane.showMessageDialog(this, "Bad server ip");
-				}
-				*/
-			}else if(selected == 2){
 				Glide.enter.play();
 				HTPMenu htp = new HTPMenu();
 				htp.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
@@ -404,7 +382,6 @@ public class MainMenu extends Canvas implements Runnable{
 					Glide.frame.add(Glide.htp);
 					Glide.htp.start();
 				}
-				
 			}else if(selected == 3){
 				Glide.enter.play();
 				OptionsMenu op = new OptionsMenu();

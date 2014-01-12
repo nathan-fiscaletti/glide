@@ -32,6 +32,6 @@ public class Version implements Serializable{
 	}
 	
 	public static int getAppBuild(){
-		return 312;
+		return 315;
 	}
 }
