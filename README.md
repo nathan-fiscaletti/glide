@@ -4,6 +4,5 @@ My First Java Game (Just to get my feet wet)
 
 Latest Release (V1.0.59b Build 315) https://github.com/thefiscster510/glide/releases/tag/v1.0.59b
 
-©2013 Fiscalleti.com
-Nathan Fiscaletti
-nathan@fisalleti.com
+©2014 Nathan Fiscaletti
+nathan.fiscaletti@visualisticstudios.com
