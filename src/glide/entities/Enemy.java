@@ -23,7 +23,7 @@ public class Enemy extends Entity{
 		Normal, Hard, None;
 	}
 	
-	int shootw = 30;
+	
 	public Enemy(double x, double y, SinglePlayerGame game, boolean drop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
 		super(x, y, game);
 		this.drop = drop;
@@ -64,8 +64,11 @@ public class Enemy extends Entity{
 		game.bsc ++;
 	}
 	
+	int shootw = 30;
+	int switchupw = 100;
 	int deathticks = 0;
 	int shoot = 0;
+	int switchup = 0;
 	@Override
 	public void tick(){
 		if(isDead()){
@@ -117,7 +120,7 @@ public class Enemy extends Entity{
 			shoot ++;
 			if(shoot == shootw){
 				Random r = new Random();
-				if(r.nextBoolean()){
+				if(r.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.getEntityImage().equals(game.getTextures().bossprotector) : false)){
 					game.getController().addEnemyBullet(new EnemyBullet(getX(), getY() + 32, game));
 				}
 				shoot = 0;
@@ -131,6 +134,13 @@ public class Enemy extends Entity{
 			if(Glide.difficulty == Difficulty.Hard && !isBomb){
 				setX(getX() + (1 * plusOrMinus));
 			}else if(Glide.difficulty == Difficulty.Expert && !isBomb){
+				switchup++;
+				if(switchup == switchupw){
+					if(new Random().nextBoolean()){
+						plusOrMinus = -plusOrMinus;
+					}
+					switchup = 0;
+				}
 				setX(getX() + ((sp) * plusOrMinus));
 			}
 		}
