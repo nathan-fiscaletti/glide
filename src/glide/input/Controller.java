@@ -1,5 +1,6 @@
 package glide.input;
 
+import glide.Glide.Difficulty;
 import glide.SinglePlayerGame;
 import glide.Glide;
 import glide.entities.Bullet;
@@ -10,6 +11,7 @@ import glide.entities.Entity;
 import glide.entities.Meteor;
 import glide.entities.MultiDirectionalBullet;
 import glide.entities.SmallMeteor;
+import glide.entities.Enemy.ProtectorType;
 import glide.spritehandles.Bounds;
 
 import java.awt.Graphics;
@@ -327,10 +329,39 @@ public class Controller {
 	public void spawnEnemy(){
 		r = new Random();
 		Random r2 = new Random();
-		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, r2.nextBoolean(), false));
+		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, r2.nextBoolean(), false, false, ProtectorType.None));
 	}
 	public void spawnBomb(){
-		addEnemy(new Enemy(r.nextInt(Glide.WIDTH * Glide.SCALE), -5, game, false, true));
+		/* Bomb */
+		addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98, game, false, true, false, ProtectorType.None));
+		
+		/* Protectors */
+		if(Glide.difficulty == Difficulty.Normal){
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68, game, false, false, true, ProtectorType.Normal));
+		}else if(Glide.difficulty == Difficulty.Hard){
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68 + 34, game, false, false, true, ProtectorType.Hard));
+		}else if(Glide.difficulty == Difficulty.Expert){
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34, game, false, false, true, ProtectorType.Normal));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68, game, false, false, true, ProtectorType.Normal));
+			
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34 + 34, game, false, false, true, ProtectorType.Hard));
+			addEnemy(new Enemy((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68 + 34, game, false, false, true, ProtectorType.Hard));
+		}
+		
 	}
 	public void spawnDrop(double x, double y, Entity.Type type){
 		addDrop(new Drop(x, y, game, type));

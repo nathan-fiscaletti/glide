@@ -19,9 +19,12 @@ public class Enemy extends Entity{
 	
 	private int plusOrMinus = (new Random().nextBoolean()) ? -1 : 1;
 	
+	public static enum ProtectorType {
+		Normal, Hard, None;
+	}
 	
 	int shootw = 30;
-	public Enemy(double x, double y, SinglePlayerGame game, boolean drop, boolean bomb) {
+	public Enemy(double x, double y, SinglePlayerGame game, boolean drop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
 		super(x, y, game);
 		this.drop = drop;
 		this.setType(Entity.Type.ENEMY);
@@ -29,23 +32,8 @@ public class Enemy extends Entity{
 			this.setEntityImage(game.getTextures().enemy3);
 			this.drop = false;
 			shootw = 10000000;
-			
-			
-			
 			int isGold = (new Random().nextInt(5 - 1 + 1) + 1);
-			
-			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
-			lowSpeed = 1;
-			
-			
-			if(isGold == 5){
-				highSpeed = 5;
-				lowSpeed = 5;
-			}
-			
 			worth = isGold;
-			
-			
 			isBomb = true;
 			highSpeed = 1;
 			lowSpeed = 1;
@@ -55,13 +43,22 @@ public class Enemy extends Entity{
 			plusOrMinus = 0;
 		}else{
 			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
+			if(isBombProtector){
+				highSpeed = 1;
+				plusOrMinus = 0;
+			}
 			lowSpeed = 1;
 			if(highSpeed == 5){
 				this.setEntityImage(game.getTextures().enemy2);
 				this.drop = true;
 				shootw = 15;
 			}else{
-				this.setEntityImage(game.getTextures().enemy);
+				if(protectorType == ProtectorType.Hard){
+					this.setEntityImage(game.getTextures().bossprotector);
+					this.lives = 2;
+				}else{
+					this.setEntityImage(game.getTextures().enemy);
+				}
 			}
 		}	
 		game.bsc ++;

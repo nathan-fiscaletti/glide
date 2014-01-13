@@ -10,7 +10,7 @@ public class Textures {
 	public BufferedImage player,enemy,enemy2,enemy3,bullet,enemybullet,healthbar1,healthbar2,healthbar3,
 						 healthbar4,healthbar5,healthbar6,healthbar7,healthbar8,powerbar1,powerbar2,powerbar3,powerbar4,powerbar5,healthpack,beam, diamond, diamond2, diamond3, des1,des2,des3,player2,playerhurt,
 						 plasma,plasmaplayer,mdbullet,mdppickup,max,bombsp,meteor1,meteor2,meteor3,meteor4,
-						 meteor5,meteor6,smallmeteor1,smallmeteor2,smallmeteor3,smallmeteor4,smallmeteor5,smallmeteor6,cod,cod_pickup,max_cod,grayscale_beam, grayscale_sheild;
+						 meteor5,meteor6,smallmeteor1,smallmeteor2,smallmeteor3,smallmeteor4,smallmeteor5,smallmeteor6,cod,cod_pickup,max_cod,grayscale_beam, grayscale_sheild,bossprotector;
 	
 	private SpriteSheet sprite_sheet = null;
 	public Textures(SinglePlayerGame game){
@@ -23,6 +23,7 @@ public class Textures {
 		enemy = sprite_sheet.grabImage(4,1,32,32);
 		enemy2 = sprite_sheet.grabImage(4,2,32,32);
 		enemy3 = sprite_sheet.grabImage(4, 3, 32, 32);
+		bossprotector = sprite_sheet.grabImage(1, 5, 32, 32);
 		
 		/* Bullets */
 		bullet = sprite_sheet.grabImage(2,1,32,32);

@@ -562,8 +562,12 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		}
 		
 		////////////////////////////////////////////////////////
-		g.dispose();
-		bs.show();
+		try{
+			g.dispose();
+			bs.show();
+		}catch(Exception e){
+			
+		}
 	}
 	
 	public boolean isBombDeployed(){
