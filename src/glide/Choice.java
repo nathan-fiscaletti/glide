@@ -18,6 +18,7 @@ public class Choice extends JFrame{
 		JLabel c = new JLabel("Would you like to run the game in a window, or full screen");
 		JButton window = new JButton("Windowed");
 		JButton full = new JButton("Full Screen");
+		
 		Image i = new ImageIcon(this.getClass().getResource("/images/icon.png")).getImage();
 		this.setIconImage(i);
 		GlideSystem.icon = i;
@@ -34,13 +35,17 @@ public class Choice extends JFrame{
 			
 		});
 		
+		full.setEnabled(false); // Disabled due to full screen functionality issues
+		
 		full.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				/* Disabled due to FullScreen functionality issues.
 				Glide.fullscreen = true;
 				cont = true;
 				setVisible(false);
+				*/
 			}
 			
 		});

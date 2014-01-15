@@ -247,6 +247,26 @@ public class Controller {
 					Glide.explosion.play();
 				}
 			}
+			
+			for(int i2 = 0;i2 < meteors.size(); i2++){
+				if(!meteors.get(i2).equals(meteors.get(i))){
+					if(Bounds.intersectsWith(meteors.get(i2), meteors.get(i))){
+						meteors.get(i).die(true);
+						meteors.get(i2).die(true);
+						Glide.explosion.play();
+					}
+				}
+			}
+			
+			for(int i3 = 0;i3 < e.size(); i3++){
+				if(Bounds.intersectsWith(e.get(i3), meteors.get(i))){
+					meteors.get(i).die(true);
+					if(!e.get(i3).isProtector()){
+						e.get(i3).die();
+					}
+				}
+			}
+			
 			}catch(Exception e){}
 			try{
 			for(int i2 = 0; i2 < b.size(); i2++){
@@ -254,7 +274,7 @@ public class Controller {
 					if(Bounds.intersectsWith(meteors.get(i), b.get(i2))){
 					
 						removeBullet(b.get(i2));
-						meteors.get(i).die();
+						meteors.get(i).die(false);
 						Glide.explosion.play();
 					
 					}
@@ -264,16 +284,15 @@ public class Controller {
 			for(int i3 = 0; i3 < mdb.size(); i3 ++){
 				
 					if(Bounds.intersectsWith(meteors.get(i), mdb.get(i3))){
-					
-						///removeMDBullet(mdb.get(i3));
-							meteors.get(i).die();
+						
+							meteors.get(i).die(false);
 							Glide.explosion.play();
 					
 					}
 			}
 			}catch(Exception e){}
 			if(Bounds.intersectsWith(game.circle, meteors.get(i)) && game.isCircling()){
-				meteors.get(i).die();
+				meteors.get(i).die(false);
 			}
 			
 		}
@@ -301,7 +320,6 @@ public class Controller {
 				try{
 					if(Bounds.intersectsWith(small_meteors.get(i), b.get(i2))){
 					
-						//removeBullet(b.get(i2));
 						removeSmallMeteor(small_meteors.get(i));
 						Glide.explosion.play();
 					
@@ -312,7 +330,6 @@ public class Controller {
 				try{
 					if(Bounds.intersectsWith(small_meteors.get(i), mdb.get(i3))){
 					
-						///removeMDBullet(mdb.get(i3));
 							removeSmallMeteor(small_meteors.get(i));
 							Glide.explosion.play();
 					

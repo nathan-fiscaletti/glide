@@ -93,7 +93,7 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 	public int beam = 0;
 	
 	/* Initial CountDown */
-	private String cntdwn_string = "... Get Ready To Play! ...";
+	private String cntdwn_string = "... Prepare to launch! ...";
 	private int cntdwn_ticks = 5;
 	private boolean cntdwn_done = false;
 	
@@ -376,15 +376,21 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		g.setFont(new Font("Ariel", Font.BOLD, 18));
 		int lvli = level;
 		String lvl = "Level: " + lvli;
-		String bombDeployed = (isBombDeployed()) ? "ENEMY BOMB DEPLOYED" : "";
+		String bombDeployed = (isBombDeployed()) ? "!!B!!" : "";
+		String sco = "Score: " + score;
 		
 		g.setColor(Color.RED);
-		g.drawChars(bombDeployed.toCharArray(), 0, bombDeployed.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (g.getFontMetrics().stringWidth(bombDeployed) * 1) -10, (Glide.HEIGHT * Glide.SCALE) - 85);
+		int bdx = ((Glide.WIDTH * Glide.SCALE) - ((g.getFontMetrics().stringWidth(sco) * 3)));
+		bdx = (Glide.WIDTH * Glide.SCALE) - bdx;
+		bdx = (Glide.WIDTH * Glide.SCALE) - bdx / 2;
+		bdx = bdx - g.getFontMetrics().stringWidth(bombDeployed);
+		bdx = bdx + g.getFontMetrics().stringWidth(bombDeployed)/4;
+		g.drawChars(bombDeployed.toCharArray(), 0, bombDeployed.toCharArray().length, bdx, (Glide.HEIGHT * Glide.SCALE) - 87);
 		
 		g.setColor(Color.ORANGE);
 		g.drawChars(lvl.toCharArray(), 0, lvl.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (g.getFontMetrics().stringWidth(lvl) * 2) + 50, (Glide.HEIGHT * Glide.SCALE) - 67);
 		g.setColor(Color.GREEN);
-		String sco = "Score: " + score;
+		
 		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (g.getFontMetrics().stringWidth(sco) * 3), (Glide.HEIGHT * Glide.SCALE) - 67);
 		
 		
@@ -924,8 +930,13 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 	}
 	
 	public void startCircling(float x, float y){
+		this.stopCircling();
 		this.pcx = x;
 		this.pcy = y;
+		circle_width = 0;
+		circle_height = 0;
+		circle_x = ((Glide.WIDTH * Glide.SCALE) / 2) - (circle_width / 2);
+		circle_y = ((Glide.HEIGHT * Glide.SCALE) / 2) - (circle_height / 2);
 		this.circling = true;
 	}
 

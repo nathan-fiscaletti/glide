@@ -19,7 +19,7 @@ public class Meteor extends Entity{
 		
 		//Make small or no..
 		Random r = new Random();
-		if(!r.nextBoolean()) this.die();
+		if(!r.nextBoolean()) this.die(false);
 		
 	}
 	
@@ -43,8 +43,8 @@ public class Meteor extends Entity{
 		}
 	}
 	
-	public void die(){
-		if(new Random().nextBoolean()){
+	public void die(boolean forceSmall){
+		if(new Random().nextBoolean() || forceSmall){
 			SmallMeteor s1 = new SmallMeteor(this.getX(), this.getY(), this.game);
 			SmallMeteor s2 = new SmallMeteor(this.getX(), this.getY(), this.game);
 			SmallMeteor s3 = new SmallMeteor(this.getX(), this.getY(), this.game);

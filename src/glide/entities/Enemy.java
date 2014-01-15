@@ -13,6 +13,7 @@ public class Enemy extends Entity{
 	public boolean drop;
 	private boolean dead;
 	public boolean isBomb = false;
+	private boolean isProtector = false;
 	public int lives = 1;
 	
 	private int worth = 1;
@@ -44,6 +45,7 @@ public class Enemy extends Entity{
 		}else{
 			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
 			if(isBombProtector){
+				this.isProtector = true;
 				highSpeed = 1;
 				plusOrMinus = 0;
 			}
@@ -153,18 +155,27 @@ public class Enemy extends Entity{
 	}
 	public void die(){
 		setDead(true);
+		if(isBomb){
+			game.stopCircling();
+			game.startCircling((float)this.getX(), (float)this.getY());	
+		}
 	}
 
 	public boolean isDead() {
 		return dead;
 	}
 
+	public boolean isProtector() {
+		return isProtector;
+	}
+
+
 	public void setDead(boolean dead) {
 		this.dead = dead;
 	}
 
 	public void blowUpBomb() {
-		//Blow up the bomb		
+		
 	}
 	
 
