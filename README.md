@@ -2,7 +2,7 @@
 * * *
 My First Java Game (Just to get my feet wet)
 
-Latest Release (V1.0.62b Build 357) https://github.com/thefiscster510/glide/releases/tag/v1.0.62b
+Latest Release (V1.0.63b Build 402) https://github.com/thefiscster510/glide/releases/tag/v1.0.63
 
 ©2014 Nathan Fiscaletti
 nathan.fiscaletti@visualisticstudios.com
