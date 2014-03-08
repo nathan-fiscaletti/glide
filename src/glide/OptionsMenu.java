@@ -271,7 +271,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 			}else if(selected == 5){
 				selected = 4;
 			}
-			Glide.select.play();
+			Glide.s_select.play();
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -284,7 +284,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 			}else if(selected == 5){
 				selected = 1;
 			}
-			Glide.select.play();
+			Glide.s_select.play();
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
 				if(Glide.music){
@@ -300,7 +300,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 				}
 			}else if(selected == 3){
 				//Controls screen
-				Glide.enter.play();
+				Glide.s_enter.play();
 				ControlsMenu cm = new ControlsMenu();
 				cm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				cm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
@@ -324,7 +324,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 					Glide.cm.start();
 				}
 			}else if(selected == 4){
-				Glide.enter.play();
+				Glide.s_enter.play();
 				if(Glide.difficulty == Difficulty.Easy){
 					Glide.difficulty = Difficulty.Normal;
 				}else if(Glide.difficulty == Difficulty.Normal){
@@ -335,7 +335,7 @@ public class OptionsMenu extends Canvas implements Runnable{
 					Glide.difficulty = Difficulty.Easy;
 				}
 			}else if(selected == 5){
-				Glide.enter.play();
+				Glide.s_enter.play();
 				MainMenu mm = new MainMenu();
 				mm.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 				mm.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));

@@ -4,8 +4,6 @@ package glide;
 
 
 
-import glide.soundsystem.Sound;
-import glide.soundsystem.Sound2;
 import glide.spritehandles.BufferedImageLoader;
 import glide.versioning.Version;
 
@@ -23,6 +21,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import kuusisto.tinysound.Music;
+import kuusisto.tinysound.TinySound;
 
 
 public class Glide {
@@ -47,15 +48,15 @@ public class Glide {
 	
 	
 	/* sounds */
-	public static final Sound explosion = new Sound("/sounds/explode.wav");
-	public static final Sound hurt = new Sound("/sounds/hurt.wav");
-	public static final Sound pickup = new Sound("/sounds/pickup.wav");
-	public static final Sound shoot = new Sound("/sounds/shoot.wav");
-	public static final Sound select = new Sound("/sounds/select.wav");
-	public static final Sound enter = new Sound("/sounds/enter.wav");
-	public static final Sound gameover = new Sound("/sounds/gameover.wav");
-	public static final Sound dropdeath = new Sound("/sounds/dropexplode.wav");
-	public static final Sound2 backgroundmusic = new Sound2("/sounds/cr.wav");
+	public static kuusisto.tinysound.Sound s_explosion;// = new Sound("/sounds/explode.wav");
+	public static kuusisto.tinysound.Sound s_hurt;// = new Sound("/sounds/hurt.wav");
+	public static kuusisto.tinysound.Sound s_pickup;// = new Sound("/sounds/pickup.wav");
+	public static kuusisto.tinysound.Sound s_shoot;// = new Sound("/sounds/shoot.wav");
+	public static kuusisto.tinysound.Sound s_select;// = new Sound("/sounds/select.wav");
+	public static kuusisto.tinysound.Sound s_enter;// = new Sound("/sounds/enter.wav");
+	public static kuusisto.tinysound.Sound s_gameover;// = new Sound("/sounds/gameover.wav");
+	public static kuusisto.tinysound.Sound s_dropdeath;// = new Sound("/sounds/dropexplode.wav");
+	public static kuusisto.tinysound.Music s_backgroundmusic;// = new Sound2("/sounds/cr.wav");
 	
 	/* Updater */
 	public static String update = "You are running the latest version!";
@@ -84,7 +85,7 @@ public class Glide {
 	/* Difficulty */
 	public static enum Difficulty {
 		Easy, Normal, Hard, Expert;
-	} public static Difficulty difficulty = Difficulty.Normal;
+	} public static Difficulty difficulty = Difficulty.Expert;
 	public static Color getDifficultyColor(Difficulty difficulty){
 		switch(difficulty){
 			case Easy:
@@ -170,8 +171,20 @@ public class Glide {
 			
 		}
 		
-		Glide.backgroundmusic.setVolume(-25.0f);
-		Glide.backgroundmusic.loop();
+		/** Tiny Sound by finnkuusisto - https://github.com/finnkuusisto/TinySound */
+		TinySound.init();
+		
+		s_explosion = TinySound.loadSound("/sounds/explode.wav", true);
+		s_hurt = TinySound.loadSound("/sounds/hurt.wav", true);
+		s_pickup = TinySound.loadSound("/sounds/pickup.wav", true);
+		s_shoot = TinySound.loadSound("/sounds/shoot.wav", true);
+		s_select = TinySound.loadSound("/sounds/select.wav", true);
+		s_enter = TinySound.loadSound("/sounds/enter.wav", true);
+		s_gameover = TinySound.loadSound("/sounds/gameover.wav", true);
+		s_dropdeath = TinySound.loadSound("/sounds/explode.wav", true);
+		s_backgroundmusic = TinySound.loadMusic("/sounds/cr.wav", true);
+		
+		s_backgroundmusic.play(true, 0.25f);
 		
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 
@@ -185,11 +198,11 @@ public class Glide {
 	
 	public static void muteMusic(){
 		Glide.music = false;
-		Glide.backgroundmusic.setVolume(-1000.0f);
+		s_backgroundmusic.pause();
 	}
 	public static void unmuteMusic(){
 		Glide.music = true;
-		Glide.backgroundmusic.setVolume(-25.0f);
+		s_backgroundmusic.play(true, 0.25f);
 	}
 	
 	public static void muteSounds(){

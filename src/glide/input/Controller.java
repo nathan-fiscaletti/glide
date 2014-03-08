@@ -80,7 +80,7 @@ public class Controller {
 						game.getHealthBar().setHealth(h);
 						game.getPlayer().hurt();
 					}
-					Glide.hurt.play();
+					Glide.s_hurt.play();
 				}else{
 					removeEnemyBullet(eb.get(i));
 				}
@@ -120,7 +120,7 @@ public class Controller {
 							e.get(i).lives --;
 						}
 						removeBullet(b.get(i2));
-						Glide.explosion.play();
+						Glide.s_explosion.play();
 					}
 				}
 			}
@@ -135,7 +135,7 @@ public class Controller {
 						}
 						e.get(i).die();
 						///removeMDBullet(mdb.get(i3));
-						Glide.explosion.play();
+						Glide.s_explosion.play();
 					}
 				}
 			}
@@ -159,7 +159,7 @@ public class Controller {
 							game.getHealthBar().setHealth(h);
 							game.getPlayer().hurt();
 						}
-						Glide.hurt.play();
+						Glide.s_hurt.play();
 					}else{
 						if(e.get(i).isBomb){
 							if(e.get(i).isBomb){
@@ -171,7 +171,7 @@ public class Controller {
 							e.get(i).die(false);
 						}else{
 							e.get(i).die();
-							Glide.explosion.play();
+							Glide.s_explosion.play();
 						}
 					}
 				}
@@ -187,7 +187,7 @@ public class Controller {
 					e.get(i).die(false);
 				}else{
 					e.get(i).die();
-					Glide.explosion.play();
+					Glide.s_explosion.play();
 				}
 			}
 			
@@ -219,7 +219,7 @@ public class Controller {
 						}
 					}
 					removeDrop(drops.get(i));
-					Glide.pickup.play();
+					Glide.s_pickup.play();
 				}
 			}
 		}
@@ -241,10 +241,10 @@ public class Controller {
 					}else{
 						game.getHealthBar().setHealth(h);
 						game.getPlayer().hurt();
-						Glide.hurt.play();
+						Glide.s_hurt.play();
 					}
 				}else{
-					Glide.explosion.play();
+					Glide.s_explosion.play();
 				}
 			}
 			
@@ -253,7 +253,7 @@ public class Controller {
 					if(Bounds.intersectsWith(meteors.get(i2), meteors.get(i))){
 						meteors.get(i).die(true);
 						meteors.get(i2).die(true);
-						Glide.explosion.play();
+						Glide.s_explosion.play();
 					}
 				}
 			}
@@ -275,7 +275,7 @@ public class Controller {
 					
 						removeBullet(b.get(i2));
 						meteors.get(i).die(false);
-						Glide.explosion.play();
+						Glide.s_explosion.play();
 					
 					}
 			}
@@ -286,7 +286,7 @@ public class Controller {
 					if(Bounds.intersectsWith(meteors.get(i), mdb.get(i3))){
 						
 							meteors.get(i).die(false);
-							Glide.explosion.play();
+							Glide.s_explosion.play();
 					
 					}
 			}
@@ -309,10 +309,10 @@ public class Controller {
 					}else{
 						game.getHealthBar().setHealth(h);
 						game.getPlayer().hurt();
-						Glide.hurt.play();
+						Glide.s_hurt.play();
 					}
 				}else{
-					Glide.explosion.play();
+					Glide.s_explosion.play();
 				}
 			}
 			
@@ -321,7 +321,7 @@ public class Controller {
 					if(Bounds.intersectsWith(small_meteors.get(i), b.get(i2))){
 					
 						removeSmallMeteor(small_meteors.get(i));
-						Glide.explosion.play();
+						Glide.s_explosion.play();
 					
 					}
 				}catch(Exception e){}
@@ -331,14 +331,14 @@ public class Controller {
 					if(Bounds.intersectsWith(small_meteors.get(i), mdb.get(i3))){
 					
 							removeSmallMeteor(small_meteors.get(i));
-							Glide.explosion.play();
+							Glide.s_explosion.play();
 					
 					}
 				}catch(Exception e){}
 			}
 			if(Bounds.intersectsWith(game.circle, small_meteors.get(i)) && game.isCircling()){
 				removeSmallMeteor(small_meteors.get(i));
-				Glide.explosion.play();
+				Glide.s_explosion.play();
 			}
 		}
 	}catch(Exception e){}

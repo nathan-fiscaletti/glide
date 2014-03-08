@@ -46,7 +46,7 @@ public class Drop extends Entity{
 				this.setEntityImage(this.game.getTextures().des3);
 				deathtick ++;
 			}else if(deathtick == 15){
-				Glide.dropdeath.play();
+				Glide.s_dropdeath.play();
 				this.game.getController().removeDrop(this);
 			}
 		}else{

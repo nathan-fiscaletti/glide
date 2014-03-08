@@ -8,7 +8,7 @@ public class Bullet extends Entity{
 		super(x, y, game);
 		this.setType(Entity.Type.BULLET);
 		this.setEntityImage(game.getTextures().bullet);
-		Glide.shoot.play();
+		Glide.s_shoot.play();
 	}
 	@Override
 	public void tick(){

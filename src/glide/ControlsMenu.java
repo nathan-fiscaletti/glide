@@ -208,7 +208,7 @@ public class ControlsMenu extends Canvas implements Runnable{
 			}else if(selected == 4){
 				selected = 3;
 			}
-			Glide.select.play();
+			Glide.s_select.play();
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -219,9 +219,9 @@ public class ControlsMenu extends Canvas implements Runnable{
 			}else if(selected == 4){
 				selected = 1;
 			}
-			Glide.select.play();
+			Glide.s_select.play();
 		}else if(key == KeyEvent.VK_ENTER){
-			Glide.enter.play();
+			Glide.s_enter.play();
 			OptionsMenu op = new OptionsMenu();
 			op.setPreferredSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));
 			op.setMaximumSize(new Dimension(Glide.WIDTH * Glide.SCALE, Glide.HEIGHT * Glide.SCALE));

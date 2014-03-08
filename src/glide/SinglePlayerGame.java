@@ -889,7 +889,7 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 	
 	public void lose(){
 		this.lost = true;
-		Glide.gameover.play();
+		Glide.s_gameover.play();
 	}
 	
 	public void restartAfterLost(){
