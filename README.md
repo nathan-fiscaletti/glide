@@ -8,8 +8,11 @@ Build it yourself instructions:
 
     git clone http://github.com/nathan-fiscaletti/glide.git
     In eclipse go to File->Import
-    Select "Existing Projects into Eclipse"
+    Select "General->Existing Projects into Eclipse"
+    Under "Select root directory", click "Browse"
     Select the "glide" directory
-    Press play
+    Click finish
+    You should now see Glide in your work space
+    Opposite click it, and go to "Run As->Java Application"
 
 nathan.fiscaletti@gmail.com
