@@ -14,5 +14,4 @@ Build it yourself instructions:
     Select the "glide" directory
     Press play
 
-©2014 Nathan Fiscaletti
-nathan.fiscaletti@visualisticstudios.com
+nathan.fiscaletti@gmail.com
