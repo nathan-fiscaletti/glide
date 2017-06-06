@@ -6,13 +6,13 @@ My First Java Game (Just to get my feet wet)
 
 Build it yourself instructions:
 
-    git clone http://github.com/nathan-fiscaletti/glide.git
-    In eclipse go to File->Import
-    Select "General->Existing Projects into Eclipse"
-    Under "Select root directory", click "Browse"
-    Select the "glide" directory
-    Click finish
-    You should now see Glide in your work space
-    Opposite click it, and go to "Run As->Java Application"
+1. `git clone http://github.com/nathan-fiscaletti/glide.git`
+2. In eclipse go to `File->Import`
+3. Select `General->Existing Projects into Eclipse`
+4. Under `Select root directory`, click `Browse`
+5. Select the `glide` directory
+6. Click finish
+7. You should now see Glide in your work space
+8. Opposite click it, and go to `Run As->Java Application`
 
 nathan.fiscaletti@gmail.com
