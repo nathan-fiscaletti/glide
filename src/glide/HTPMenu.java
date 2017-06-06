@@ -155,10 +155,6 @@ public class HTPMenu extends Canvas implements Runnable{
 		int logoh = logo.getHeight();
 		g.drawImage(logo, ((Glide.WIDTH * Glide.SCALE) / 2) - (logow / 2), 120, null);
 		
-		String htp = "Use the arrow keys to move your spaceship back and forth";
-		String htp2 = "Use space to shoot and destroy enemies"; 
-		String htp3 = "Pick up drops along the way, and defeat the enemy invaders!";
-		
 		g.setColor(Color.ORANGE);
 		BufferedImageLoader l = new BufferedImageLoader();
 		BufferedImage ht = null;

@@ -22,7 +22,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import kuusisto.tinysound.Music;
 import kuusisto.tinysound.TinySound;
 
 

@@ -5,9 +5,6 @@ import glide.Glide;
 import java.applet.Applet;
 import java.applet.AudioClip;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
 public class Sound {
 	private AudioClip clip;
 	

@@ -1,6 +1,5 @@
 package glide;
 
-import glide.Glide.Difficulty;
 import glide.entities.Bullet;
 import glide.entities.Enemy;
 import glide.entities.HealthBar;
@@ -42,6 +41,10 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 	/* Game Properties */
 	private boolean running = false;
 	private Thread thread;
+	
+	// TODO: Move rendering to it's own thread?
+	// private Thread renderThread;
+	
 	private BufferedImage image = (GlideSystem.isApplet) ? new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB) : new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
 	
@@ -134,6 +137,21 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		
 		thread = new Thread(this);
 		thread.start();
+		
+		// TODO: Move rendering to it's own thread?
+		/*
+		renderThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (running) {
+					render();
+				}
+			}
+		});
+		
+		renderThread.start();
+		*/
+		
 		running = true;
 	}
 	
