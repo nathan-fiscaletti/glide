@@ -4,7 +4,15 @@ My First Java Game (Just to get my feet wet)
 
 Wiki: https://github.com/nathan-fiscaletti/glide/wiki
 
-Latest Release (V1.0.66b Build 481) https://github.com/thefiscster510/glide/releases/tag/v1.0.66b
+Latest Release (V1.0.66b Build 481) https://github.com/nathan-fiscaletti/glide/releases/tag/v1.0.66b
+
+Build it yourself instructions:
+
+    git clone http://github.com/nathan-fiscaletti/glide.git
+    In eclipse go to File->Import
+    Select "Existing Projects into Eclipse"
+    Select the "glide" directory
+    Press play
 
 ©2014 Nathan Fiscaletti
 nathan.fiscaletti@visualisticstudios.com
