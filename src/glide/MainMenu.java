@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 
 
 
@@ -68,11 +67,14 @@ public class MainMenu extends Canvas implements Runnable{
 		if(running){
 			return;
 		}
-		if(!Glide.checkedForUpdate){
+		
+		// Updating is disable currently due to downed update servers
+		// To update 
+		if (! Glide.checkedForUpdate) {
 			Updater updater = null;
 			if(Updater.internetCheck()){
 				try {
-					updater = new Updater(new URL("http://www.visualisticstudios.com/glide/glide.v"));
+					updater = new Updater();
 				} catch (Exception e) {
 					Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
 					Glide.update_color = Color.RED;
@@ -80,7 +82,7 @@ public class MainMenu extends Canvas implements Runnable{
 		
 				if(updater != null && updater.needsUpdate()){
 					Glide.update = "There is an update available for version " + updater.getLatestVersion().getVersion() + " Build " + updater.getLatestVersion().getBuild() + "!";
-					Glide.update2 = "Update at " + updater.getLatestVersion().getUpdateURL();
+					Glide.update2 = "Update at " + Updater.updateAt;
 					Glide.update_color = Color.YELLOW;
 					Glide.TITLE = Glide.TITLE + " ~ !!UPDATE AVAILABLE!!";
 				}
@@ -90,6 +92,8 @@ public class MainMenu extends Canvas implements Runnable{
 			}
 			Glide.checkedForUpdate = true;
 		}
+		
+		System.out.println("Starting thread!");
 		running = true;
 		thread = new Thread(this);
 		thread.start();
@@ -97,10 +101,6 @@ public class MainMenu extends Canvas implements Runnable{
 	}
 	
 	public synchronized void stop() throws Exception{
-		if(!running){
-			return;
-		}
-		
 		running = false;
 	}
 	/* End Thread Control */
@@ -203,11 +203,7 @@ public class MainMenu extends Canvas implements Runnable{
 		
 		//Play
 		/////
-		if(selected == 1){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor((selected == 1) ? Color.GREEN : Color.DARK_GRAY);
 		String sco = "Play";
 		int w = g.getFontMetrics().stringWidth(sco);
 		g.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 49 + logoh));
@@ -216,23 +212,15 @@ public class MainMenu extends Canvas implements Runnable{
 		
 		//How to play
 		///
-		if(selected == 9001){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor((selected == 9001) ? Color.GREEN : Color.DARK_GRAY);
 		String sco2 = "Multiplayer (Coming soon)";
 		int w2 = g.getFontMetrics().stringWidth(sco2);
 		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh));
-				///
+		///
 		
 		//How to play
 		///
-		if(selected == 2){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor((selected == 2) ? Color.GREEN : Color.DARK_GRAY);
 		sco2 = "How To Play";
 		w2 = g.getFontMetrics().stringWidth(sco2);
 		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() - 25 + logoh + 25));
@@ -240,11 +228,7 @@ public class MainMenu extends Canvas implements Runnable{
 		
 		//Options
 		///
-		if(selected == 3){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor((selected == 3) ? Color.GREEN : Color.DARK_GRAY);
 		sco2 = "Options";
 		w2 = g.getFontMetrics().stringWidth(sco2);
 		g.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25));
@@ -252,11 +236,7 @@ public class MainMenu extends Canvas implements Runnable{
 		
 		//Exit
 		///
-		if(selected == 4){
-			g.setColor(Color.GREEN);
-		}else{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor((selected == 4) ? Color.GREEN : Color.DARK_GRAY);
 		String sco3 = "Exit";
 		int w3 = g.getFontMetrics().stringWidth(sco3);
 		g.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (g.getFontMetrics().getDescent() + logoh + 25 + 25));
@@ -310,7 +290,6 @@ public class MainMenu extends Canvas implements Runnable{
 				try {
 					stop();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if(!GlideSystem.isApplet){
@@ -328,7 +307,6 @@ public class MainMenu extends Canvas implements Runnable{
 
 						@Override
 						public void focusGained(FocusEvent e) {
-							// TODO Auto-generated method stub
 							
 						}
 						
@@ -349,7 +327,6 @@ public class MainMenu extends Canvas implements Runnable{
 
 						@Override
 						public void focusGained(FocusEvent e) {
-							// TODO Auto-generated method stub
 							
 						}
 						
@@ -413,23 +390,9 @@ public class MainMenu extends Canvas implements Runnable{
 		
 
 	}
+	
 	public void keyReleased(KeyEvent e){
-		/*
-		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_UP){
-			this.getPlayer().setVelocityY(0);
-		}else if(key == KeyEvent.VK_LEFT){
-			this.getPlayer().setVelocityX(0);
-		}else if(key == KeyEvent.VK_DOWN){
-			this.getPlayer().setVelocityY(0);
-		}else if(key == KeyEvent.VK_RIGHT){
-			this.getPlayer().setVelocityX(0);
-		}else if(key == KeyEvent.VK_SPACE){
-			if(!getPlayer().isRapidFire()){
-				getPlayer().setShooting(false);
-			}
-		}
-		*/
+		
 	}
 
 	public static int getScale() {

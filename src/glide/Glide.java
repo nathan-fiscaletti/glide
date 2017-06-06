@@ -126,13 +126,14 @@ public class Glide {
 				}
 			}
 		}
+		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try{
 			background = loader.loadImage("/images/mm_b.png");
 			background2 = background;
 			b2y = -background.getHeight();
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 		
 		mm = new MainMenu();
@@ -154,7 +155,7 @@ public class Glide {
 		
 		mm.start();
 		
-		if(fullscreen){
+		if (fullscreen) {
 			GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice vc = env.getDefaultScreenDevice();
 			DisplayMode dm = new DisplayMode(800, 600, 16, DisplayMode.REFRESH_RATE_UNKNOWN);
@@ -162,12 +163,10 @@ public class Glide {
 			if(dm != null){
 				try{
 					vc.setDisplayMode(dm);
-				}catch(Exception ex){}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
 			}
-		}else{
-			
-			
-			
 		}
 		
 		/** Tiny Sound by finnkuusisto - https://github.com/finnkuusisto/TinySound */
