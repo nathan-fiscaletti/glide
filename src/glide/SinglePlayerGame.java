@@ -42,14 +42,11 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 	private boolean running = false;
 	private Thread thread;
 	
-	// TODO: Move rendering to it's own thread?
-	// private Thread renderThread;
-	
 	private BufferedImage image = (GlideSystem.isApplet) ? new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB) : new BufferedImage(Glide.WIDTH,Glide.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet = null;
 	
 	
-	private Player p;
+	private Player player;
 	private Controller c;
 	private HealthBar healthBar;
 	private Plasma plasmae;
@@ -138,20 +135,6 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		thread = new Thread(this);
 		thread.start();
 		
-		// TODO: Move rendering to it's own thread?
-		/*
-		renderThread = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				while (running) {
-					render();
-				}
-			}
-		});
-		
-		renderThread.start();
-		*/
-		
 		running = true;
 	}
 	
@@ -179,11 +162,12 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		
 		setTextures(new Textures(this));
 		
-		p = new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104, this);
+		player = new Player(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104, this);
 		c = new Controller(this);
 		healthBar = new HealthBar((this.getWidth() / 2) - (this.getTextures().healthbar1.getWidth() / 2), this.getHeight() - (this.getTextures().healthbar1.getHeight() + 10), this);
 		plasmae = new Plasma(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52, this);
 		Glide.backgroundSpeed = 7;
+	
 	}
 	
 	//Main GAME
@@ -244,7 +228,7 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		if(!isPaused() && !lost() && !won() && !cheating()){
 			Glide.b1y+=Glide.backgroundSpeed;
 			Glide.b2y+=Glide.backgroundSpeed;
-			p.tick();
+			player.tick();
 			c.tick();
 			plasmae.tick();
 			healthBar.tick();
@@ -342,10 +326,10 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		g.drawImage(Glide.background2, 0, (int)Glide.b2y, null);
 		/* End Background Scroller */
 		
-		p.render(g);
+		player.render(g);
 		if(plasma){
-			plasmae.setX(p.getX());
-			plasmae.setY(p.getY());
+			plasmae.setX(player.getX());
+			plasmae.setY(player.getY());
 			plasmae.render(g);
 		}
 		c.render(g);
@@ -653,7 +637,7 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 			}else if(key == KeyEvent.VK_SPACE && !getPlayer().isShooting()){
 				if(!isPaused() && !lost() && !cheating()){
 					if(!getPlayer().isBeaming()){
-						c.addBullet(new Bullet(p.getX(), p.getY() - 32, this));
+						c.addBullet(new Bullet(player.getX(), player.getY() - 32, this));
 						getPlayer().setShooting(true);
 					}				
 				}
@@ -825,11 +809,11 @@ public class SinglePlayerGame extends Canvas implements Runnable{
 		}
 	}
 	public Player getPlayer() {
-		return p;
+		return player;
 	}
 
 	public void setPlayer(Player p) {
-		this.p = p;
+		this.player = p;
 	}
 
 	public static int getScale() {

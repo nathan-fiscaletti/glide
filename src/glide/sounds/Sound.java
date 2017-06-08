@@ -1,28 +1,19 @@
 package glide.sounds;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
+import glide.Glide;
 
 public class Sound {
-	private AudioClip clip;
+	private kuusisto.tinysound.Sound sound;
 	
-	public Sound(String filename){
-		try{
-			clip = Applet.newAudioClip(Sound.class.getResource(filename));
-		}catch(Exception e){
-			
-		}
+	public Sound(String url)
+	{
+		this.sound = kuusisto.tinysound.TinySound.loadSound(url);
 	}
 	
-	public void play(){
-		try{
-			new Thread(){
-				public void run(){
-					clip.play();
-				}
-			}.start();
-		}catch(Exception e){
-			
+	public void play()
+	{
+		if (Glide.sounds) {
+			sound.play();
 		}
 	}
 }
