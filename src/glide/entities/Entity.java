@@ -4,6 +4,7 @@ import glide.SinglePlayerGame;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 
 public class Entity {
@@ -24,7 +25,7 @@ public class Entity {
 	private Entity.Type type;
 	protected SinglePlayerGame game;
 	private BufferedImage entityImage;
-	
+	protected Random random;
 	
 	
 	//Constructor
@@ -32,6 +33,7 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		this.game = game;
+		this.random = new Random();
 	}
 	
 	
@@ -73,9 +75,5 @@ public class Entity {
 	public BufferedImage getEntityImage() {
 		return this.entityImage;
 	}
-	public void setEntityImage(BufferedImage entityImage) {
-		this.entityImage = entityImage;
-	}
-	
-	
+
 }

@@ -1,7 +1,6 @@
 package glide.entities;
 
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import glide.Glide;
 import glide.SinglePlayerGame;
@@ -9,95 +8,65 @@ import glide.Glide.Difficulty;
 
 public class Meteor extends Entity{
 	int speed = 1 + (int)(Math.random()*3);
-	
-	int plusOrMinus = (new Random().nextBoolean()) ? -1 : 1;
+	int plusOrMinus = (this.random.nextBoolean()) ? -1 : 1;
+	int meteorType = 1;
 	
 	public Meteor(double x, double y, SinglePlayerGame game) {
 		super(x, y, game);
 		this.setType(Entity.Type.METEORBIG);
-		this.setEntityImage(EI());
+		meteorType = random.nextInt(7);
 		
 		//Make small or no..
-		Random r = new Random();
-		if(!r.nextBoolean()) this.die(false);
+		if(!random.nextBoolean()) this.die(false);
 		
 	}
 	
-	public BufferedImage EI(){
-		Random r = new Random();
-		int i = r.nextInt(7);
-		if(i == 1){
-			return game.getTextures().meteor1;
-		}else if(i == 2){
-			return game.getTextures().meteor2;
-		}else if(i == 3){
-			return game.getTextures().meteor3;
-		}else if(i == 4){
-			return game.getTextures().meteor4;
-		}else if(i == 5){
-			return game.getTextures().meteor5;
-		}else if(i == 6){
-			return game.getTextures().meteor6;
-		}else{
-			return game.getTextures().meteor1;
-		}
-	}
-	
-	public void die(boolean forceSmall){
-		if(new Random().nextBoolean() || forceSmall){
-			SmallMeteor s1 = new SmallMeteor(this.getX(), this.getY(), this.game);
-			SmallMeteor s2 = new SmallMeteor(this.getX(), this.getY(), this.game);
-			SmallMeteor s3 = new SmallMeteor(this.getX(), this.getY(), this.game);
-		
-			int spread = 70;
-		
-			//Small 1
-			boolean updown = new Random().nextBoolean();
-			boolean leftright = new Random().nextBoolean();
-			int i2 = new Random().nextInt(spread);
-			int i3 = new Random().nextInt(spread);
+	@Override
+	public BufferedImage getEntityImage() {
+		switch(meteorType) {
+			case 1 : return game.getTextures().meteor1;
+			case 2 : return game.getTextures().meteor2;
+			case 3 : return game.getTextures().meteor3;
+			case 4 : return game.getTextures().meteor4;
+			case 5 : return game.getTextures().meteor5;
+			case 6 : return game.getTextures().meteor6;
 			
-			s1.setX((updown) ? (this.getX() - i2) : (this.getX() + i2));
-			s1.setY((leftright) ? (this.getY() - i3) : (this.getY() - i3));
-			
-			//Small 2
-			updown = new Random().nextBoolean();
-			leftright = new Random().nextBoolean();
-			i2 = new Random().nextInt(spread);
-			i3 = new Random().nextInt(spread);
-			
-			s2.setX((updown) ? (this.getX() - i2) : (this.getX() + i2));
-			s2.setY((leftright) ? (this.getY() - i3) : (this.getY() - i3));
-			
-			//Small 3
-			updown = new Random().nextBoolean();
-			leftright = new Random().nextBoolean();
-			i2 = new Random().nextInt(spread);
-			i3 = new Random().nextInt(spread);
-			
-			s3.setX((updown) ? (this.getX() - i2) : (this.getX() + i2));
-			s3.setY((leftright) ? (this.getY() - i3) : (this.getY() - i3));
-			
-			game.getController().addSmallMeteor(s1);
-			game.getController().addSmallMeteor(s2);
-			game.getController().addSmallMeteor(s3);
-			game.getController().removeMeteor(this);
-		}else{
-		
-			game.getController().removeMeteor(this);
-		
+			default: return game.getTextures().meteor1;
 		}
 	}
 	
 	@Override
 	public void tick(){
+		// Move the meteor from the top of the screen down based on the entity speed
 		this.setY(this.getY() + speed);
 		
-		/* Difficulty Definer */
-		
-		if(Glide.difficulty == Difficulty.Normal || Glide.difficulty == Difficulty.Hard || Glide.difficulty == Difficulty.Expert){
+		// If the difficulty is anything besides EASY, 
+		// move the meteor left or right as well.
+		if(Glide.difficulty != Difficulty.Easy){
 			this.setX(this.getX() + speed*plusOrMinus);
 		}
+	}
+	
+	public void die(boolean forceSmall){
+		// Generate the child meteors when a meteor is destroyed
+		if(random.nextBoolean() || forceSmall){
+			
+			// Generate between 0 and 5 meteors
+			int smallMeteorCount = random.nextInt(5);
+			
+			// Give the small meteors a spread of 70 pixels
+			int spread = 70;
+			for (int i = 0;i<smallMeteorCount;i++) {
+				SmallMeteor small_meteor = new SmallMeteor(this.getX(), this.getY(), this.game);
+				small_meteor.setX(this.getX() + (random.nextBoolean() ? -random.nextInt(spread) : +random.nextInt(spread)));
+				small_meteor.setY(this.getY() + (random.nextBoolean() ? -random.nextInt(spread) : +random.nextInt(spread)));
+				game.getController().addSmallMeteor(small_meteor);
+			}
+			
+			
+		}
+		
+		game.getController().removeMeteor(this);
 	}
 	
 	

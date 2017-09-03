@@ -1,6 +1,9 @@
 package glide.entities;
 
 import glide.SinglePlayerGame;
+
+import java.awt.image.BufferedImage;
+
 import glide.Glide;
 
 public class Player extends Entity{
@@ -18,11 +21,32 @@ public class Player extends Entity{
 	public static final int boostSpeed = 15;
 	
 	public int speed = Player.normalSpeed;
+	
+	@Override
+	public BufferedImage getEntityImage()
+	{
+		if (isBeaming()) {
+			return game.getTextures().player2;
+		} else if (!t) {
+			return game.getTextures().player;
+		}
+		
+		if (hurttick < 10 && isHurting()) {
+			return game.getTextures().playerhurt;
+		} else if (!t2) {
+			if(!isBeaming()){
+				return game.getTextures().player;
+			}else{
+				return game.getTextures().player2;
+			}
+		}
+		
+		return game.getTextures().player;
+	}
 
 	public Player(double x, double y, SinglePlayerGame game){
 		super(x, y, game);
 		this.setType(Entity.Type.PLAYER);
-		this.setEntityImage(game.getTextures().player);
 	}
 	
 	public int beamtick = 0;
@@ -55,10 +79,8 @@ public class Player extends Entity{
 					this.game.beam = 0;
 				}
 			}
-			setEntityImage(game.getTextures().player2);
 			t = false;
 		}else if(!t){
-			setEntityImage(game.getTextures().player);
 			t = true;
 		}
 		
@@ -89,16 +111,10 @@ public class Player extends Entity{
 	
 		
 		if(hurttick < 10 && isHurting()){
-			setEntityImage(game.getTextures().playerhurt);
 			t2 = false;
 			hurttick ++;
 		}else if(!t2){
 			hurttick = 0;
-			if(!isBeaming()){
-				setEntityImage(game.getTextures().player);
-			}else{
-				setEntityImage(game.getTextures().player2);
-			}
 			t2 = true;
 			setHurting(false);
 		}

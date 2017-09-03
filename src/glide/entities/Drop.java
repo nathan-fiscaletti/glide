@@ -1,32 +1,32 @@
 package glide.entities;
 
 import glide.SinglePlayerGame;
-import glide.Glide;
+
+import java.awt.image.BufferedImage;
 
 public class Drop extends Entity{
-	
-	
 	
 	private boolean dead = false;
 	public Drop(double x, double y, SinglePlayerGame game, Entity.Type type) {
 		super(x, y, game);
 		this.setType(type);
-		if(type == Entity.Type.HEALTHPACK){
-			this.setEntityImage(game.getTextures().healthpack);
-		}else if(type == Entity.Type.BEAM){
-			this.setEntityImage(game.getTextures().beam);
-		}else if(type == Entity.Type.DIAMOND){
-			this.setEntityImage(game.getTextures().diamond);
-		}else if(type == Entity.Type.PLASMA){
-			this.setEntityImage(game.getTextures().plasma);
-		}else if(type == Entity.Type.MDB){
-			this.setEntityImage(game.getTextures().mdppickup);
-		}else if(type == Entity.Type.DIAMOND2){
-			this.setEntityImage(game.getTextures().diamond2);
-		}else if(type == Entity.Type.DIAMOND3){
-			this.setEntityImage(game.getTextures().diamond3);
-		}else if(type == Entity.Type.COD){
-			this.setEntityImage(game.getTextures().cod_pickup);
+	}
+	
+	@Override
+	public BufferedImage getEntityImage()
+	{
+		// TODO: Implement death animation
+		switch(this.getType()) {
+			case HEALTHPACK : return game.getTextures().healthpack;
+			case BEAM       : return game.getTextures().beam;
+			case DIAMOND    : return game.getTextures().diamond;
+			case DIAMOND2   : return game.getTextures().diamond2;
+			case DIAMOND3   : return game.getTextures().diamond3;
+			case PLASMA     : return game.getTextures().plasma;
+			case MDB        : return game.getTextures().mdppickup;
+			case COD        : return game.getTextures().cod_pickup;
+			
+			default         : return null;
 		}
 	}
 	
@@ -36,6 +36,8 @@ public class Drop extends Entity{
 	public void tick(){
 		dropc ++;
 		if(isDead()){
+			// TODO: Implement death animation
+			/**
 			if(deathtick < 5){
 				this.setEntityImage(this.game.getTextures().des1);
 				deathtick ++;
@@ -49,6 +51,8 @@ public class Drop extends Entity{
 				Glide.s_dropdeath.play();
 				this.game.getController().removeDrop(this);
 			}
+			**/
+			this.game.getController().removeDrop(this);
 		}else{
 			if(getType() == Entity.Type.DIAMOND || getType() == Entity.Type.COD){
 				if(dropc > 180){

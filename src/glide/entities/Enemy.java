@@ -2,9 +2,10 @@ package glide.entities;
 
 import glide.Glide.Difficulty;
 import glide.SinglePlayerGame;
-import glide.Glide;
 
-import java.util.Random;
+import java.awt.image.BufferedImage;
+
+import glide.Glide;
 
 
 public class Enemy extends Entity{
@@ -14,11 +15,12 @@ public class Enemy extends Entity{
 	private boolean dead;
 	public boolean isBomb = false;
 	private boolean isProtector = false;
+	private ProtectorType protectorType;
 	public int lives = 1;
 	
 	private int worth = 1;
 	
-	private int plusOrMinus = (new Random().nextBoolean()) ? -1 : 1;
+	private int plusOrMinus = (random.nextBoolean()) ? -1 : 1;
 	
 	public static enum ProtectorType {
 		Normal, Hard, None;
@@ -29,11 +31,11 @@ public class Enemy extends Entity{
 		super(x, y, game);
 		this.drop = drop;
 		this.setType(Entity.Type.ENEMY);
+		this.protectorType = protectorType;
 		if(bomb){
-			this.setEntityImage(game.getTextures().enemy3);
 			this.drop = false;
 			shootw = 10000000;
-			int isGold = (new Random().nextInt(5 - 1 + 1) + 1);
+			int isGold = (random.nextInt(5 - 1 + 1) + 1);
 			worth = isGold;
 			isBomb = true;
 			highSpeed = 1;
@@ -43,7 +45,7 @@ public class Enemy extends Entity{
 			setX((Glide.WIDTH * Glide.SCALE) / 2 - 32);
 			plusOrMinus = 0;
 		}else{
-			highSpeed = (new Random().nextInt(5 - 3 + 1) + 3);
+			highSpeed = (random.nextInt(5 - 3 + 1) + 3);
 			if(isBombProtector){
 				this.isProtector = true;
 				highSpeed = 1;
@@ -51,19 +53,33 @@ public class Enemy extends Entity{
 			}
 			lowSpeed = 1;
 			if(highSpeed == 5){
-				this.setEntityImage(game.getTextures().enemy2);
 				this.drop = true;
 				shootw = 15;
 			}else{
 				if(protectorType == ProtectorType.Hard){
-					this.setEntityImage(game.getTextures().bossprotector);
 					this.lives = 2;
-				}else{
-					this.setEntityImage(game.getTextures().enemy);
 				}
 			}
 		}	
 		game.bsc ++;
+	}
+	
+	@Override
+	public BufferedImage getEntityImage()
+	{
+		if (isBomb) {
+			return game.getTextures().enemy3;
+		}
+		
+		if (highSpeed == 5) {
+			return game.getTextures().enemy2;
+		}
+		
+		if (protectorType == ProtectorType.Hard) {
+			return game.getTextures().bossprotector;
+		}
+		
+		return game.getTextures().enemy;
 	}
 	
 	int shootw = 30;
@@ -74,6 +90,8 @@ public class Enemy extends Entity{
 	@Override
 	public void tick(){
 		if(isDead()){
+			// TODO: Implement death animation
+			/**
 			if(deathticks < 5){
 				this.setEntityImage(this.game.getTextures().des1);
 				deathticks ++;
@@ -84,13 +102,12 @@ public class Enemy extends Entity{
 				this.setEntityImage(this.game.getTextures().des3);
 				deathticks ++;
 			}else if(deathticks == 10){
+			**/
 				game.setScore(game.getScore() + worth);
 				this.game.getController().removeEnemy(this);
 				if(drop){
-						Random r = new Random();
 						if(highSpeed == 5){
-							Random dia = new Random();
-							int diacatch = dia.nextInt(4);
+							int diacatch = random.nextInt(4);
 							if(diacatch == 1){
 								this.game.getController().spawnDrop(this.getX(), this.getY(), Entity.Type.DIAMOND);
 							}else if(diacatch == 2){
@@ -102,7 +119,7 @@ public class Enemy extends Entity{
 							}
 							return;
 						}
-						int go = r.nextInt(26);
+						int go = random.nextInt(26);
 						if(go < 5){
 							this.game.getController().spawnDrop(this.getX(), this.getY(),Entity.Type.HEALTHPACK);
 						}else if (go > 5 && go <= 10){
@@ -117,18 +134,17 @@ public class Enemy extends Entity{
 						}
 				}
 				
-			}
+			/**}**/
 		}else{
 			shoot ++;
 			if(shoot == shootw){
-				Random r = new Random();
-				if(r.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.getEntityImage().equals(game.getTextures().bossprotector) : false)){
+				if(random.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.getEntityImage().equals(game.getTextures().bossprotector) : false)){
 					game.getController().addEnemyBullet(new EnemyBullet(getX(), getY() + 32, game));
 				}
 				shoot = 0;
 			}
 			
-			int sp = new Random().nextInt(highSpeed - lowSpeed + 1) + lowSpeed;
+			int sp = random.nextInt(highSpeed - lowSpeed + 1) + lowSpeed;
 			
 			setY(getY() + sp);
 			
@@ -138,7 +154,7 @@ public class Enemy extends Entity{
 			}else if(Glide.difficulty == Difficulty.Expert && !isBomb){
 				switchup++;
 				if(switchup == switchupw){
-					if(new Random().nextBoolean()){
+					if(random.nextBoolean()){
 						plusOrMinus = -plusOrMinus;
 					}
 					switchup = 0;

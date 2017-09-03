@@ -1,5 +1,7 @@
 package glide.entities;
 
+import java.awt.image.BufferedImage;
+
 import glide.SinglePlayerGame;
 
 public class MultiDirectionalBullet extends Entity{
@@ -9,9 +11,14 @@ public class MultiDirectionalBullet extends Entity{
 	
 	public MultiDirectionalBullet(double x, double y, SinglePlayerGame game, int tofro) {
 		super(x, y, game);
-		this.setEntityImage(game.getTextures().mdbullet);
 		this.setType(Entity.Type.MULTIDIRECTIONALBULLET);
 		this.tofro = tofro;
+	}
+	
+	@Override
+	public BufferedImage getEntityImage()
+	{
+		return game.getTextures().mdbullet;
 	}
 	
 	@Override

@@ -1,42 +1,41 @@
 package glide.entities;
 
+import java.awt.image.BufferedImage;
+
 import glide.SinglePlayerGame;
 
 public class HealthBar extends Entity{
 	private int health = 8;
 	private SinglePlayerGame game;
+	
 	public HealthBar(double x, double y, SinglePlayerGame game) {
 		super(x, y, game);
 		this.game = game;
 		this.setType(Entity.Type.HEALTHBAR);
-		this.setEntityImage(game.getTextures().healthbar1);
 	}
+	
 	@Override
 	public void tick(){
-		if(health == 8){
-			this.setEntityImage(game.getTextures().healthbar1);
-		}else if(health == 7){
-			this.setEntityImage(game.getTextures().healthbar2);
-		}else if(health == 6){
-			this.setEntityImage(game.getTextures().healthbar3);
-		}else if(health == 5){
-			this.setEntityImage(game.getTextures().healthbar4);
-		}else if(health == 4){
-			this.setEntityImage(game.getTextures().healthbar5);
-		}else if(health == 3){
-			this.setEntityImage(game.getTextures().healthbar6);
-		}else if(health == 2){
-			this.setEntityImage(game.getTextures().healthbar7);
-		}else if(health == 1){
-			this.setEntityImage(game.getTextures().healthbar8);
-		}else if(health > 8){
-			health = 8;
-		}else if(health < 1){
-			health = 1;
-		}else{
-			health = 1;
+		health = (health > 8) ? 8 : ((health < 1) ? 1 : health);
+	}
+	
+	@Override
+	public BufferedImage getEntityImage()
+	{
+		switch (health) {
+			case 8 : return game.getTextures().healthbar1;
+			case 7 : return game.getTextures().healthbar2;
+			case 6 : return game.getTextures().healthbar3;
+			case 5 : return game.getTextures().healthbar4;
+			case 4 : return game.getTextures().healthbar5;
+			case 3 : return game.getTextures().healthbar6;
+			case 2 : return game.getTextures().healthbar7;
+			case 1 : return game.getTextures().healthbar8;
+			
+			default : return game.getTextures().healthbar1;
 		}
 	}
+	
 	public int getHealth() {
 		return health;
 	}
