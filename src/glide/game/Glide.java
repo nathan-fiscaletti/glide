@@ -1,6 +1,10 @@
 package glide.game;
 
+import glide.engine.Entity;
 import glide.engine.Screen;
+import glide.engine.graphics.BufferedImageLoader;
+import glide.engine.graphics.SpriteSheet;
+import glide.engine.graphics.Textures;
 import glide.engine.sound.Music;
 import glide.engine.sound.Sound;
 import glide.game.renderers.BackgroundRenderer;
@@ -19,6 +23,7 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -104,6 +109,7 @@ public class Glide {
 				fullscreen = false;
 			}
 		}	
+		
 		if(fullscreen){
 			final Choice c = new Choice();
 			Runnable r = new Runnable(){
@@ -120,6 +126,12 @@ public class Glide {
 					e.printStackTrace();
 				}
 			}
+		}
+		
+		try {
+			Entity.setTextures(new Textures(new SpriteSheet(BufferedImageLoader.load("/images/sprite_sheet.png"), 32, 32)));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		backgroundRenderer = new BackgroundRenderer("/images/mm_b.png");

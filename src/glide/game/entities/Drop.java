@@ -1,9 +1,9 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
-import glide.game.screens.SinglePlayerGame;
 
 public class Drop extends Entity 
 {
@@ -21,20 +21,20 @@ public class Drop extends Entity
 	
 	public Drop.Type dropType;
 	
-	public Drop(Vector position, SinglePlayerGame attachedGame, Drop.Type type) {
+	public Drop(Vector position, Screen screen, Drop.Type type) {
 		
-		super(position, attachedGame);
+		super(position, screen);
 		this.dropType = type;
 		
 		switch(this.dropType) {
-			case HEALTHPACK : this.renderedSprite = this.attachedGame.getTextures().healthpack; break;
-			case BEAM       : this.renderedSprite = this.attachedGame.getTextures().beam; break;
-			case DIAMOND    : this.renderedSprite = this.attachedGame.getTextures().diamond; break;
-			case DIAMOND2   : this.renderedSprite = this.attachedGame.getTextures().diamond2; break;
-			case DIAMOND3   : this.renderedSprite = this.attachedGame.getTextures().diamond3; break;
-			case PLASMA     : this.renderedSprite = this.attachedGame.getTextures().plasma; break;
-			case MDB        : this.renderedSprite = this.attachedGame.getTextures().mdppickup; break;
-			case COD        : this.renderedSprite = this.attachedGame.getTextures().cod_pickup; break;
+			case HEALTHPACK : this.renderedSprite = Entity.getTextures().healthpack; break;
+			case BEAM       : this.renderedSprite = Entity.getTextures().beam; break;
+			case DIAMOND    : this.renderedSprite = Entity.getTextures().diamond; break;
+			case DIAMOND2   : this.renderedSprite = Entity.getTextures().diamond2; break;
+			case DIAMOND3   : this.renderedSprite = Entity.getTextures().diamond3; break;
+			case PLASMA     : this.renderedSprite = Entity.getTextures().plasma; break;
+			case MDB        : this.renderedSprite = Entity.getTextures().mdppickup; break;
+			case COD        : this.renderedSprite = Entity.getTextures().cod_pickup; break;
 			
 			default         : break;
 		}

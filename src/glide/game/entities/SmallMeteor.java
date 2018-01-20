@@ -1,10 +1,10 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
 import glide.game.Glide.Difficulty;
-import glide.game.screens.SinglePlayerGame;
 
 public class SmallMeteor extends Entity
 {
@@ -15,20 +15,20 @@ public class SmallMeteor extends Entity
 	
 	int changeDirectionTick = 0;
 	
-	public SmallMeteor(Vector position, SinglePlayerGame attachedGame) {
-		super(position, attachedGame);
+	public SmallMeteor(Vector position, Screen screen) {
+		super(position, screen);
 		this.meteorType = random.nextInt(7);
 		this.playDeathAnimation = true;
 		
 		switch (meteorType) {
-			case 1 : this.renderedSprite = attachedGame.getTextures().smallmeteor1; break;
-			case 2 : this.renderedSprite = attachedGame.getTextures().smallmeteor2; break;
-			case 3 : this.renderedSprite = attachedGame.getTextures().smallmeteor3; break;
-			case 4 : this.renderedSprite = attachedGame.getTextures().smallmeteor4; break;
-			case 5 : this.renderedSprite = attachedGame.getTextures().smallmeteor5; break;
-			case 6 : this.renderedSprite = attachedGame.getTextures().smallmeteor6; break;
+			case 1 : this.renderedSprite = Entity.getTextures().smallmeteor1; break;
+			case 2 : this.renderedSprite = Entity.getTextures().smallmeteor2; break;
+			case 3 : this.renderedSprite = Entity.getTextures().smallmeteor3; break;
+			case 4 : this.renderedSprite = Entity.getTextures().smallmeteor4; break;
+			case 5 : this.renderedSprite = Entity.getTextures().smallmeteor5; break;
+			case 6 : this.renderedSprite = Entity.getTextures().smallmeteor6; break;
 			
-			default : this.renderedSprite = attachedGame.getTextures().smallmeteor1;
+			default : this.renderedSprite = Entity.getTextures().smallmeteor1;
 		}
 	}
 	

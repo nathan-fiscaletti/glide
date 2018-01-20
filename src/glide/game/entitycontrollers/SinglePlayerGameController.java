@@ -7,18 +7,18 @@ import glide.engine.EntityController;
 import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.engine.graphics.Bounds;
-import glide.entities.Enemy;
-import glide.entities.MultiDirectionalBullet;
-import glide.entities.SmallMeteor;
-import glide.entities.Enemy.ProtectorType;
 import glide.game.Glide;
 import glide.game.Glide.Difficulty;
+import glide.game.entities.Enemy;
+import glide.game.entities.Meteor;
+import glide.game.entities.MultiDirectionalBullet;
+import glide.game.entities.SmallMeteor;
+import glide.game.entities.Enemy.ProtectorType;
 import glide.game.screens.SinglePlayerGame;
-import glide.entities.Meteor;
 
-public class GlideController extends EntityController {
+public class SinglePlayerGameController extends EntityController {
 	
-	public GlideController(Screen screen) {
+	public SinglePlayerGameController(Screen screen) {
 		super(screen);
 	}
 

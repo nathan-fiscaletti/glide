@@ -1,10 +1,10 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
 import glide.game.Glide.Difficulty;
-import glide.game.screens.SinglePlayerGame;
 
 public class Meteor extends Entity{
 	protected int speed = 1 + (int)(Math.random()*3);
@@ -13,8 +13,8 @@ public class Meteor extends Entity{
 	protected int changeDirectionTick = 0;
 	protected boolean forceSmall = false;
 	
-	public Meteor(Vector position, SinglePlayerGame attachedGame) {
-		super(position, attachedGame);
+	public Meteor(Vector position, Screen screen) {
+		super(position, screen);
 		meteorType = random.nextInt(7);
 		
 		this.velocity = this.velocity.plusY(speed);
@@ -31,14 +31,14 @@ public class Meteor extends Entity{
 			
 			// Initialize the sprite for the entity.
 			switch(meteorType) {
-				case 1 : this.renderedSprite = this.attachedGame.getTextures().meteor1; break;
-				case 2 : this.renderedSprite = this.attachedGame.getTextures().meteor2; break;
-				case 3 : this.renderedSprite = this.attachedGame.getTextures().meteor3; break;
-				case 4 : this.renderedSprite = this.attachedGame.getTextures().meteor4; break;
-				case 5 : this.renderedSprite = this.attachedGame.getTextures().meteor5; break;
-				case 6 : this.renderedSprite = this.attachedGame.getTextures().meteor6; break;
+				case 1 : this.renderedSprite = Entity.getTextures().meteor1; break;
+				case 2 : this.renderedSprite = Entity.getTextures().meteor2; break;
+				case 3 : this.renderedSprite = Entity.getTextures().meteor3; break;
+				case 4 : this.renderedSprite = Entity.getTextures().meteor4; break;
+				case 5 : this.renderedSprite = Entity.getTextures().meteor5; break;
+				case 6 : this.renderedSprite = Entity.getTextures().meteor6; break;
 				
-				default: this.renderedSprite = this.attachedGame.getTextures().meteor1;
+				default: this.renderedSprite = Entity.getTextures().meteor1;
 			}
 		}
 	}
@@ -96,10 +96,10 @@ public class Meteor extends Entity{
 			// Give the small meteors a spread of 70 pixels
 			int spread = 70;
 			for (int i = 0;i<smallMeteorCount;i++) {
-				SmallMeteor small_meteor = new SmallMeteor(this.position, this.attachedGame);
+				SmallMeteor small_meteor = new SmallMeteor(this.position, this.parentScreen);
 				small_meteor.position = small_meteor.position.plusX((this.random.nextBoolean() ? -this.random.nextInt(spread) : +this.random.nextInt(spread)));
 				small_meteor.position = small_meteor.position.plusY((this.random.nextBoolean() ? -this.random.nextInt(spread) : +this.random.nextInt(spread)));
-				this.attachedGame.getController().spawnEntity(small_meteor);
+				parentScreen.controller.spawnEntity(small_meteor);
 			}
 		}
 	}

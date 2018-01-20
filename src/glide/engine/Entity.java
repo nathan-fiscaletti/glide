@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import glide.game.screens.SinglePlayerGame;
+import glide.engine.graphics.Textures;
 
 /**
  * Parent class for all Entities
@@ -34,7 +34,7 @@ public abstract class Entity extends Renderer {
 	/**
 	 * The Game that the entity is attached to.
 	 */
-	public SinglePlayerGame attachedGame;
+	public Screen parentScreen;
 	
 	/**
 	 * The rendered sprite for the entity.
@@ -67,6 +67,11 @@ public abstract class Entity extends Renderer {
 	private boolean isDead = false;
 	
 	/**
+	 * The textures that can be used by entities.
+	 */
+	private static Textures textures;
+	
+	/**
 	 * Some entities make use of a random
 	 * value. We provide them the means
 	 * to access that through this 
@@ -78,14 +83,14 @@ public abstract class Entity extends Renderer {
 	 * Create a new instance of the Entity Class.
 	 *
 	 * @param Vector position The initial position.
-	 * @param SinglePlayerGame _attachedGame_ The game to attach the entity to.
+	 * @param Screen screen The screen to attach the entity to.
 	 */
-	public Entity(Vector position, SinglePlayerGame attachedGame)
+	public Entity(Vector position, Screen screen)
 	{
 		this.position = position;
 		this.velocity = Vector.Zero();
 		this.positionConstraint = Vector.Zero();
-		this.attachedGame = attachedGame;
+		this.parentScreen = screen;
 		this.random = new Random();
 	}
 	
@@ -222,6 +227,23 @@ public abstract class Entity extends Renderer {
 	}
 	
 	/**
+	 * Set textures.
+	 * @param textures
+	 */
+	public final static void setTextures(Textures textures)
+	{
+		Entity.textures = textures;
+	}
+	
+	/**
+	 * get the Textures.
+	 */
+	public final static Textures getTextures()
+	{
+		return Entity.textures;
+	}
+	
+	/**
 	 * Check if we need to die based on our life lived.
 	 */
 	private void checkLife()
@@ -242,21 +264,21 @@ public abstract class Entity extends Renderer {
 		if (this.isDead) {
 			if (this.playDeathAnimation) {
 				if(deathTick < 5){
-					this.renderedSprite = this.attachedGame.getTextures().des1;
+					this.renderedSprite = Entity.textures.des1;
 					deathTick ++;
 				}else if(deathTick >= 5 && deathTick < 10){
-					this.renderedSprite = this.attachedGame.getTextures().des2;
+					this.renderedSprite = Entity.getTextures().des2;
 					deathTick ++;
 				}else if(deathTick >= 10 && deathTick < 15){
-					this.renderedSprite = this.attachedGame.getTextures().des3;
+					this.renderedSprite = Entity.getTextures().des3;
 					deathTick ++;
 				}else if(deathTick == 15){
 					this.onDeath();
-					this.attachedGame.getController().deSpawnEntity(this);
+					this.parentScreen.controller.deSpawnEntity(this);
 				}
 			} else {
 				this.onDeath();
-				this.attachedGame.getController().deSpawnEntity(this);
+				this.parentScreen.controller.deSpawnEntity(this);
 			}
 		}
 	}

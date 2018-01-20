@@ -1,6 +1,7 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
 import glide.game.Glide.Difficulty;
@@ -38,8 +39,8 @@ public class Enemy extends Entity
 		Normal, Hard, None;
 	}
 	
-	public Enemy(Vector position, SinglePlayerGame attachedGame, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
-		super(position, attachedGame);
+	public Enemy(Vector position, Screen screen, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
+		super(position, screen);
 		
 		this.shouldDrop = shouldDrop;
 		this.protectorType = protectorType;
@@ -51,7 +52,7 @@ public class Enemy extends Entity
 			this.worth = 10;
 			this.isBomb = true;
 			this.lives = 15;
-			this.attachedGame.bsc = -1;
+			this.getGame().bsc = -1;
 			this.position.x = (Glide.WIDTH * Glide.SCALE) / 2 - 32;
 			this.currentDirection = 0;
 		}else{
@@ -73,16 +74,16 @@ public class Enemy extends Entity
 			}
 		}	
 		
-		this.attachedGame.bsc ++;
+		this.getGame().bsc ++;
 
 		// Set up the sprite for the entity.
-		this.renderedSprite = this.attachedGame.getTextures().enemy;
+		this.renderedSprite = Entity.getTextures().enemy;
 		if (isBomb) {
-			this.renderedSprite = this.attachedGame.getTextures().enemy3;
+			this.renderedSprite = Entity.getTextures().enemy3;
 		} else if (highSpeed == 5) {
-			this.renderedSprite = this.attachedGame.getTextures().enemy2;
+			this.renderedSprite = Entity.getTextures().enemy2;
 		} else if (protectorType == ProtectorType.Hard) {
-			this.renderedSprite = this.attachedGame.getTextures().bossprotector;
+			this.renderedSprite = Entity.getTextures().bossprotector;
 		}
 	}
 	
@@ -109,11 +110,11 @@ public class Enemy extends Entity
 	public final void onExitBounds()
 	{
 		if (this.isBomb) {
-			this.attachedGame.lose();
+			this.getGame().lose();
 		}
 		
 		this.kill();
-		this.attachedGame.getController().deSpawnEntity(this);
+		this.parentScreen.controller.deSpawnEntity(this);
 	}
 	
 	@Override
@@ -133,27 +134,27 @@ public class Enemy extends Entity
 	public final void onDeath()
 	{
 		if(isBomb){
-			this.attachedGame.stopCircling();
-			this.attachedGame.startCircling(this.position);	
+			this.getGame().stopCircling();
+			this.getGame().startCircling(this.position);	
 		}
 		
-		this.attachedGame.setScore(this.attachedGame.getScore() + worth);
+		this.getGame().setScore(this.getGame().getScore() + worth);
 		if (this.shouldDrop) {
 			// Only Gold enemies have a high speed of 5
 			if(highSpeed == 5){
 				int diamondSpawnDecision = random.nextInt(4);
 				switch (diamondSpawnDecision) {
 					case 1 :
-						this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.DIAMOND));
+						this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.DIAMOND));
 						break;
 					case 2 :
-						this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.DIAMOND2));
+						this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.DIAMOND2));
 						break;
 					case 3 :
-						this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.DIAMOND3));
+						this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.DIAMOND3));
 						break;
 					default : 
-						this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.DIAMOND));
+						this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.DIAMOND));
 				}
 				return;
 			}
@@ -163,17 +164,22 @@ public class Enemy extends Entity
 			// their 'drop' value is set to 'true'.
 			int dropChance = random.nextInt(26);
 			if(dropChance < 5){
-				this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.HEALTHPACK));
+				this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.HEALTHPACK));
 			}else if (dropChance > 5 && dropChance <= 10){
-				this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.BEAM));
+				this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.BEAM));
 			}else if(dropChance > 10 && dropChance <= 15){
-				this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.PLASMA));
+				this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.PLASMA));
 			}else if(dropChance > 15 && dropChance <= 20){
-				this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.MDB));
+				this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.MDB));
 			}else if(dropChance > 23 && dropChance <= 25){
-				this.attachedGame.getController().spawnEntity(new Drop(position, this.attachedGame, Drop.Type.COD));
+				this.parentScreen.controller.spawnEntity(new Drop(this.position, this.parentScreen, Drop.Type.COD));
 			}
 		}
+	}
+	
+	private SinglePlayerGame getGame()
+	{
+		return (SinglePlayerGame)this.parentScreen;
 	}
 	
 	private void updateVelocity()
@@ -205,14 +211,14 @@ public class Enemy extends Entity
 		if (this.canFireLaser) {
 			this.ticksSinceLastLaserFireAttempt++;
 			if(this.ticksSinceLastLaserFireAttempt == this.tryToFireLaserEveryXTicks){
-				if(random.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.renderedSprite.equals(attachedGame.getTextures().bossprotector) : false)){
+				if(random.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.renderedSprite.equals(Entity.getTextures().bossprotector) : false)){
 					
-					attachedGame.getController().spawnEntity(new EnemyBullet(this.position.plusY(32), this.attachedGame, 0));
+					this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32), this.parentScreen, 0));
 					
 					if (Glide.difficulty == Difficulty.Expert) {
 						if (highSpeed == 5) {
-							attachedGame.getController().spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(-32), this.attachedGame, 1));
-							attachedGame.getController().spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(32), this.attachedGame, 2));
+							this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(-32), this.parentScreen, 1));
+							this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(32), this.parentScreen, 2));
 						} 
 					}
 					

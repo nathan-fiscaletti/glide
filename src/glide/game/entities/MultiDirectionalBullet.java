@@ -1,17 +1,17 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
-import glide.game.screens.SinglePlayerGame;
 
 public class MultiDirectionalBullet extends Entity{
 	
 	private int speed = 5;
 	
-	public MultiDirectionalBullet(Vector position, SinglePlayerGame attachedGame, int tofro) {
-		super(position, attachedGame);
-		this.renderedSprite = this.attachedGame.getTextures().mdbullet;
+	public MultiDirectionalBullet(Vector position, Screen screen, int tofro) {
+		super(position, screen);
+		this.renderedSprite = Entity.getTextures().mdbullet;
 		
 		// Set the velocity for the entity.
 		if(tofro == 1){

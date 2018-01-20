@@ -1,19 +1,17 @@
 package glide.game.screens;
 
+import glide.engine.Entity;
 import glide.engine.Screen;
 import glide.engine.Vector;
-import glide.engine.graphics.BufferedImageLoader;
-import glide.engine.graphics.SpriteSheet;
-import glide.engine.graphics.Textures;
-import glide.entities.Bullet;
-import glide.entities.Enemy;
-import glide.entities.HealthBar;
-import glide.entities.Meteor;
-import glide.entities.Plasma;
-import glide.entities.Player;
-import glide.entities.Enemy.ProtectorType;
 import glide.game.Glide;
-import glide.game.entitycontrollers.GlideController;
+import glide.game.entities.Bullet;
+import glide.game.entities.Enemy;
+import glide.game.entities.HealthBar;
+import glide.game.entities.Meteor;
+import glide.game.entities.Plasma;
+import glide.game.entities.Player;
+import glide.game.entities.Enemy.ProtectorType;
+import glide.game.entitycontrollers.SinglePlayerGameController;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,9 +25,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-
 
 public class SinglePlayerGame extends Screen {
 
@@ -44,7 +39,6 @@ public class SinglePlayerGame extends Screen {
 	private Player player;
 	private HealthBar healthBar;
 	private Plasma plasmae;
-	private Textures textures;
 	
 	private int score = 0;
 	private boolean paused = false;
@@ -98,15 +92,10 @@ public class SinglePlayerGame extends Screen {
 	public void initialize()
 	{
 		this.name = "SinglePlayerGame";
-		try {
-			this.textures = new Textures(new SpriteSheet(BufferedImageLoader.load("/images/sprite_sheet.png"), 32, 32));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		player = new Player(new Vector(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104), this);
-		controller = new GlideController(this);
-		healthBar = new HealthBar(new Vector((this.getWidth() / 2) - (this.getTextures().healthbar1.getWidth() / 2), this.getHeight() - (this.getTextures().healthbar1.getHeight() + 10)), this);
+		controller = new SinglePlayerGameController(this);
+		healthBar = new HealthBar(new Vector((this.getWidth() / 2) - (Entity.getTextures().healthbar1.getWidth() / 2), this.getHeight() - (Entity.getTextures().healthbar1.getHeight() + 10)), this);
 		plasmae = new Plasma(new Vector(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52), this);
 		
 		this.shouldRenderBackground = true;
@@ -239,21 +228,21 @@ public class SinglePlayerGame extends Screen {
 		/* MDBs */
 		int out = 32;
 		for(int i = 0;i < mdbs;i++){
-			graphics.drawImage(this.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 			out = out + 32;
 		}
 		if(mdbs == 5){
-			graphics.drawImage(textures.max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures().max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
 		
 		/* CODs */
 		out = 257;
 		for(int i = 0;i < cods; i++){
-			graphics.drawImage(this.getTextures().cod, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures().cod, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 			out = out + 32;
 		}
 		if(cods == 2){
-			graphics.drawImage(textures.max_cod, 321, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures().max_cod, 321, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
 		}
 		
 		/* Lvl / Score */
@@ -282,52 +271,52 @@ public class SinglePlayerGame extends Screen {
 		String c = String.valueOf(boc); 
 		
 		graphics.drawChars(c.toCharArray(), 0, c.toCharArray().length, 32, (Glide.HEIGHT * Glide.SCALE) - 67);
-		graphics.drawImage(this.getTextures().bombsp, 32 + graphics.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		graphics.drawImage(Entity.getTextures().bombsp, 32 + graphics.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 92, null);
 		
 		/* Power Ups */
 		int statsoffset = 64 + graphics.getFontMetrics().stringWidth(c);
 		graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		if(this.getPlayer().beaming){
-			BufferedImage beamer = getTextures().beam;
-			BufferedImage level = getTextures().powerbar1;
+			BufferedImage beamer = Entity.getTextures().beam;
+			BufferedImage level = Entity.getTextures().powerbar1;
 			if(beam == 1){
-				level = getTextures().powerbar5;
+				level = Entity.getTextures().powerbar5;
 			}else if(beam == 2){
-				level = getTextures().powerbar4;
+				level = Entity.getTextures().powerbar4;
 			}else if(beam == 3){
-				level = getTextures().powerbar3;
+				level = Entity.getTextures().powerbar3;
 			}else if(beam == 4){
-				level = getTextures().powerbar2;
+				level = Entity.getTextures().powerbar2;
 			}else if(beam == 5){
-				level = getTextures().powerbar1;
+				level = Entity.getTextures().powerbar1;
 			}
 			
 			graphics.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 			graphics.drawImage(level, 32 + 34 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 		}else{
-			BufferedImage beamer = getTextures().grayscale_beam;
+			BufferedImage beamer = Entity.getTextures().grayscale_beam;
 			graphics.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 		}
 		
 		if(this.isPlasmaActive && this.getPlayer().plasma){
-			BufferedImage shielded = getTextures().plasma;
-			BufferedImage level = getTextures().powerbar1;
+			BufferedImage shielded = Entity.getTextures().plasma;
+			BufferedImage level = Entity.getTextures().powerbar1;
 			if(shield == 1){
-				level = getTextures().powerbar5;
+				level = Entity.getTextures().powerbar5;
 			}else if(shield == 2){
-				level = getTextures().powerbar4;
+				level = Entity.getTextures().powerbar4;
 			}else if(shield == 3){
-				level = getTextures().powerbar3;
+				level = Entity.getTextures().powerbar3;
 			}else if(shield == 4){
-				level = getTextures().powerbar2;
+				level = Entity.getTextures().powerbar2;
 			}else if(shield == 5){
-				level = getTextures().powerbar1;
+				level = Entity.getTextures().powerbar1;
 			}
 			
 			graphics.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 			graphics.drawImage(level, 134 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 		}else{
-			BufferedImage shielded = getTextures().grayscale_sheild;
+			BufferedImage shielded = Entity.getTextures().grayscale_sheild;
 			graphics.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
 		}
 		
@@ -671,14 +660,6 @@ public class SinglePlayerGame extends Screen {
 		return Glide.SCALE;
 	}
 	
-	public Textures getTextures() {
-		return textures;
-	}
-
-	public void setTextures(Textures textures) {
-		this.textures = textures;
-	}
-	
 	public HealthBar getHealthBar() {
 		return healthBar;
 	}
@@ -687,8 +668,8 @@ public class SinglePlayerGame extends Screen {
 		this.healthBar = healthBar;
 	}
 
-	public GlideController getController() {
-		return (GlideController)this.controller;
+	public SinglePlayerGameController getController() {
+		return (SinglePlayerGameController)this.controller;
 	}
 	
 	public boolean isPaused() {

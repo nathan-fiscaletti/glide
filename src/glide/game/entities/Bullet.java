@@ -1,9 +1,9 @@
-package glide.entities;
+package glide.game.entities;
 
 import glide.engine.Entity;
+import glide.engine.Screen;
 import glide.engine.Vector;
 import glide.game.Glide;
-import glide.game.screens.SinglePlayerGame;
 
 public class Bullet extends Entity {
 	
@@ -15,11 +15,12 @@ public class Bullet extends Entity {
 	 * @param position
 	 * @param attachedGame
 	 */
-	public Bullet(Vector position, SinglePlayerGame attachedGame){
-		super(position, attachedGame);
+	public Bullet(Vector position, Screen screen)
+	{
+		super(position, screen);
 		
 		// Set the sprite.
-		this.renderedSprite = this.attachedGame.getTextures().bullet;
+		this.renderedSprite = Entity.getTextures().bullet;
 		
 		// Play the shoot sound.
 		Glide.s_shoot.play();
