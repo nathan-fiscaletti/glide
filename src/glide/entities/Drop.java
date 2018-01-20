@@ -1,83 +1,72 @@
 package glide.entities;
 
-import glide.SinglePlayerGame;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.Glide;
+import glide.game.screens.SinglePlayerGame;
 
-import java.awt.image.BufferedImage;
-
-public class Drop extends Entity{
+public class Drop extends Entity 
+{
 	
-	private boolean dead = false;
-	public Drop(double x, double y, SinglePlayerGame game, Entity.Type type) {
-		super(x, y, game);
-		this.setType(type);
+	/**
+	 * Entity Type Definitions
+	 */
+	public static enum Type {
+		HEALTHPACK, BEAM, DIAMOND, DIAMOND2, DIAMOND3, PLASMA, MDB, COD,
+	}
+	
+	public boolean isDead = false;
+	protected int lifeLived = 0;
+	protected int deathtick = 0;
+	
+	public Drop.Type dropType;
+	
+	public Drop(Vector position, SinglePlayerGame attachedGame, Drop.Type type) {
+		
+		super(position, attachedGame);
+		this.dropType = type;
+		
+		switch(this.dropType) {
+			case HEALTHPACK : this.renderedSprite = this.attachedGame.getTextures().healthpack; break;
+			case BEAM       : this.renderedSprite = this.attachedGame.getTextures().beam; break;
+			case DIAMOND    : this.renderedSprite = this.attachedGame.getTextures().diamond; break;
+			case DIAMOND2   : this.renderedSprite = this.attachedGame.getTextures().diamond2; break;
+			case DIAMOND3   : this.renderedSprite = this.attachedGame.getTextures().diamond3; break;
+			case PLASMA     : this.renderedSprite = this.attachedGame.getTextures().plasma; break;
+			case MDB        : this.renderedSprite = this.attachedGame.getTextures().mdppickup; break;
+			case COD        : this.renderedSprite = this.attachedGame.getTextures().cod_pickup; break;
+			
+			default         : break;
+		}
+		
+		// Configure the death of the entity.
+		this.playDeathAnimation = true;
+		switch (this.dropType) {
+			case DIAMOND :
+			case DIAMOND2 :
+			case DIAMOND3 :
+				this.killAfter = 180;
+				break;
+			case COD :
+				this.killAfter = 180;
+				break;
+			case BEAM :
+			case PLASMA :
+			case MDB :
+				this.killAfter = 240;
+				break;
+			case HEALTHPACK:
+				this.killAfter = 520;
+				break;
+			default:
+				this.killAfter = 1;
+				break;
+		}
 	}
 	
 	@Override
-	public BufferedImage getEntityImage()
+	public final void onDeath()
 	{
-		// TODO: Implement death animation
-		switch(this.getType()) {
-			case HEALTHPACK : return game.getTextures().healthpack;
-			case BEAM       : return game.getTextures().beam;
-			case DIAMOND    : return game.getTextures().diamond;
-			case DIAMOND2   : return game.getTextures().diamond2;
-			case DIAMOND3   : return game.getTextures().diamond3;
-			case PLASMA     : return game.getTextures().plasma;
-			case MDB        : return game.getTextures().mdppickup;
-			case COD        : return game.getTextures().cod_pickup;
-			
-			default         : return null;
-		}
-	}
-	
-	int dropc = 0;
-	int deathtick = 0;
-	@Override 
-	public void tick(){
-		dropc ++;
-		if(isDead()){
-			// TODO: Implement death animation
-			/**
-			if(deathtick < 5){
-				this.setEntityImage(this.game.getTextures().des1);
-				deathtick ++;
-			}else if(deathtick >= 5 && deathtick < 10){
-				this.setEntityImage(this.game.getTextures().des2);
-				deathtick ++;
-			}else if(deathtick >= 10 && deathtick < 15){
-				this.setEntityImage(this.game.getTextures().des3);
-				deathtick ++;
-			}else if(deathtick == 15){
-				Glide.s_dropdeath.play();
-				this.game.getController().removeDrop(this);
-			}
-			**/
-			this.game.getController().removeDrop(this);
-		}else{
-			if(getType() == Entity.Type.DIAMOND || getType() == Entity.Type.COD){
-				if(dropc > 180){
-					die();
-				}
-			}else if(getType() == Entity.Type.BEAM || getType() == Entity.Type.PLASMA || getType() == Entity.Type.MDB){
-				if(dropc > 240){
-					die();
-				}
-			}else if(getType() == Entity.Type.HEALTHPACK){
-				if(dropc > 520){
-					die();
-				}
-			}
-		}
-	}
-	
-	public void die(){
-		setDead(true);
-	}
-	
-	public boolean isDead() {
-		return dead;
-	}
-	public void setDead(boolean dead) {
-		this.dead = dead;
+		Glide.s_dropdeath.play();
 	}
 }

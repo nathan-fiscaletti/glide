@@ -1,6 +1,6 @@
-package glide.sounds;
+package glide.engine.sound;
 
-import glide.Glide;
+import glide.game.Glide;
 
 public class Music {
 	public kuusisto.tinysound.Music music;

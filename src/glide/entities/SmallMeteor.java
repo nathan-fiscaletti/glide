@@ -1,44 +1,68 @@
 package glide.entities;
 
-import java.awt.image.BufferedImage;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.Glide;
+import glide.game.Glide.Difficulty;
+import glide.game.screens.SinglePlayerGame;
 
-import glide.Glide;
-import glide.Glide.Difficulty;
-import glide.SinglePlayerGame;
-
-public class SmallMeteor extends Entity{
+public class SmallMeteor extends Entity
+{
 
 	int speed = 1 + (int)(Math.random()*2);
-	int plusOrMinus = (random.nextBoolean()) ? -1 : 1;
+	int xVelocityMultiplier = (random.nextBoolean()) ? -1 : 1;
 	int meteorType = 1;
 	
-	public SmallMeteor(double x, double y, SinglePlayerGame game) {
-		super(x, y, game);
-		this.meteorType = random.nextInt(7);
-		this.setType(Entity.Type.METEORSMALL);
-	}
+	int changeDirectionTick = 0;
 	
-	@Override
-	public BufferedImage getEntityImage()
-	{
+	public SmallMeteor(Vector position, SinglePlayerGame attachedGame) {
+		super(position, attachedGame);
+		this.meteorType = random.nextInt(7);
+		this.playDeathAnimation = true;
+		
 		switch (meteorType) {
-			case 1 : return game.getTextures().smallmeteor1;
-			case 2 : return game.getTextures().smallmeteor2;
-			case 3 : return game.getTextures().smallmeteor3;
-			case 4 : return game.getTextures().smallmeteor4;
-			case 5 : return game.getTextures().smallmeteor5;
-			case 6 : return game.getTextures().smallmeteor6;
+			case 1 : this.renderedSprite = attachedGame.getTextures().smallmeteor1; break;
+			case 2 : this.renderedSprite = attachedGame.getTextures().smallmeteor2; break;
+			case 3 : this.renderedSprite = attachedGame.getTextures().smallmeteor3; break;
+			case 4 : this.renderedSprite = attachedGame.getTextures().smallmeteor4; break;
+			case 5 : this.renderedSprite = attachedGame.getTextures().smallmeteor5; break;
+			case 6 : this.renderedSprite = attachedGame.getTextures().smallmeteor6; break;
 			
-			default : return game.getTextures().smallmeteor1;
+			default : this.renderedSprite = attachedGame.getTextures().smallmeteor1;
 		}
 	}
 	
 	@Override
-	public void tick(){
-		this.setY(this.getY() + speed);
+	public final void update()
+	{
+		this.position = this.position.plusY(speed);
 		
 		if(Glide.difficulty != Difficulty.Easy){
-			this.setX(this.getX() + speed*plusOrMinus);
+			this.position.plusX(speed*xVelocityMultiplier);
+			
+			// If the difficulty is anything besides EASY, 
+			// move the meteor left or right as well.
+			if(Glide.difficulty != Difficulty.Easy){
+				
+				// Move the meteor either left or right.
+				this.velocity.x = speed*xVelocityMultiplier;
+				
+				// If you set the difficulty to expert, the meteors
+				// should change their X velocity randomly every 60 ticks.
+				if (Glide.difficulty == Difficulty.Expert) {
+					
+					// After every 60 ticks, we need to
+					// change the left or right toggle.
+					if (this.changeDirectionTick == 60) {
+						this.xVelocityMultiplier = (this.random.nextBoolean()) ? -1 : 1;
+					}
+					
+					// Update how many ticks it's been
+					// since we last changed the
+					// left or right toggle.
+					this.changeDirectionTick += (this.changeDirectionTick == 60) ? -60 : 1;
+				}
+			}
 		}
 	}
 

@@ -1,12 +1,11 @@
-package glide;
+package glide.game;
 
-
-
-
-
-import glide.sounds.Music;
-import glide.sounds.Sound;
-import glide.spritehandles.BufferedImageLoader;
+import glide.engine.Screen;
+import glide.engine.sound.Music;
+import glide.engine.sound.Sound;
+import glide.game.renderers.BackgroundRenderer;
+import glide.game.renderers.LogoRenderer;
+import glide.game.screens.MainMenu;
 import glide.versioning.Version;
 
 import java.awt.Color;
@@ -15,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -33,32 +33,30 @@ public class Glide {
 	public static final int HEIGHT = WIDTH / 12 * 9;
 	public static final int SCALE = 2;
 	
+	public static Image icon;
+	
 	/* Game Properties */
 	public static final String version = Version.getAppVersion() + " [Build: " + Version.getAppBuild() + "]";
 	public static String TITLE = "Glide - " + version;
 	
 	public static JFrame frame = new JFrame(TITLE);
-	public static MainMenu mm;
-	public static HTPMenu htp;
-	public static OptionsMenu op;
-	public static ControlsMenu cm;
-	public static SinglePlayerGame game;
+	public static Screen currentScreen;
 	public static boolean sounds = true;
 	public static boolean music = true;
 	public static boolean fullscreen = true;
 	
 	
 	/* sounds */
-	public static Sound s_explosion;// = new Sound("/sounds/explode.wav");
-	public static Sound s_hurt;// = new Sound("/sounds/hurt.wav");
-	public static Sound s_pickup;// = new Sound("/sounds/pickup.wav");
-	public static Sound s_shoot;// = new Sound("/sounds/shoot.wav");
-	public static Sound s_select;// = new Sound("/sounds/select.wav");
-	public static Sound s_enter;// = new Sound("/sounds/enter.wav");
-	public static Sound s_gameover;// = new Sound("/sounds/gameover.wav");
-	public static Sound s_dropdeath;// = new Sound("/sounds/dropexplode.wav");
+	public static Sound s_explosion;
+	public static Sound s_hurt;
+	public static Sound s_pickup;
+	public static Sound s_shoot;
+	public static Sound s_select;
+	public static Sound s_enter;
+	public static Sound s_gameover;
+	public static Sound s_dropdeath;
 	
-	public static Music s_backgroundmusic;// = new Sound2("/sounds/cr.wav");
+	public static Music s_backgroundmusic;
 	
 	/* Updater */
 	public static String update = "You are running the latest version!";
@@ -71,11 +69,8 @@ public class Glide {
 	public static LayoutManager correctLayout = null;
 	
 	/* Scrolling Background */
-	public static BufferedImage background = null;
-	public static BufferedImage background2 = null;
-	public static float b1y = 0;
-	public static float b2y = 0;
-	public static int backgroundSpeed = 1;
+	public static BackgroundRenderer backgroundRenderer;
+	public static LogoRenderer logoRenderer;
 	
 	/* Cheats */
 	public static boolean mdb_cheat = false;
@@ -103,9 +98,6 @@ public class Glide {
 		}
 	}
 	
-
-	
-	
 	public static void main(String[] args){
 		if(args.length > 0){
 			if(args[0].equalsIgnoreCase("-windowed")){
@@ -130,31 +122,17 @@ public class Glide {
 			}
 		}
 		
-		BufferedImageLoader loader = new BufferedImageLoader();
-		try{
-			background = loader.loadImage("/images/mm_b.png");
-			background2 = background;
-			b2y = -background.getHeight();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		mm = new MainMenu();
-		mm.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		mm.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		mm.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		backgroundRenderer = new BackgroundRenderer("/images/mm_b.png");
+		logoRenderer = new LogoRenderer("/images/logo.png");
 		
 		frame = new JFrame(TITLE + " - Loading..");
 		frame.setBackground(Color.BLACK);
-		frame.add(mm);
-		frame.pack();
+		frame.setSize(Glide.getWidth(), Glide.getHeight());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setIconImage(new ImageIcon(Glide.class.getClass().getResource("/images/icon.png")).getImage());
 		frame.setVisible(true);
-		
-		mm.start();
 		
 		if (fullscreen) {
 			GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -193,6 +171,42 @@ public class Glide {
 		// Set the blank cursor to the JFrame.
 		frame.getContentPane().setCursor(blankCursor);
 		
+		// Initialize the main menu
+		setScreen(new MainMenu());
+		
+	}
+	
+	public static void setScreen(Screen screen)
+	{
+		if (currentScreen != null) {
+			try {
+				currentScreen.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			frame.remove(currentScreen);
+		}
+		
+		currentScreen = screen;
+		
+		currentScreen.setPreferredSize(new Dimension(Glide.getWidth(), Glide.getHeight()));
+		currentScreen.setMaximumSize(new Dimension(Glide.getWidth(), Glide.getHeight()));
+		currentScreen.setMinimumSize(new Dimension(Glide.getWidth(), Glide.getHeight()));
+		
+		frame.add(currentScreen);
+		
+		frame.pack();
+		currentScreen.start();
+	}
+	
+	public static int getWidth()
+	{
+		return Glide.WIDTH * Glide.SCALE;
+	}
+	
+	public static int getHeight()
+	{
+		return Glide.HEIGHT * Glide.SCALE;
 	}
 	
 	public static void muteMusic(){

@@ -1,49 +1,65 @@
 package glide.entities;
 
-import java.awt.image.BufferedImage;
-
-import glide.SinglePlayerGame;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.Glide;
+import glide.game.screens.SinglePlayerGame;
 
 public class MultiDirectionalBullet extends Entity{
 	
-	public int tofro;
-	public int speed = 5;
+	private int speed = 5;
 	
-	public MultiDirectionalBullet(double x, double y, SinglePlayerGame game, int tofro) {
-		super(x, y, game);
-		this.setType(Entity.Type.MULTIDIRECTIONALBULLET);
-		this.tofro = tofro;
-	}
-	
-	@Override
-	public BufferedImage getEntityImage()
-	{
-		return game.getTextures().mdbullet;
-	}
-	
-	@Override
-	public void tick(){
-		if(this.tofro == 1){
-			this.setX(this.getX() + speed);
-			this.setY(this.getY() + speed);
-		}else if(this.tofro == 2){
-			this.setX(this.getX() + speed);
-			this.setY(this.getY() - speed);
-		}else if(this.tofro == 3){
-			this.setX(this.getX() - speed);
-			this.setY(this.getY() + speed);
-		}else if(this.tofro == 4){
-			this.setX(this.getX() - speed);
-			this.setY(this.getY() - speed);
-		}else if(this.tofro == 5){
-			this.setX(this.getX() + speed);
-		}else if(this.tofro == 6){
-			this.setX(this.getX() - speed);
-		}else if(this.tofro == 7){
-			this.setY(this.getY() + speed);
-		}else if(this.tofro == 8){
-			this.setY(this.getY() - speed);
+	public MultiDirectionalBullet(Vector position, SinglePlayerGame attachedGame, int tofro) {
+		super(position, attachedGame);
+		this.renderedSprite = this.attachedGame.getTextures().mdbullet;
+		
+		// Set the velocity for the entity.
+		if(tofro == 1){
+			this.velocity = this.velocity.plus(speed, speed);
+		}else if(tofro == 2){
+			this.velocity = this.velocity.plus(speed, -speed);
+		}else if(tofro == 3){
+			this.velocity = this.velocity.plus(-speed, speed);
+		}else if(tofro == 4){
+			this.velocity = this.velocity.plus(-speed, -speed);
+		}else if(tofro == 5){
+			this.velocity = this.velocity.plusX(speed);
+		}else if(tofro == 6){
+			this.velocity = this.velocity.plusX(-speed);
+		}else if(tofro == 7){
+			this.velocity = this.velocity.plusY(speed);
+		}else if(tofro == 8){
+			this.velocity = this.velocity.plusY(-speed);
 		}
 	}
-
+	
+	@Override
+	public final void onCollide(Entity collidedWith)
+	{
+		// Handle Collision with Meteor
+		if (collidedWith instanceof Meteor) {
+			((Meteor)collidedWith).kill(false);
+			Glide.s_explosion.play();
+		} 
+		
+		// Handle Collision with Small Meteor
+		else if (collidedWith instanceof SmallMeteor) {
+			((SmallMeteor)collidedWith).kill();
+			Glide.s_explosion.play();
+		}
+		
+		// Handle Collision with Enemy
+		else if (collidedWith instanceof Enemy) {
+			Enemy enemy = (Enemy)collidedWith;
+			if (! enemy.isDead) {
+				if (enemy.isBomb) {
+					enemy.kill(false);
+				} else {
+					enemy.kill();
+				}
+				
+				Glide.s_explosion.play();
+			}
+		}
+	}
 }

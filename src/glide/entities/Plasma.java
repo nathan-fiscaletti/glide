@@ -1,20 +1,12 @@
 package glide.entities;
 
-import java.awt.image.BufferedImage;
-
-import glide.SinglePlayerGame;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.screens.SinglePlayerGame;
 
 public class Plasma extends Entity{
-
-	public Plasma(double x, double y, SinglePlayerGame game) {
-		super(x, y, game);
-		this.setType(Entity.Type.PLASMAPLAYER);
+	public Plasma(Vector position, SinglePlayerGame attachedGame) {
+		super(position, attachedGame);
+		this.renderedSprite = this.attachedGame.getTextures().plasmaplayer;
 	}
-	
-	@Override
-	public BufferedImage getEntityImage()
-	{
-		return game.getTextures().plasmaplayer;
-	}
-
 }

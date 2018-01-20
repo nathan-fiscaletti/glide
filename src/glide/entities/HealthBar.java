@@ -1,45 +1,33 @@
 package glide.entities;
 
-import java.awt.image.BufferedImage;
-
-import glide.SinglePlayerGame;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.screens.SinglePlayerGame;
 
 public class HealthBar extends Entity{
-	private int health = 8;
-	private SinglePlayerGame game;
+	public int health = 8;
 	
-	public HealthBar(double x, double y, SinglePlayerGame game) {
-		super(x, y, game);
-		this.game = game;
-		this.setType(Entity.Type.HEALTHBAR);
+	public HealthBar(Vector position, SinglePlayerGame attachedGame) {
+		super(position, attachedGame);
+		this.renderedSprite = this.attachedGame.getTextures().healthbar8;
 	}
 	
 	@Override
-	public void tick(){
-		health = (health > 8) ? 8 : ((health < 1) ? 1 : health);
-	}
-	
-	@Override
-	public BufferedImage getEntityImage()
+	public final void updateSprite()
 	{
+		this.health = (health > 8) ? 8 : ((health < 1) ? 1 : health);
+		
 		switch (health) {
-			case 8 : return game.getTextures().healthbar1;
-			case 7 : return game.getTextures().healthbar2;
-			case 6 : return game.getTextures().healthbar3;
-			case 5 : return game.getTextures().healthbar4;
-			case 4 : return game.getTextures().healthbar5;
-			case 3 : return game.getTextures().healthbar6;
-			case 2 : return game.getTextures().healthbar7;
-			case 1 : return game.getTextures().healthbar8;
+			case 8 : this.renderedSprite = this.attachedGame.getTextures().healthbar1; break;
+			case 7 : this.renderedSprite = this.attachedGame.getTextures().healthbar2; break;
+			case 6 : this.renderedSprite = this.attachedGame.getTextures().healthbar3; break;
+			case 5 : this.renderedSprite = this.attachedGame.getTextures().healthbar4; break;
+			case 4 : this.renderedSprite = this.attachedGame.getTextures().healthbar5; break;
+			case 3 : this.renderedSprite = this.attachedGame.getTextures().healthbar6; break;
+			case 2 : this.renderedSprite = this.attachedGame.getTextures().healthbar7; break;
+			case 1 : this.renderedSprite = this.attachedGame.getTextures().healthbar8; break;
 			
-			default : return game.getTextures().healthbar1;
+			default : this.renderedSprite = this.attachedGame.getTextures().healthbar8;
 		}
-	}
-	
-	public int getHealth() {
-		return health;
-	}
-	public void setHealth(int health) {
-		this.health = health;
 	}
 }

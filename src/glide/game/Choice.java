@@ -1,4 +1,4 @@
-package glide;
+package glide.game;
 
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -21,7 +21,7 @@ public class Choice extends JFrame{
 		
 		Image i = new ImageIcon(this.getClass().getResource("/images/icon.png")).getImage();
 		this.setIconImage(i);
-		GlideSystem.icon = i;
+		Glide.icon = i;
 		///////////////
 		
 		window.addActionListener(new ActionListener(){

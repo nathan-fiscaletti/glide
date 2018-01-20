@@ -1,27 +1,51 @@
 package glide.entities;
 
-import glide.SinglePlayerGame;
-
-import java.awt.image.BufferedImage;
-
-import glide.Glide;
+import glide.engine.Entity;
+import glide.engine.Vector;
+import glide.game.Glide;
+import glide.game.screens.SinglePlayerGame;
 
 public class EnemyBullet extends Entity {
 	
-	public EnemyBullet(double x, double y, SinglePlayerGame game){
-		super(x, y, game);
-		this.setType(Entity.Type.ENEMYBULLET);
-		Glide.s_shoot.play();
+	int speed = 10;
+	
+	public EnemyBullet(Vector position, SinglePlayerGame attachedGame, int orientation){
+		super(position, attachedGame);
+		this.velocity = new Vector(0, speed);
+		
+		switch (orientation) {
+			case 0 :
+				this.renderedSprite = attachedGame.getTextures().enemybullet;
+				break;
+			case 1 : 
+				this.renderedSprite = attachedGame.getTextures().enemybulletleft;
+				this.velocity = this.velocity.plusX(-(speed/2));
+				break;
+			case 2 : 
+				this.renderedSprite = attachedGame.getTextures().enemybulletright;
+				this.velocity = this.velocity.plusX((speed/2));
+				break;
+		}
 	}
 	
 	@Override
-	public void tick(){
-		this.setY(this.getY() + 10);
-	}
-	
-	@Override
-	public BufferedImage getEntityImage()
+	public final void onCollide(Entity collidedWith)
 	{
-		return game.getTextures().enemybullet;
+		// Handle collision with player
+		if (collidedWith instanceof Player) {
+			Player player = (Player)collidedWith;
+			if(!player.plasma && !Glide.health_cheat){
+				int h = (this.attachedGame.getHealthBar().health > 1) ? this.attachedGame.getHealthBar().health - 1 : 8;
+				if(h == 8){
+					this.attachedGame.lose();
+				}else{
+					this.attachedGame.getHealthBar().health = h;
+					player.hurting = true;
+				}
+				Glide.s_hurt.play();
+			}
+			
+			this.attachedGame.getController().deSpawnEntity(this);
+		} 
 	}
 }

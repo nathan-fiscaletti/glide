@@ -1,4 +1,4 @@
-package glide.spritehandles;
+package glide.engine.graphics;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
