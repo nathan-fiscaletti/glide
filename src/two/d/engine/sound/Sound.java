@@ -1,6 +1,6 @@
-package glide.engine.sound;
+package two.d.engine.sound;
 
-import glide.game.Glide;
+import two.d.engine.Engine;
 
 public class Sound {
 	private kuusisto.tinysound.Sound sound;
@@ -10,9 +10,9 @@ public class Sound {
 		this.sound = kuusisto.tinysound.TinySound.loadSound(url);
 	}
 	
-	public void play()
+	public void play(Engine engine)
 	{
-		if (Glide.sounds) {
+		if (engine.enableSounds) {
 			sound.play();
 		}
 	}

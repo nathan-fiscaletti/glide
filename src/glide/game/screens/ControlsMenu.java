@@ -1,6 +1,5 @@
 package glide.game.screens;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,11 +7,19 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import glide.engine.Screen;
-import glide.engine.graphics.BufferedImageLoader;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import two.d.engine.Screen;
+import two.d.engine.graphics.BufferedImageLoader;
 
-public class ControlsMenu extends Screen {
+public class ControlsMenu extends Screen<GlideEngine> {
+
+	/**
+	 * Create the menu.
+	 * @param engine
+	 */
+	public ControlsMenu(GlideEngine engine) {
+		super(engine);
+	}
 
 	/**
 	 * Generated Serial Version UID
@@ -26,8 +33,6 @@ public class ControlsMenu extends Screen {
 	protected final void initialize()
 	{
 		this.name = "ControlsMenu";
-		this.shouldRenderLogo = true;
-		this.shouldRenderBackground = true;
 	}
 
 	@Override
@@ -46,7 +51,7 @@ public class ControlsMenu extends Screen {
 		graphics.setFont(f);
 		graphics.setColor(Color.ORANGE);
 		int w = graphics.getFontMetrics().stringWidth(op);
-		graphics.drawChars(op.toCharArray(), 0, op.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 130 + Glide.logoRenderer.getLogoHeight()));
+		graphics.drawChars(op.toCharArray(), 0, op.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 130 + this.parentEngine.logoRenderer.getLogoHeight()));
 		
 		
 		/* Menu Items */
@@ -60,13 +65,13 @@ public class ControlsMenu extends Screen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		graphics.drawImage(controlls, ((Glide.WIDTH * Glide.SCALE) / 2) - (controlls.getWidth() / 2), 120 + Glide.logoRenderer.getLogoHeight() + 24 + 40, this);
+		graphics.drawImage(controlls, (this.parentEngine.getWidth() / 2) - (controlls.getWidth() / 2), 120 + this.parentEngine.logoRenderer.getLogoHeight() + 24 + 40, this);
 		//Exit
 		///
 		graphics.setColor(Color.GREEN);
 		String sco3 = "Back";
 		int w3 = graphics.getFontMetrics().stringWidth(sco3);
-		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), (controlls.getHeight() + 24 + 18 + 140 + Glide.logoRenderer.getLogoHeight() + 40));
+		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w3 / 2), (controlls.getHeight() + 24 + 18 + 140 + this.parentEngine.logoRenderer.getLogoHeight() + 40));
 		///
 	}
 	
@@ -83,7 +88,7 @@ public class ControlsMenu extends Screen {
 			}else if(selected == 4){
 				selected = 3;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -94,10 +99,10 @@ public class ControlsMenu extends Screen {
 			}else if(selected == 4){
 				selected = 1;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if(key == KeyEvent.VK_ENTER){
-			Glide.s_enter.play();
-			Glide.setScreen(new OptionsMenu());
+			this.parentEngine.sounds.s_enter.play(this.parentEngine);
+			this.parentEngine.setScreen(new OptionsMenu(this.parentEngine));
 		}
 	}
 	

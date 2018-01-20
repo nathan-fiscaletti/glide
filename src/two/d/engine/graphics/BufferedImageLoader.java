@@ -1,4 +1,4 @@
-package glide.engine.graphics;
+package two.d.engine.graphics;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -1,12 +1,13 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class Bullet extends Entity {
-	
+public class Bullet extends Entity<GlideEngine> {
+
 	private int speed = 20;
 	
 	/**
@@ -15,34 +16,34 @@ public class Bullet extends Entity {
 	 * @param position
 	 * @param attachedGame
 	 */
-	public Bullet(Vector position, Screen screen)
+	public Bullet(Vector position, Screen<GlideEngine> screen)
 	{
 		super(position, screen);
 		
 		// Set the sprite.
-		this.renderedSprite = Entity.getTextures().bullet;
+		this.renderedSprite = Entity.getTextures(GlideTextures.class).bullet;
 		
 		// Play the shoot sound.
-		Glide.s_shoot.play();
+		this.parentEngine.sounds.s_shoot.play(this.parentEngine);
 		
 		// Set the entities velocity
 		this.velocity = new Vector(0, -speed);
 	}
 	
 	@Override
-	public final void onCollide(Entity collidedWith)
+	public final void onCollide(Entity<GlideEngine> collidedWith)
 	{
 		// Handle Collision with Meteor
 		if (collidedWith instanceof Meteor) {
 			this.kill();
 			((Meteor)collidedWith).kill(false);
-			Glide.s_explosion.play();
+			this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 		}
 		
 		// Handle Collision with Small Meteor
 		else if (collidedWith instanceof SmallMeteor) {
 			((SmallMeteor)collidedWith).kill();
-			Glide.s_explosion.play();
+			this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 		}
 		
 		// Handle collision with Enemy
@@ -60,7 +61,7 @@ public class Bullet extends Entity {
 				}
 				
 				this.kill();
-				Glide.s_explosion.play();
+				this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 			}
 		}
 	}

@@ -1,6 +1,4 @@
-package glide.engine;
-
-import glide.game.Glide;
+package two.d.engine;
 
 public class Vector {
 	
@@ -144,8 +142,8 @@ public class Vector {
 	 * The maximum vector allowed with an additional buffer.
 	 * @return
 	 */
-	public final static Vector Max(int buffer) {
-		Vector result = new Vector((Glide.WIDTH * Glide.SCALE) + buffer, (Glide.HEIGHT * Glide.SCALE) + buffer);
+	public final static Vector Max(int buffer, Engine engine) {
+		Vector result = new Vector(engine.getWidth() + buffer, engine.getHeight() + buffer);
 		result.buffer = buffer;
 		
 		return result;
@@ -155,7 +153,7 @@ public class Vector {
 	 * The maximum vector allowed.
 	 * @return
 	 */
-	public final static Vector Max() {
-		return new Vector((Glide.WIDTH * Glide.SCALE), (Glide.HEIGHT * Glide.SCALE));
+	public final static Vector Max(Engine engine) {
+		return Vector.Max(0, engine);
 	}
 }

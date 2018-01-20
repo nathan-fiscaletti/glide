@@ -1,4 +1,4 @@
-package glide.engine;
+package two.d.engine;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
@@ -6,9 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
-import glide.game.Glide;
-
-public abstract class Screen extends Canvas implements Runnable
+public abstract class Screen<ParentEngine extends Engine> extends Canvas implements Runnable
 {
 	/**
 	 * Serial Version UID 
@@ -25,7 +23,7 @@ public abstract class Screen extends Canvas implements Runnable
 	 * any entities you might want to have
 	 * attached to this screen.
 	 */
-	public EntityController controller;
+	public EntityController<ParentEngine> controller;
 	
 	/**
 	 * The Ticks Per Second for this screen.
@@ -38,16 +36,6 @@ public abstract class Screen extends Canvas implements Runnable
 	public int fps;
 	
 	/**
-	 * If set to true, the logo will be rendered out.
-	 */
-	public boolean shouldRenderLogo = false;
-	
-	/**
-	 * If set to true, the background will be rendered out.
-	 */
-	public boolean shouldRenderBackground = false;
-	
-	/**
 	 * Primary thread control.
 	 */
 	private boolean running = false;
@@ -56,6 +44,21 @@ public abstract class Screen extends Canvas implements Runnable
 	 * Primary Thread.
 	 */
 	private Thread thread;
+	
+	/**
+	 * The parent Engine for this screen.
+	 */
+	public ParentEngine parentEngine;
+	
+	/**
+	 * Initialize the screen with a parent engine.
+	 *
+	 * @param engine
+	 */
+	public Screen(ParentEngine engine)
+	{
+		this.parentEngine = engine;
+	}
 	
 	/**
 	 * Called to initialize properties.
@@ -98,7 +101,6 @@ public abstract class Screen extends Canvas implements Runnable
 		final double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
-		Glide.frame.setTitle(Glide.TITLE);
 		int updates = 0;
 		int frames = 0;
 		long timer = System.currentTimeMillis();
@@ -185,14 +187,19 @@ public abstract class Screen extends Canvas implements Runnable
 		
 		Graphics graphics = bs.getDrawGraphics();
 		
-		if (this.shouldRenderBackground) {
-			Glide.backgroundRenderer.render(graphics, this);
-		}
-		if (this.shouldRenderLogo) {
-			Glide.logoRenderer.render(graphics, this);
+		for (Renderer renderer : parentEngine.globalRenderers) {
+			if (renderer.shouldRenderWhenGlobal && !renderer.topMost) {
+				renderer.render(graphics, this);
+			}
 		}
 		
 		this.renderFrame(graphics);
+		
+		for (Renderer renderer : parentEngine.globalRenderers) {
+			if (renderer.shouldRenderWhenGlobal && renderer.topMost) {
+				renderer.render(graphics, this);
+			}
+		}
 		
 		graphics.dispose();
 		bs.show();
@@ -203,8 +210,12 @@ public abstract class Screen extends Canvas implements Runnable
 	 */
 	private void runUpdate()
 	{
-		Glide.backgroundRenderer.update();
-		Glide.logoRenderer.update();
+		for (Renderer renderer : parentEngine.globalRenderers) {
+			if (renderer.shouldRenderWhenGlobal) {
+				renderer.update();
+			}
+		}
+		
 		this.update();
 	}
 }

@@ -1,6 +1,4 @@
-package glide.engine.sound;
-
-import glide.game.Glide;
+package two.d.engine.sound;
 
 public class Music {
 	public kuusisto.tinysound.Music music;
@@ -12,9 +10,7 @@ public class Music {
 	
 	public void play()
 	{
-		if (Glide.music) {
-			music.play(true, 0.25f);
-		}
+		music.play(true, 0.25f);
 	}
 	
 	public void pause()

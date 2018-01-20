@@ -4,13 +4,15 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import glide.engine.Renderer;
-import glide.engine.Vector;
-import glide.engine.graphics.BufferedImageLoader;
-import glide.game.Glide;
+import two.d.engine.Engine;
+import two.d.engine.Renderer;
+import two.d.engine.Vector;
+import two.d.engine.graphics.BufferedImageLoader;
 
 public class BackgroundRenderer extends Renderer {
 
+	private Engine parentEngine;
+	
 	private BufferedImage blackImage;
 	private BufferedImage backgroundOne = null;
 	private BufferedImage backgroundTwo = null;
@@ -20,9 +22,9 @@ public class BackgroundRenderer extends Renderer {
 	
 	private int speed = 1;
 	
-	public BackgroundRenderer(String backgroundImagePath)
+	public BackgroundRenderer(String backgroundImagePath, Engine engine)
 	{
-		this.blackImage = Renderer.blackImage();
+		this.blackImage = Renderer.blackImage(engine);
 		try{
 			backgroundOne = BufferedImageLoader.load(backgroundImagePath);
 			backgroundTwo = backgroundOne;
@@ -30,17 +32,19 @@ public class BackgroundRenderer extends Renderer {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		this.parentEngine = engine;
 	}
 	
 	@Override
 	public void render(Graphics g, Canvas canvas) {
-		g.drawImage(this.blackImage, 0, 0, Glide.getWidth(), Glide.getHeight(), canvas);
+		g.drawImage(this.blackImage, 0, 0, parentEngine.getWidth(), parentEngine.getHeight(), canvas);
 		
-		if(backgroundOnePosition.y >= Vector.Max().y){
+		if(backgroundOnePosition.y >= Vector.Max(parentEngine).y){
 			backgroundOnePosition.y = backgroundTwoPosition.y - backgroundTwo.getHeight();
 		}
 		
-		if(backgroundTwoPosition.y >= Vector.Max().y){
+		if(backgroundTwoPosition.y >= Vector.Max(parentEngine).y){
 			backgroundTwoPosition.y = backgroundOnePosition.y - backgroundTwo.getHeight();
 		}
 		

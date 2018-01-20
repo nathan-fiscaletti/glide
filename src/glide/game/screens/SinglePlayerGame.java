@@ -1,9 +1,7 @@
 package glide.game.screens;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
 import glide.game.entities.Bullet;
 import glide.game.entities.Enemy;
 import glide.game.entities.HealthBar;
@@ -12,6 +10,9 @@ import glide.game.entities.Plasma;
 import glide.game.entities.Player;
 import glide.game.entities.Enemy.ProtectorType;
 import glide.game.entitycontrollers.SinglePlayerGameController;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -26,7 +27,7 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
-public class SinglePlayerGame extends Screen {
+public class SinglePlayerGame extends Screen<GlideEngine> {
 
 	private static final long serialVersionUID = -4093553489357496142L;
 	
@@ -65,8 +66,8 @@ public class SinglePlayerGame extends Screen {
 	public Shape circle = new Ellipse2D.Float();
 	float circle_width = 0;
 	float circle_height = 0;
-	float circle_x = ((Glide.WIDTH * Glide.SCALE) / 2) - (circle_width / 2);
-	float circle_y = ((Glide.HEIGHT * Glide.SCALE) / 2) - (circle_height / 2);
+	float circle_x = (this.parentEngine.getWidth() / 2) - (circle_width / 2);
+	float circle_y = (this.parentEngine.getHeight() / 2) - (circle_height / 2);
 	float pcx = 0;
 	float pcy = 0;
 	
@@ -88,20 +89,21 @@ public class SinglePlayerGame extends Screen {
 	
 	/* End Countdown Control */
 
+	public SinglePlayerGame(GlideEngine engine) {
+		super(engine);
+	}
+	
 	@Override
 	public void initialize()
 	{
 		this.name = "SinglePlayerGame";
 		
-		player = new Player(new Vector(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104), this);
+		player = new Player(new Vector((this.parentEngine.getWidth() / 2) - 16, this.parentEngine.getHeight() - 104), this);
 		controller = new SinglePlayerGameController(this);
-		healthBar = new HealthBar(new Vector((this.getWidth() / 2) - (Entity.getTextures().healthbar1.getWidth() / 2), this.getHeight() - (Entity.getTextures().healthbar1.getHeight() + 10)), this);
-		plasmae = new Plasma(new Vector(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 52), this);
+		healthBar = new HealthBar(new Vector((this.getWidth() / 2) - (Entity.getTextures(GlideTextures.class).healthbar1.getWidth() / 2), this.getHeight() - (Entity.getTextures(GlideTextures.class).healthbar1.getHeight() + 10)), this);
+		plasmae = new Plasma(new Vector((this.parentEngine.getWidth() / 2) - 16, this.parentEngine.getHeight() - 52), this);
 		
-		this.shouldRenderBackground = true;
-		this.shouldRenderLogo = false;
-		
-		Glide.backgroundRenderer.setSpeed(7);
+		this.parentEngine.backgroundRenderer.setSpeed(7);
 		
 		addFocusListener(new FocusListener(){
 			@Override
@@ -138,6 +140,10 @@ public class SinglePlayerGame extends Screen {
 			}
 		}
 		
+		
+		this.parentEngine.logoRenderer.shouldRenderWhenGlobal = (isPaused() || lost() || won() || cheating() || !cntdwn_done);
+		
+		
 		if(!isPaused() && !lost() && !won() && !cheating()){
 			player.performUpdate();
 			this.controller.update();
@@ -148,13 +154,13 @@ public class SinglePlayerGame extends Screen {
 			addm ++;
 			if(adde == curlvl){
 				if(cntdwn_done){
-					controller.spawnEntity(new Enemy(new Vector(getController().random.nextInt(Glide.WIDTH * Glide.SCALE), -5), this, getController().random.nextBoolean(), false, false, ProtectorType.None));
+					controller.spawnEntity(new Enemy(new Vector(getController().random.nextInt(this.parentEngine.getWidth()), -5), this, getController().random.nextBoolean(), false, false, ProtectorType.None));
 				}
 				adde = 0;
 			}
 			if(addm == 45){
 				if(cntdwn_done){
-					controller.spawnEntity(new Meteor(new Vector(controller.random.nextInt(Glide.WIDTH * Glide.SCALE), -5), this));
+					controller.spawnEntity(new Meteor(new Vector(controller.random.nextInt(this.parentEngine.getWidth()), -5), this));
 				}
 				addm = 0;
 			}
@@ -180,7 +186,7 @@ public class SinglePlayerGame extends Screen {
 				circle_height = circle_width + 20;
 				circle_x = pcx - (circle_width / 2);
 				circle_y = pcy - (circle_height / 2);
-				if(circle_width > (Glide.WIDTH * Glide.SCALE) * 2){
+				if(circle_width > this.parentEngine.getWidth() * 2){
 					stopCircling();
 				}
 			}
@@ -200,11 +206,11 @@ public class SinglePlayerGame extends Screen {
 		// Count Down
 		graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		graphics.setColor(Color.GREEN);
-		graphics.drawChars(cntdwn_string.toCharArray(), 0, cntdwn_string.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(cntdwn_string) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) - 24);
+		graphics.drawChars(cntdwn_string.toCharArray(), 0, cntdwn_string.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(cntdwn_string) / 2), (this.parentEngine.getHeight() / 2) - 24);
 		graphics.setFont(new Font("Ariel", Font.BOLD, 36));
 		graphics.setColor(Color.ORANGE);
 		if(!(cntdwn_ticks == 0)){
-			graphics.drawChars(Integer.toString(cntdwn_ticks).toCharArray(), 0, Integer.toString(cntdwn_ticks).toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(Integer.toString(cntdwn_ticks)) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + 20);
+			graphics.drawChars(Integer.toString(cntdwn_ticks).toCharArray(), 0, Integer.toString(cntdwn_ticks).toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(Integer.toString(cntdwn_ticks)) / 2), (this.parentEngine.getHeight() / 2) + 20);
 		}
 		
 		// health bar
@@ -212,10 +218,10 @@ public class SinglePlayerGame extends Screen {
 		healthBar.render(graphics, this);
 
 		/* HUD Container */
-		int wid1 = (Glide.WIDTH * Glide.SCALE) - 20;
-		int hit1 = ((Glide.HEIGHT * Glide.SCALE) - 60);
+		int wid1 = this.parentEngine.getWidth() - 20;
+		int hit1 = (this.parentEngine.getHeight() - 60);
 		int rectx1 = 10;
-		int recty1 = (Glide.HEIGHT * Glide.SCALE) - 50;
+		int recty1 = this.parentEngine.getHeight() - 50;
 		graphics.setColor(Color.WHITE);		
 		Graphics2D g2d = (Graphics2D)graphics;
 		Stroke os = g2d.getStroke();
@@ -228,21 +234,21 @@ public class SinglePlayerGame extends Screen {
 		/* MDBs */
 		int out = 32;
 		for(int i = 0;i < mdbs;i++){
-			graphics.drawImage(Entity.getTextures().mdbullet, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures(GlideTextures.class).mdbullet, out, (this.parentEngine.getHeight() - 40), null);
 			out = out + 32;
 		}
 		if(mdbs == 5){
-			graphics.drawImage(Entity.getTextures().max, 192, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures(GlideTextures.class).max, 192, (this.parentEngine.getHeight() - 40), null);
 		}
 		
 		/* CODs */
 		out = 257;
 		for(int i = 0;i < cods; i++){
-			graphics.drawImage(Entity.getTextures().cod, out, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures(GlideTextures.class).cod, out, (this.parentEngine.getHeight() - 40), null);
 			out = out + 32;
 		}
 		if(cods == 2){
-			graphics.drawImage(Entity.getTextures().max_cod, 321, ((Glide.HEIGHT * Glide.SCALE) - 40), null);
+			graphics.drawImage(Entity.getTextures(GlideTextures.class).max_cod, 321, (this.parentEngine.getHeight() - 40), null);
 		}
 		
 		/* Lvl / Score */
@@ -253,71 +259,71 @@ public class SinglePlayerGame extends Screen {
 		String sco = "Score: " + score;
 		
 		graphics.setColor(Color.RED);
-		int bdx = ((Glide.WIDTH * Glide.SCALE) - ((graphics.getFontMetrics().stringWidth(sco) * 3)));
-		bdx = (Glide.WIDTH * Glide.SCALE) - bdx;
-		bdx = (Glide.WIDTH * Glide.SCALE) - bdx / 2;
+		int bdx = (this.parentEngine.getWidth() - ((graphics.getFontMetrics().stringWidth(sco) * 3)));
+		bdx = this.parentEngine.getWidth() - bdx;
+		bdx = this.parentEngine.getWidth() - bdx / 2;
 		bdx = bdx - graphics.getFontMetrics().stringWidth(bombDeployed);
 		bdx = bdx + graphics.getFontMetrics().stringWidth(bombDeployed)/4;
-		graphics.drawChars(bombDeployed.toCharArray(), 0, bombDeployed.toCharArray().length, bdx, (Glide.HEIGHT * Glide.SCALE) - 87);
+		graphics.drawChars(bombDeployed.toCharArray(), 0, bombDeployed.toCharArray().length, bdx, this.parentEngine.getHeight() - 87);
 		
 		graphics.setColor(Color.ORANGE);
-		graphics.drawChars(lvl.toCharArray(), 0, lvl.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (graphics.getFontMetrics().stringWidth(lvl) * 2) + 50, (Glide.HEIGHT * Glide.SCALE) - 67);
+		graphics.drawChars(lvl.toCharArray(), 0, lvl.toCharArray().length, this.parentEngine.getWidth() - (graphics.getFontMetrics().stringWidth(lvl) * 2) + 50, this.parentEngine.getHeight() - 67);
 		graphics.setColor(Color.GREEN);
 		
-		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (Glide.WIDTH * Glide.SCALE) - (graphics.getFontMetrics().stringWidth(sco) * 3), (Glide.HEIGHT * Glide.SCALE) - 67);
+		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, this.parentEngine.getWidth() - (graphics.getFontMetrics().stringWidth(sco) * 3), this.parentEngine.getHeight() - 67);
 		
 		
 		/* Bomb Counter */
 		String c = String.valueOf(boc); 
 		
-		graphics.drawChars(c.toCharArray(), 0, c.toCharArray().length, 32, (Glide.HEIGHT * Glide.SCALE) - 67);
-		graphics.drawImage(Entity.getTextures().bombsp, 32 + graphics.getFontMetrics().stringWidth(c), (Glide.HEIGHT * Glide.SCALE) - 92, null);
+		graphics.drawChars(c.toCharArray(), 0, c.toCharArray().length, 32, this.parentEngine.getHeight() - 67);
+		graphics.drawImage(Entity.getTextures(GlideTextures.class).bombsp, 32 + graphics.getFontMetrics().stringWidth(c), this.parentEngine.getHeight() - 92, null);
 		
 		/* Power Ups */
 		int statsoffset = 64 + graphics.getFontMetrics().stringWidth(c);
 		graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		if(this.getPlayer().beaming){
-			BufferedImage beamer = Entity.getTextures().beam;
-			BufferedImage level = Entity.getTextures().powerbar1;
+			BufferedImage beamer = Entity.getTextures(GlideTextures.class).beam;
+			BufferedImage level = Entity.getTextures(GlideTextures.class).powerbar1;
 			if(beam == 1){
-				level = Entity.getTextures().powerbar5;
+				level = Entity.getTextures(GlideTextures.class).powerbar5;
 			}else if(beam == 2){
-				level = Entity.getTextures().powerbar4;
+				level = Entity.getTextures(GlideTextures.class).powerbar4;
 			}else if(beam == 3){
-				level = Entity.getTextures().powerbar3;
+				level = Entity.getTextures(GlideTextures.class).powerbar3;
 			}else if(beam == 4){
-				level = Entity.getTextures().powerbar2;
+				level = Entity.getTextures(GlideTextures.class).powerbar2;
 			}else if(beam == 5){
-				level = Entity.getTextures().powerbar1;
+				level = Entity.getTextures(GlideTextures.class).powerbar1;
 			}
 			
-			graphics.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
-			graphics.drawImage(level, 32 + 34 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			graphics.drawImage(beamer, 32 + statsoffset, this.parentEngine.getHeight() - 92, null);
+			graphics.drawImage(level, 32 + 34 + statsoffset, this.parentEngine.getHeight() - 92, null);
 		}else{
-			BufferedImage beamer = Entity.getTextures().grayscale_beam;
-			graphics.drawImage(beamer, 32 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			BufferedImage beamer = Entity.getTextures(GlideTextures.class).grayscale_beam;
+			graphics.drawImage(beamer, 32 + statsoffset, this.parentEngine.getHeight() - 92, null);
 		}
 		
 		if(this.isPlasmaActive && this.getPlayer().plasma){
-			BufferedImage shielded = Entity.getTextures().plasma;
-			BufferedImage level = Entity.getTextures().powerbar1;
+			BufferedImage shielded = Entity.getTextures(GlideTextures.class).plasma;
+			BufferedImage level = Entity.getTextures(GlideTextures.class).powerbar1;
 			if(shield == 1){
-				level = Entity.getTextures().powerbar5;
+				level = Entity.getTextures(GlideTextures.class).powerbar5;
 			}else if(shield == 2){
-				level = Entity.getTextures().powerbar4;
+				level = Entity.getTextures(GlideTextures.class).powerbar4;
 			}else if(shield == 3){
-				level = Entity.getTextures().powerbar3;
+				level = Entity.getTextures(GlideTextures.class).powerbar3;
 			}else if(shield == 4){
-				level = Entity.getTextures().powerbar2;
+				level = Entity.getTextures(GlideTextures.class).powerbar2;
 			}else if(shield == 5){
-				level = Entity.getTextures().powerbar1;
+				level = Entity.getTextures(GlideTextures.class).powerbar1;
 			}
 			
-			graphics.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
-			graphics.drawImage(level, 134 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			graphics.drawImage(shielded, 100 + statsoffset, this.parentEngine.getHeight() - 92, null);
+			graphics.drawImage(level, 134 + statsoffset, this.parentEngine.getHeight() - 92, null);
 		}else{
-			BufferedImage shielded = Entity.getTextures().grayscale_sheild;
-			graphics.drawImage(shielded, 100 + statsoffset, (Glide.HEIGHT * Glide.SCALE) - 92, null);
+			BufferedImage shielded = Entity.getTextures(GlideTextures.class).grayscale_sheild;
+			graphics.drawImage(shielded, 100 + statsoffset, this.parentEngine.getHeight() - 92, null);
 		}
 		
 		
@@ -336,15 +342,15 @@ public class SinglePlayerGame extends Screen {
 		if(isPaused()){
 			String pause = "Press 'Escape' to resume";
 			String pause2 = "Press 'q' to return to Main Menu";
-			String sounds = "Press 'z' to " + ((Glide.sounds) ? "disable" : "enable") + " sounds";
-			String music = "Press 'c' to " + ((Glide.music) ? "disable" : "enable") + " music";
+			String sounds = "Press 'z' to " + ((this.parentEngine.enableSounds) ? "disable" : "enable") + " sounds";
+			String music = "Press 'c' to " + ((this.parentEngine.enableMusic) ? "disable" : "enable") + " music";
 			
 			graphics.setFont(new Font("Ariel", Font.BOLD, 36));
-			graphics.drawChars(pause.toCharArray(), 0, pause.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(pause) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 38));
-			graphics.drawChars(pause2.toCharArray(), 0, pause2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(pause2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent()));
+			graphics.drawChars(pause.toCharArray(), 0, pause.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(pause) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 38));
+			graphics.drawChars(pause2.toCharArray(), 0, pause2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(pause2) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent()));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 18));
-			graphics.drawChars(sounds.toCharArray(), 0, sounds.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 4) - (graphics.getFontMetrics().stringWidth(sounds) / 4) - 20, ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 100));
-			graphics.drawChars(music.toCharArray(), 0, music.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) - (Glide.WIDTH * Glide.SCALE) / 4) - (graphics.getFontMetrics().stringWidth(music) - (graphics.getFontMetrics().stringWidth(pause2) / 4)), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 100));
+			graphics.drawChars(sounds.toCharArray(), 0, sounds.toCharArray().length, (this.parentEngine.getWidth() / 4) - (graphics.getFontMetrics().stringWidth(sounds) / 4) - 20, (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 100));
+			graphics.drawChars(music.toCharArray(), 0, music.toCharArray().length, (this.parentEngine.getWidth() - this.parentEngine.getWidth() / 4) - (graphics.getFontMetrics().stringWidth(music) - (graphics.getFontMetrics().stringWidth(pause2) / 4)), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 100));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
 		
@@ -356,27 +362,27 @@ public class SinglePlayerGame extends Screen {
 			String lose3 = "Press 'Enter' to start over";
 			String lose4 = "Press 'q' to return to Main Menu";
 			String lose5 = "Level: " + lvli;
-			String lose6 = "Difficulty: " + Glide.difficulty.toString();
+			String lose6 = "Difficulty: " + this.parentEngine.difficulty.toString();
 			//Lose border
 			int wid = (graphics.getFontMetrics().stringWidth(lose4) + 4);
 			int hit = (graphics.getFontMetrics().getDescent()) + 52 + 26 + 118 + 4 + 26;
-			int rectx = ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2) + 60;
-			int recty = ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 118) - 20;
+			int rectx = (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2) + 60;
+			int recty = (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 118) - 20;
 			graphics.setColor(Color.ORANGE);
 			graphics.drawRoundRect(wid, hit, rectx, recty, 10, 10);
 			
 			
 			graphics.setFont(new Font("Ariel", Font.BOLD, 42));
 			graphics.setColor(Color.RED);
-			graphics.drawChars(lose.toCharArray(), 0, lose.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 118));
+			graphics.drawChars(lose.toCharArray(), 0, lose.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 118));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 			graphics.setColor(Color.ORANGE);
-			graphics.drawChars(lose2.toCharArray(), 0, lose2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 52 + 10));
+			graphics.drawChars(lose2.toCharArray(), 0, lose2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose2) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 52 + 10));
 			
-			graphics.drawChars(lose5.toCharArray(), 0, lose5.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose5) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 26 + 10));
-			graphics.drawChars(lose6.toCharArray(), 0, lose6.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose6) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 10));
-			graphics.drawChars(lose3.toCharArray(), 0, lose3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose3) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 26 + 10));
-			graphics.drawChars(lose4.toCharArray(), 0, lose4.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose4) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 52 + 10));
+			graphics.drawChars(lose5.toCharArray(), 0, lose5.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose5) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 26 + 10));
+			graphics.drawChars(lose6.toCharArray(), 0, lose6.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose6) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 10));
+			graphics.drawChars(lose3.toCharArray(), 0, lose3.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose3) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 26 + 10));
+			graphics.drawChars(lose4.toCharArray(), 0, lose4.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose4) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 52 + 10));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
 		
@@ -388,27 +394,27 @@ public class SinglePlayerGame extends Screen {
 			String lose3 = "Press 'Enter' to start over";
 			String lose4 = "Press 'q' to return to Main Menu";
 			String lose5 = "Level: " + lvli;
-			String lose6 = "Difficulty: " + Glide.difficulty.toString();
+			String lose6 = "Difficulty: " + this.parentEngine.difficulty.toString();
 			//Lose border
 			int wid = (graphics.getFontMetrics().stringWidth(lose4) + 4);
 			int hit = (graphics.getFontMetrics().getDescent()) + 52 + 26 + 118 + 4 + 26;
-			int rectx = ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2) + 60;
-			int recty = ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 118) - 20;
+			int rectx = (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2) + 60;
+			int recty = (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 118) - 20;
 			graphics.setColor(Color.ORANGE);
 			graphics.drawRoundRect(wid, hit, rectx, recty, 10, 10);
 			
 			
 			graphics.setFont(new Font("Ariel", Font.BOLD, 42));
 			graphics.setColor(Color.GREEN);
-			graphics.drawChars(lose.toCharArray(), 0, lose.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 118));
+			graphics.drawChars(lose.toCharArray(), 0, lose.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 118));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 			graphics.setColor(Color.ORANGE);
-			graphics.drawChars(lose2.toCharArray(), 0, lose2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 52 + 10));
+			graphics.drawChars(lose2.toCharArray(), 0, lose2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose2) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 52 + 10));
 			
-			graphics.drawChars(lose5.toCharArray(), 0, lose5.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose5) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 26 + 10));
-			graphics.drawChars(lose6.toCharArray(), 0, lose6.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose6) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 10));
-			graphics.drawChars(lose3.toCharArray(), 0, lose3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose3) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 26 + 10));
-			graphics.drawChars(lose4.toCharArray(), 0, lose4.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(lose4) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 52 + 10));
+			graphics.drawChars(lose5.toCharArray(), 0, lose5.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose5) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 26 + 10));
+			graphics.drawChars(lose6.toCharArray(), 0, lose6.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose6) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 10));
+			graphics.drawChars(lose3.toCharArray(), 0, lose3.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose3) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 26 + 10));
+			graphics.drawChars(lose4.toCharArray(), 0, lose4.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(lose4) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 52 + 10));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 		}
 		
@@ -420,15 +426,15 @@ public class SinglePlayerGame extends Screen {
 			graphics.setFont(new Font("Ariel", Font.BOLD, 24));
 			
 			graphics.setColor(Color.ORANGE);
-			graphics.drawChars(Title.toCharArray(), 0, Title.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(Title) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 40));
+			graphics.drawChars(Title.toCharArray(), 0, Title.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(Title) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 40));
 			graphics.setColor(Color.GREEN);
 			graphics.setFont(new Font("Ariel", Font.BOLD, 12));
-			graphics.drawChars(message.toCharArray(), 0, message.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(message) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 20));
+			graphics.drawChars(message.toCharArray(), 0, message.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(message) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 20));
 			graphics.setColor(Color.RED);
-			graphics.drawChars(cheatError.toCharArray(), 0, cheatError.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(cheatError) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent()));
+			graphics.drawChars(cheatError.toCharArray(), 0, cheatError.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(cheatError) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent()));
 			graphics.setFont(new Font("Ariel", Font.BOLD, 12));
 			graphics.setColor(Color.YELLOW);
-			graphics.drawChars(cheatString.toCharArray(), 0, cheatString.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(cheatString) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + 20));
+			graphics.drawChars(cheatString.toCharArray(), 0, cheatString.toCharArray().length, (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(cheatString) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + 20));
 		}
 		
 		graphics.setColor(Color.RED);
@@ -466,20 +472,20 @@ public class SinglePlayerGame extends Screen {
 				if(!isPaused() && !lost() && !cheating()){	
 					this.getPlayer().velocity.x = -Player.boostSpeed;
 				}else if(isPaused() && !lost() && ! cheating()){
-					if(Glide.sounds){
-						Glide.muteSounds();
+					if(this.parentEngine.enableSounds){
+						this.parentEngine.muteSounds();
 					}else{
-						Glide.unmuteSounds();
+						this.parentEngine.unmuteSounds();
 					}
 				}
 			}else if(key == KeyEvent.VK_C){ 
 				if(!isPaused() && !lost() && !cheating()){	
 					this.getPlayer().velocity.x = Player.boostSpeed;
 				}else if(isPaused() && !lost() && ! cheating()){
-					if(Glide.music){
-						Glide.muteMusic();
+					if(this.parentEngine.enableMusic){
+						this.parentEngine.sounds.s_backgroundmusic.pause();
 					}else{
-						Glide.unmuteMusic();
+						this.parentEngine.sounds.s_backgroundmusic.play();
 					}
 				}
 			}else if(key == KeyEvent.VK_SPACE && !getPlayer().shooting){
@@ -507,8 +513,8 @@ public class SinglePlayerGame extends Screen {
 				}
 			}else if(key == KeyEvent.VK_Q){
 				if((isPaused() || lost() || won()) && !cheating()){
-						Glide.backgroundRenderer.setSpeed(1);
-						Glide.setScreen(new MainMenu());
+						this.parentEngine.backgroundRenderer.setSpeed(1);
+						this.parentEngine.setScreen(new MainMenu(this.parentEngine));
 				}
 			}else if(key == KeyEvent.VK_X){
 				if(!won() && !lost() && !isPaused() && !cheating())
@@ -524,7 +530,7 @@ public class SinglePlayerGame extends Screen {
 					this.score = 0;
 					mdbs = 5;
 					cods = 2;
-					setPlayer(new Player(new Vector(((Glide.WIDTH * Glide.SCALE) / 2) - 16, (Glide.HEIGHT * Glide.SCALE) - 104), this));
+					setPlayer(new Player(new Vector((this.parentEngine.getWidth() / 2) - 16, this.parentEngine.getHeight() - 104), this));
 					boc = 0;
 					level = 1;
 					curlvl = 120;
@@ -534,48 +540,48 @@ public class SinglePlayerGame extends Screen {
 				}else if(cheating()){
 					if(cheatString.equalsIgnoreCase("20120614")){
 						cheatString = "";
-						if(Glide.beam_cheat){
+						if(this.parentEngine.cheats.beam_cheat){
 							cheatError = "De-Activated Beam Cheat!";
-							Glide.beam_cheat = false;
+							this.parentEngine.cheats.beam_cheat = false;
 						}else{
 							cheatError = "Activated Beam Cheat!";
-							Glide.beam_cheat = true;
+							this.parentEngine.cheats.beam_cheat = true;
 						}
 					}else if(cheatString.equalsIgnoreCase("19951122")){
 						cheatString = "";
-						if(Glide.shield_cheat){
+						if(this.parentEngine.cheats.shield_cheat){
 							cheatError = "De-Activated Shield Cheat!";
-							Glide.shield_cheat = false;
+							this.parentEngine.cheats.shield_cheat = false;
 						}else{
 							cheatError = "Activated Shield Cheat!";
-							Glide.shield_cheat = true;
+							this.parentEngine.cheats.shield_cheat = true;
 						}
 					}else if(cheatString.equalsIgnoreCase("11232013")){
 						cheatString = "";
-						if(Glide.health_cheat){
+						if(this.parentEngine.cheats.health_cheat){
 							cheatError = "Deactivated Health Cheat!";
-							Glide.health_cheat = false;
+							this.parentEngine.cheats.health_cheat = false;
 						}else{
 							cheatError = "Activated Health Cheat!";
-							Glide.health_cheat = true;
+							this.parentEngine.cheats.health_cheat = true;
 						}
 					}else if(cheatString.equalsIgnoreCase("26435")){
 						cheatString = "";
-						if(Glide.mdb_cheat){
+						if(this.parentEngine.cheats.mdb_cheat){
 							cheatError = "Deactivated MDB Cheat!";
-							Glide.mdb_cheat = false;
+							this.parentEngine.cheats.mdb_cheat = false;
 						}else{
 							cheatError = "Activated MDB Cheat!";
-							Glide.mdb_cheat = true;
+							this.parentEngine.cheats.mdb_cheat = true;
 						}
 					}else if(cheatString.equalsIgnoreCase("4568353669")){
 						cheatString="";
-						if(Glide.cod_cheat){
+						if(this.parentEngine.cheats.cod_cheat){
 							cheatError = "Deactivated Sweeper-Detonator Cheat!";
-							Glide.cod_cheat = false;
+							this.parentEngine.cheats.cod_cheat = false;
 						}else{
 							cheatError = "Activated Sweeper-Detonator Cheat!";
-							Glide.cod_cheat = true;
+							this.parentEngine.cheats.cod_cheat = true;
 						}
 					}else{
 						//Bad Cheat //TODO
@@ -655,10 +661,6 @@ public class SinglePlayerGame extends Screen {
 	public void setPlayer(Player p) {
 		this.player = p;
 	}
-
-	public static int getScale() {
-		return Glide.SCALE;
-	}
 	
 	public HealthBar getHealthBar() {
 		return healthBar;
@@ -713,7 +715,7 @@ public class SinglePlayerGame extends Screen {
 	
 	public void lose(){
 		this.lost = true;
-		Glide.s_gameover.play();
+		this.parentEngine.sounds.s_gameover.play(this.parentEngine);
 	}
 	
 	public void restartAfterLost(){
@@ -755,8 +757,8 @@ public class SinglePlayerGame extends Screen {
 		this.pcy = startPosition.y;
 		circle_width = 0;
 		circle_height = 0;
-		circle_x = ((Glide.WIDTH * Glide.SCALE) / 2) - (circle_width / 2);
-		circle_y = ((Glide.HEIGHT * Glide.SCALE) / 2) - (circle_height / 2);
+		circle_x = (this.parentEngine.getWidth() / 2) - (circle_width / 2);
+		circle_y = (this.parentEngine.getHeight() / 2) - (circle_height / 2);
 		this.isCircling = true;
 	}
 	

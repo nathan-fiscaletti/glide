@@ -1,12 +1,14 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
 import glide.game.screens.SinglePlayerGame;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class Player extends Entity{
+public class Player extends Entity<GlideEngine>
+{
 	public boolean shooting = false;
 	public boolean beaming = false;
 	public boolean plasma = false;
@@ -24,41 +26,41 @@ public class Player extends Entity{
 	int hurttick = 0;
 	int plasmatick = 0;
 	
-	public Player(Vector position, Screen screen){
+	public Player(Vector position, Screen<GlideEngine> screen){
 		super(position, screen);
-		this.renderedSprite = Entity.getTextures().player;
-		this.positionConstraint = Vector.Max().plusX(-this.renderedSprite.getWidth());
+		this.renderedSprite = Entity.getTextures(GlideTextures.class).player;
+		this.positionConstraint = Vector.Max(this.parentEngine).plusX(-this.renderedSprite.getWidth());
 	}
 	
 	@Override
 	public final void updateSprite()
 	{
 		if (this.beaming) {
-			this.renderedSprite = Entity.getTextures().player2;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).player2;
 		} else if (!t) {
-			this.renderedSprite = Entity.getTextures().player;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).player;
 		}
 		
 		if (hurttick < 10 && this.hurting) {
-			this.renderedSprite = Entity.getTextures().playerhurt;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).playerhurt;
 		} else if (!t2) {
 			if(!this.beaming){
-				this.renderedSprite = Entity.getTextures().player;
+				this.renderedSprite = Entity.getTextures(GlideTextures.class).player;
 			}else{
-				this.renderedSprite = Entity.getTextures().player2;
+				this.renderedSprite = Entity.getTextures(GlideTextures.class).player2;
 			}
 		}
 	}
 	
 	@Override
-	public final void onCollide(Entity collidedWith)
+	public final void onCollide(Entity<GlideEngine> collidedWith)
 	{
 		
 		// Handle Collision with Enemy
 		if (collidedWith instanceof Enemy) {
 			Enemy enemy = (Enemy)collidedWith;
 			if (! enemy.isDead) {
-				if(!this.plasma && !Glide.health_cheat){
+				if(!this.plasma && !this.parentEngine.cheats.health_cheat){
 					int h = (this.getGame().getHealthBar().health > 1) ? this.getGame().getHealthBar().health - 1 : 8;
 					
 					if(h == 8){
@@ -70,12 +72,12 @@ public class Player extends Entity{
 						} else {
 							enemy.kill();
 						}
-						Glide.s_explosion.play();
+						this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 						
 						this.getGame().getHealthBar().health = h;
 						this.hurting = true;
 					}
-					Glide.s_hurt.play();
+					this.parentEngine.sounds.s_hurt.play(this.parentEngine);
 				}else{
 					if(enemy.isBomb){
 						enemy.kill(false);
@@ -83,7 +85,7 @@ public class Player extends Entity{
 						enemy.kill();
 					}
 					
-					Glide.s_explosion.play();
+					this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 				}
 			}
 		}
@@ -116,7 +118,7 @@ public class Player extends Entity{
 				}
 				
 				drop.kill();
-				Glide.s_pickup.play();
+				this.parentEngine.sounds.s_pickup.play(this.parentEngine);
 			}
 		}
 		
@@ -124,17 +126,17 @@ public class Player extends Entity{
 		else if (collidedWith instanceof Meteor || collidedWith instanceof SmallMeteor) {
 			this.parentScreen.controller.deSpawnEntity(collidedWith);
 			
-			if(!this.plasma && !Glide.health_cheat){
+			if(!this.plasma && !this.parentEngine.cheats.health_cheat){
 				int h = (this.getGame().getHealthBar().health > 1) ? this.getGame().getHealthBar().health - 1 : 8;
 				if(h == 8){
 					this.getGame().lose();
 				}else{
 					this.getGame().getHealthBar().health = h;
 					this.hurting = true;
-					Glide.s_hurt.play();
+					this.parentEngine.sounds.s_hurt.play(this.parentEngine);
 				}
 			}else{
-				Glide.s_explosion.play();
+				this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 			}
 		}
 	}

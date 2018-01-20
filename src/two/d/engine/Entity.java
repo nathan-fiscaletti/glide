@@ -1,4 +1,4 @@
-package glide.engine;
+package two.d.engine;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import glide.engine.graphics.Textures;
+import two.d.engine.graphics.Textures;
 
 /**
  * Parent class for all Entities
@@ -14,7 +14,7 @@ import glide.engine.graphics.Textures;
  *
  * @author Nathan Fiscaletti
  */
-public abstract class Entity extends Renderer {
+public abstract class Entity<ParentEngine extends Engine> extends Renderer {
 	
 	/**
 	 * The position of the entity.
@@ -34,7 +34,12 @@ public abstract class Entity extends Renderer {
 	/**
 	 * The Game that the entity is attached to.
 	 */
-	public Screen parentScreen;
+	public Screen<ParentEngine> parentScreen;
+	
+	/**
+	 * The parent engine for this class.
+	 */
+	public ParentEngine parentEngine;
 	
 	/**
 	 * The rendered sprite for the entity.
@@ -84,14 +89,16 @@ public abstract class Entity extends Renderer {
 	 *
 	 * @param Vector position The initial position.
 	 * @param Screen screen The screen to attach the entity to.
+	 * @param ParentEngine engine The Parent engine for this Entity.
 	 */
-	public Entity(Vector position, Screen screen)
+	public Entity(Vector position, Screen<ParentEngine> screen)
 	{
 		this.position = position;
 		this.velocity = Vector.Zero();
 		this.positionConstraint = Vector.Zero();
 		this.parentScreen = screen;
 		this.random = new Random();
+		this.parentEngine = screen.parentEngine;
 	}
 	
 	/**
@@ -124,7 +131,7 @@ public abstract class Entity extends Renderer {
 	 * 
 	 * @param collidedWith
 	 */
-	public void onCollide(Entity collidedWith)
+	public void onCollide(Entity<ParentEngine> collidedWith)
 	{
 		// Not implemented by default.
 	}
@@ -193,7 +200,7 @@ public abstract class Entity extends Renderer {
 	 * @param entity
 	 * @return
 	 */
-	public final boolean isCollidingWith(Entity entity)
+	public final boolean isCollidingWith(Entity<ParentEngine> entity)
 	{
 		if (entity.renderedSprite == null) {
 			System.out.println("Null sprite");
@@ -238,9 +245,9 @@ public abstract class Entity extends Renderer {
 	/**
 	 * get the Textures.
 	 */
-	public final static Textures getTextures()
+	public final static <TextureType extends Textures> TextureType getTextures(Class<TextureType> type)
 	{
-		return Entity.textures;
+		return type.cast(Entity.textures);
 	}
 	
 	/**
@@ -264,13 +271,13 @@ public abstract class Entity extends Renderer {
 		if (this.isDead) {
 			if (this.playDeathAnimation) {
 				if(deathTick < 5){
-					this.renderedSprite = Entity.textures.des1;
+					this.renderedSprite = Entity.getTextures(Textures.class).des1;
 					deathTick ++;
 				}else if(deathTick >= 5 && deathTick < 10){
-					this.renderedSprite = Entity.getTextures().des2;
+					this.renderedSprite = Entity.getTextures(Textures.class).des2;
 					deathTick ++;
 				}else if(deathTick >= 10 && deathTick < 15){
-					this.renderedSprite = Entity.getTextures().des3;
+					this.renderedSprite = Entity.getTextures(Textures.class).des3;
 					deathTick ++;
 				}else if(deathTick == 15){
 					this.onDeath();

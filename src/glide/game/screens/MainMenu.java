@@ -1,15 +1,18 @@
 package glide.game.screens;
 
-import glide.engine.Screen;
-import glide.game.Glide;
-import glide.versioning.Updater;
+import glide.game.GlideEngine;
+import two.d.engine.Screen;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-public final class MainMenu extends Screen {
+public final class MainMenu extends Screen<GlideEngine> {
+
+	public MainMenu(GlideEngine engine) {
+		super(engine);
+	}
 
 	/**
 	 * Generated Serial Version UID
@@ -21,30 +24,6 @@ public final class MainMenu extends Screen {
 	@Override
 	protected final void initialize() {
 		this.name = "MainMenu";
-		this.shouldRenderLogo = true;
-		this.shouldRenderBackground = true;
-		if (! Glide.checkedForUpdate) {
-			Updater updater = null;
-			if(Updater.internetCheck()){
-				try {
-					updater = new Updater();
-				} catch (Exception e) {
-					Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
-					Glide.update_color = Color.RED;
-				}
-		
-				if(updater != null && updater.needsUpdate()){
-					Glide.update = "There is an update available for version " + updater.getLatestVersion().getVersion() + " Build " + updater.getLatestVersion().getBuild() + "!";
-					Glide.update2 = "Update at " + Updater.updateAt;
-					Glide.update_color = Color.YELLOW;
-					Glide.TITLE = Glide.TITLE + " ~ !!UPDATE AVAILABLE!!";
-				}
-			}else{
-				Glide.update = "There was an error while checking for update. - Unable to connect to Glide Servers.";
-				Glide.update_color = Color.RED;
-			}
-			Glide.checkedForUpdate = true;
-		}
 	}
 	
 	@Override
@@ -61,12 +40,12 @@ public final class MainMenu extends Screen {
 		f = new Font("Ariel", Font.BOLD, 12);
 		graphics.setFont(f);
 		graphics.setColor(Color.GREEN);
-		graphics.drawChars(Glide.version.toCharArray(), 0, Glide.version.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(Glide.version) / 2), 130 + Glide.logoRenderer.getLogoHeight());
+		graphics.drawChars(this.parentEngine.version.toCharArray(), 0, this.parentEngine.version.length(), (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(this.parentEngine.version) / 2), 130 + this.parentEngine.logoRenderer.getLogoHeight());
 		
 		/* Updater */
-		graphics.setColor(Glide.update_color);
-		graphics.drawChars(Glide.update.toCharArray(), 0, Glide.update.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(Glide.update) / 2), 152 + Glide.logoRenderer.getLogoHeight());
-		graphics.drawChars(Glide.update2.toCharArray(), 0, Glide.update2.length(), ((Glide.WIDTH * Glide.SCALE) / 2) - (graphics.getFontMetrics().stringWidth(Glide.update2) / 2), 174 + Glide.logoRenderer.getLogoHeight());
+		graphics.setColor(this.parentEngine.updater.update_color);
+		graphics.drawChars(this.parentEngine.updater.update.toCharArray(), 0, this.parentEngine.updater.update.length(), (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(this.parentEngine.updater.update) / 2), 152 + this.parentEngine.logoRenderer.getLogoHeight());
+		graphics.drawChars(this.parentEngine.updater.update2.toCharArray(), 0, this.parentEngine.updater.update2.length(), (this.parentEngine.getWidth() / 2) - (graphics.getFontMetrics().stringWidth(this.parentEngine.updater.update2) / 2), 174 + this.parentEngine.logoRenderer.getLogoHeight());
 		/* End Updater */
 		
 		graphics.setColor(Color.GREEN);
@@ -80,7 +59,7 @@ public final class MainMenu extends Screen {
 		graphics.setColor((selected == 1) ? Color.GREEN : Color.DARK_GRAY);
 		String sco = "Play";
 		int w = graphics.getFontMetrics().stringWidth(sco);
-		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 49 + Glide.logoRenderer.getLogoHeight()));
+		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 49 + this.parentEngine.logoRenderer.getLogoHeight()));
 		////
 		
 		
@@ -89,7 +68,7 @@ public final class MainMenu extends Screen {
 		graphics.setColor((selected == 9001) ? Color.GREEN : Color.DARK_GRAY);
 		String sco2 = "Multiplayer (Coming soon)";
 		int w2 = graphics.getFontMetrics().stringWidth(sco2);
-		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 25 + Glide.logoRenderer.getLogoHeight()));
+		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w2 / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 25 + this.parentEngine.logoRenderer.getLogoHeight()));
 		///
 		
 		//How to play
@@ -97,7 +76,7 @@ public final class MainMenu extends Screen {
 		graphics.setColor((selected == 2) ? Color.GREEN : Color.DARK_GRAY);
 		sco2 = "How To Play";
 		w2 = graphics.getFontMetrics().stringWidth(sco2);
-		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 25 + Glide.logoRenderer.getLogoHeight() + 25));
+		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w2 / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 25 + this.parentEngine.logoRenderer.getLogoHeight() + 25));
 		///
 		
 		//Options
@@ -105,7 +84,7 @@ public final class MainMenu extends Screen {
 		graphics.setColor((selected == 3) ? Color.GREEN : Color.DARK_GRAY);
 		sco2 = "Options";
 		w2 = graphics.getFontMetrics().stringWidth(sco2);
-		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w2 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 25));
+		graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w2 / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 25));
 		///
 		
 		//Exit
@@ -113,7 +92,7 @@ public final class MainMenu extends Screen {
 		graphics.setColor((selected == 4) ? Color.GREEN : Color.DARK_GRAY);
 		String sco3 = "Exit";
 		int w3 = graphics.getFontMetrics().stringWidth(sco3);
-		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 25 + 25));
+		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w3 / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 25 + 25));
 		///
 	}
 	
@@ -130,7 +109,7 @@ public final class MainMenu extends Screen {
 			}else if(selected == 4){
 				selected = 3;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -141,17 +120,17 @@ public final class MainMenu extends Screen {
 			}else if(selected == 4){
 				selected = 1;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
-				Glide.s_enter.play();
-				Glide.setScreen(new SinglePlayerGame());
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				this.parentEngine.setScreen(new SinglePlayerGame(this.parentEngine));
 			}else if(selected == 2){
-				Glide.s_enter.play();
-				Glide.setScreen(new HTPMenu());
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				this.parentEngine.setScreen(new HTPMenu(this.parentEngine));
 			}else if(selected == 3){
-				Glide.s_enter.play();
-				Glide.setScreen(new OptionsMenu());
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				this.parentEngine.setScreen(new OptionsMenu(this.parentEngine));
 			}else if(selected == 4){
 				System.exit(0);
 			}

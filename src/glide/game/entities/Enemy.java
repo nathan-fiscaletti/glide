@@ -1,13 +1,14 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
-import glide.game.Glide.Difficulty;
+import glide.game.Difficulty;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
 import glide.game.screens.SinglePlayerGame;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class Enemy extends Entity
+public class Enemy extends Entity<GlideEngine>
 {
 	public boolean shouldDrop;
 	public boolean isDead;
@@ -39,7 +40,7 @@ public class Enemy extends Entity
 		Normal, Hard, None;
 	}
 	
-	public Enemy(Vector position, Screen screen, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
+	public Enemy(Vector position, Screen<GlideEngine> screen, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
 		super(position, screen);
 		
 		this.shouldDrop = shouldDrop;
@@ -53,7 +54,7 @@ public class Enemy extends Entity
 			this.isBomb = true;
 			this.lives = 15;
 			this.getGame().bsc = -1;
-			this.position.x = (Glide.WIDTH * Glide.SCALE) / 2 - 32;
+			this.position.x = this.parentEngine.getWidth() / 2 - 32;
 			this.currentDirection = 0;
 		}else{
 			this.highSpeed = (random.nextInt(5 - 3 + 1) + 3);
@@ -77,13 +78,13 @@ public class Enemy extends Entity
 		this.getGame().bsc ++;
 
 		// Set up the sprite for the entity.
-		this.renderedSprite = Entity.getTextures().enemy;
+		this.renderedSprite = Entity.getTextures(GlideTextures.class).enemy;
 		if (isBomb) {
-			this.renderedSprite = Entity.getTextures().enemy3;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).enemy3;
 		} else if (highSpeed == 5) {
-			this.renderedSprite = Entity.getTextures().enemy2;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).enemy2;
 		} else if (protectorType == ProtectorType.Hard) {
-			this.renderedSprite = Entity.getTextures().bossprotector;
+			this.renderedSprite = Entity.getTextures(GlideTextures.class).bossprotector;
 		}
 	}
 	
@@ -118,7 +119,7 @@ public class Enemy extends Entity
 	}
 	
 	@Override
-	public final void onCollide(Entity collidedWith)
+	public final void onCollide(Entity<GlideEngine> collidedWith)
 	{
 		// Handle Meteor collision
 		if (collidedWith instanceof Meteor) {
@@ -188,9 +189,9 @@ public class Enemy extends Entity
 		int xDeviancy = 0;
 		
 		if (! this.isBomb) {
-			if (Glide.difficulty == Difficulty.Hard) {
+			if (this.parentEngine.difficulty == Difficulty.Hard) {
 				xDeviancy = 1 * currentDirection;
-			} else if (Glide.difficulty == Difficulty.Expert) {
+			} else if (this.parentEngine.difficulty == Difficulty.Expert) {
 				this.ticksSinceLastDirectionChangeAttempt++;
 				if(this.ticksSinceLastDirectionChangeAttempt == this.changeDirectrionEveryXTicks){
 					if(random.nextBoolean()){
@@ -211,18 +212,18 @@ public class Enemy extends Entity
 		if (this.canFireLaser) {
 			this.ticksSinceLastLaserFireAttempt++;
 			if(this.ticksSinceLastLaserFireAttempt == this.tryToFireLaserEveryXTicks){
-				if(random.nextBoolean() && !((Glide.difficulty == Difficulty.Expert) ? this.renderedSprite.equals(Entity.getTextures().bossprotector) : false)){
+				if(random.nextBoolean() && !((this.parentEngine.difficulty == Difficulty.Expert) ? this.renderedSprite.equals(Entity.getTextures(GlideTextures.class).bossprotector) : false)){
 					
 					this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32), this.parentScreen, 0));
 					
-					if (Glide.difficulty == Difficulty.Expert) {
+					if (this.parentEngine.difficulty == Difficulty.Expert) {
 						if (highSpeed == 5) {
 							this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(-32), this.parentScreen, 1));
 							this.parentScreen.controller.spawnEntity(new EnemyBullet(this.position.plusY(32).plusX(32), this.parentScreen, 2));
 						} 
 					}
 					
-					Glide.s_shoot.play();
+					this.parentEngine.sounds.s_shoot.play(this.parentEngine);
 				}
 				this.ticksSinceLastLaserFireAttempt = 0;
 			}

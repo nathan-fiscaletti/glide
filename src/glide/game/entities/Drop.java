@@ -1,11 +1,12 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class Drop extends Entity 
+public class Drop extends Entity<GlideEngine>
 {
 	
 	/**
@@ -21,20 +22,20 @@ public class Drop extends Entity
 	
 	public Drop.Type dropType;
 	
-	public Drop(Vector position, Screen screen, Drop.Type type) {
+	public Drop(Vector position, Screen<GlideEngine> screen, Drop.Type type) {
 		
 		super(position, screen);
 		this.dropType = type;
 		
 		switch(this.dropType) {
-			case HEALTHPACK : this.renderedSprite = Entity.getTextures().healthpack; break;
-			case BEAM       : this.renderedSprite = Entity.getTextures().beam; break;
-			case DIAMOND    : this.renderedSprite = Entity.getTextures().diamond; break;
-			case DIAMOND2   : this.renderedSprite = Entity.getTextures().diamond2; break;
-			case DIAMOND3   : this.renderedSprite = Entity.getTextures().diamond3; break;
-			case PLASMA     : this.renderedSprite = Entity.getTextures().plasma; break;
-			case MDB        : this.renderedSprite = Entity.getTextures().mdppickup; break;
-			case COD        : this.renderedSprite = Entity.getTextures().cod_pickup; break;
+			case HEALTHPACK : this.renderedSprite = Entity.getTextures(GlideTextures.class).healthpack; break;
+			case BEAM       : this.renderedSprite = Entity.getTextures(GlideTextures.class).beam; break;
+			case DIAMOND    : this.renderedSprite = Entity.getTextures(GlideTextures.class).diamond; break;
+			case DIAMOND2   : this.renderedSprite = Entity.getTextures(GlideTextures.class).diamond2; break;
+			case DIAMOND3   : this.renderedSprite = Entity.getTextures(GlideTextures.class).diamond3; break;
+			case PLASMA     : this.renderedSprite = Entity.getTextures(GlideTextures.class).plasma; break;
+			case MDB        : this.renderedSprite = Entity.getTextures(GlideTextures.class).mdppickup; break;
+			case COD        : this.renderedSprite = Entity.getTextures(GlideTextures.class).cod_pickup; break;
 			
 			default         : break;
 		}
@@ -67,6 +68,6 @@ public class Drop extends Entity
 	@Override
 	public final void onDeath()
 	{
-		Glide.s_dropdeath.play();
+		this.parentEngine.sounds.s_dropdeath.play(parentEngine);
 	}
 }

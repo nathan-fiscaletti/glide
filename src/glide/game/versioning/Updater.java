@@ -1,5 +1,6 @@
-package glide.versioning;
+package glide.game.versioning;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,10 +8,16 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Updater {
+	public static final boolean checkedForUpdate = false;
+	public static final String updateAt = "https://github.com/nathan-fiscaletti/glide/releases";
+	public static final String updateUrl = "https://raw.githubusercontent.com/nathan-fiscaletti/glide/master/glide.v";
+	
 	private URL online;
 	private Version onlineVersion;
-	public static String updateAt = "https://github.com/nathan-fiscaletti/glide/releases";
-	public static String updateUrl = "https://raw.githubusercontent.com/nathan-fiscaletti/glide/master/glide.v";
+	
+	public String update = "You are running the latest version!";
+	public String update2 = "";
+	public Color update_color = Color.GREEN;
 	
 	private boolean needsUpdate = false;
 	public Updater() throws Exception{
@@ -47,7 +54,7 @@ public class Updater {
 		return onlineVersion;
 	}
 	
-	public static boolean internetCheck()
+	public boolean internetCheck()
     {
         try {
             URL url = new URL("http://www.google.com/");

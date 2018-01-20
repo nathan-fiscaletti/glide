@@ -1,19 +1,21 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
-import glide.game.Glide.Difficulty;
+import glide.game.Difficulty;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class Meteor extends Entity{
+public class Meteor extends Entity<GlideEngine>
+{
 	protected int speed = 1 + (int)(Math.random()*3);
 	protected int xVelocityMultiplier = (this.random.nextBoolean()) ? -1 : 1;
 	protected int meteorType = 1;
 	protected int changeDirectionTick = 0;
 	protected boolean forceSmall = false;
 	
-	public Meteor(Vector position, Screen screen) {
+	public Meteor(Vector position, Screen<GlideEngine> screen) {
 		super(position, screen);
 		meteorType = random.nextInt(7);
 		
@@ -31,27 +33,27 @@ public class Meteor extends Entity{
 			
 			// Initialize the sprite for the entity.
 			switch(meteorType) {
-				case 1 : this.renderedSprite = Entity.getTextures().meteor1; break;
-				case 2 : this.renderedSprite = Entity.getTextures().meteor2; break;
-				case 3 : this.renderedSprite = Entity.getTextures().meteor3; break;
-				case 4 : this.renderedSprite = Entity.getTextures().meteor4; break;
-				case 5 : this.renderedSprite = Entity.getTextures().meteor5; break;
-				case 6 : this.renderedSprite = Entity.getTextures().meteor6; break;
+				case 1 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor1; break;
+				case 2 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor2; break;
+				case 3 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor3; break;
+				case 4 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor4; break;
+				case 5 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor5; break;
+				case 6 : this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor6; break;
 				
-				default: this.renderedSprite = Entity.getTextures().meteor1;
+				default: this.renderedSprite = Entity.getTextures(GlideTextures.class).meteor1;
 			}
 		}
 	}
 	
 	@Override
-	public final void onCollide(Entity collidedWith)
+	public final void onCollide(Entity<GlideEngine> collidedWith)
 	{
 		// Handle a Meteor colliding with another meteor.
 		if (collidedWith instanceof Meteor) {
 			if ((Meteor)collidedWith != this && ! collidedWith.isDead()) {
 				this.kill(true);
 				((Meteor)collidedWith).kill(true);
-				Glide.s_explosion.play();
+				this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 			}
 		}
 	}
@@ -61,14 +63,14 @@ public class Meteor extends Entity{
 	{
 		// If the difficulty is anything besides EASY, 
 		// move the meteor left or right as well.
-		if(Glide.difficulty != Difficulty.Easy){
+		if(this.parentEngine.difficulty != Difficulty.Easy){
 			
 			// Move the meteor either left or right.
 			this.velocity.x = speed*xVelocityMultiplier;
 			
 			// If you set the difficulty to expert, the meteors
 			// should change their X velocity randomly every 60 ticks.
-			if (Glide.difficulty == Difficulty.Expert) {
+			if (this.parentEngine.difficulty == Difficulty.Expert) {
 				
 				// After every 60 ticks, we need to
 				// change the left or right toggle.

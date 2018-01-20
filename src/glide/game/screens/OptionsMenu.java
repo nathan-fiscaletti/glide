@@ -1,15 +1,19 @@
 package glide.game.screens;
 
-import glide.engine.Screen;
-import glide.game.Glide;
-import glide.game.Glide.Difficulty;
+import glide.game.GlideEngine;
+import two.d.engine.Screen;
+import glide.game.Difficulty;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-public final class OptionsMenu extends Screen {
+public final class OptionsMenu extends Screen<GlideEngine> {
+
+	public OptionsMenu(GlideEngine engine) {
+		super(engine);
+	}
 
 	/**
 	 * Generated Serial Version UID
@@ -19,10 +23,9 @@ public final class OptionsMenu extends Screen {
 	private int selected = 1;
 	
 	@Override
-	protected final void initialize(){
+	protected final void initialize()
+	{
 		this.name = "OptionsMenu";
-		this.shouldRenderBackground = true;
-		this.shouldRenderLogo = true;
 	}
 	
 	@Override
@@ -41,7 +44,7 @@ public final class OptionsMenu extends Screen {
 		graphics.setFont(f);
 		graphics.setColor(Color.ORANGE);
 		int w = graphics.getFontMetrics().stringWidth(op);
-		graphics.drawChars(op.toCharArray(), 0, op.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 130 + Glide.logoRenderer.getLogoHeight()));
+		graphics.drawChars(op.toCharArray(), 0, op.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 130 + this.parentEngine.logoRenderer.getLogoHeight()));
 		
 		
 		/* Menu Items */
@@ -57,9 +60,9 @@ public final class OptionsMenu extends Screen {
 		}else{
 			graphics.setColor(Color.DARK_GRAY);
 		}
-		String sco = "Music - " + ((Glide.music) ? "Enabled" : "Disabled");
+		String sco = "Music - " + ((this.parentEngine.enableMusic) ? "Enabled" : "Disabled");
 		w = graphics.getFontMetrics().stringWidth(sco);
-		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() - 49 + Glide.logoRenderer.getLogoHeight()));
+		graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() - 49 + this.parentEngine.logoRenderer.getLogoHeight()));
 		////
 		//
 		
@@ -70,9 +73,9 @@ public final class OptionsMenu extends Screen {
 			}else{
 				graphics.setColor(Color.DARK_GRAY);
 			}
-			sco = "Sounds - " + ((Glide.sounds) ? "Enabled" : "Disabled");
+			sco = "Sounds - " + ((this.parentEngine.enableSounds) ? "Enabled" : "Disabled");
 			w = graphics.getFontMetrics().stringWidth(sco);
-			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() - 13));
+			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() - 13));
 			////
 			//
 			
@@ -85,7 +88,7 @@ public final class OptionsMenu extends Screen {
 			}
 			sco = "Controls";
 			w = graphics.getFontMetrics().stringWidth(sco);
-			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 24));
+			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 24));
 			////
 			//
 
@@ -97,14 +100,14 @@ public final class OptionsMenu extends Screen {
 				graphics.setColor(Color.DARK_GRAY);
 			}
 			sco = "Difficulty - ";
-			String sco2 = Glide.difficulty.toString();
+			String sco2 = this.parentEngine.difficulty.toString();
 			
 			
 			w = graphics.getFontMetrics().stringWidth(sco);
 			int w2 = graphics.getFontMetrics().stringWidth(sco2);
-			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - ((w + w2) / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 59));
-			graphics.setColor(Glide.getDifficultyColor(Glide.difficulty));
-			graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - ((w + w2) / 2) + w, ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 59));
+			graphics.drawChars(sco.toCharArray(), 0, sco.toCharArray().length, (this.parentEngine.getWidth() / 2) - ((w + w2) / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 59));
+			graphics.setColor(Difficulty.getDifficultyColor(this.parentEngine.difficulty));
+			graphics.drawChars(sco2.toCharArray(), 0, sco2.toCharArray().length, (this.parentEngine.getWidth() / 2) - ((w + w2) / 2) + w, (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 59));
 			graphics.setColor(Color.GREEN);
 			////
 			//
@@ -120,7 +123,7 @@ public final class OptionsMenu extends Screen {
 		}
 		String sco3 = "Back";
 		int w3 = graphics.getFontMetrics().stringWidth(sco3);
-		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, ((Glide.WIDTH * Glide.SCALE) / 2) - (w3 / 2), ((Glide.HEIGHT * Glide.SCALE) / 2) + (graphics.getFontMetrics().getDescent() + Glide.logoRenderer.getLogoHeight() + 108));
+		graphics.drawChars(sco3.toCharArray(), 0, sco3.toCharArray().length, (this.parentEngine.getWidth() / 2) - (w3 / 2), (this.parentEngine.getHeight() / 2) + (graphics.getFontMetrics().getDescent() + this.parentEngine.logoRenderer.getLogoHeight() + 108));
 		///
 	}
 	
@@ -140,7 +143,7 @@ public final class OptionsMenu extends Screen {
 			}else if(selected == 5){
 				selected = 4;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if (key == KeyEvent.VK_DOWN){
 			if(selected == 1){
 				selected = 2;
@@ -153,38 +156,38 @@ public final class OptionsMenu extends Screen {
 			}else if(selected == 5){
 				selected = 1;
 			}
-			Glide.s_select.play();
+			this.parentEngine.sounds.s_select.play(this.parentEngine);
 		}else if(key == KeyEvent.VK_ENTER){
 			if(selected == 1){
-				if(Glide.music){
-					Glide.muteMusic();
+				if(this.parentEngine.enableMusic){
+					this.parentEngine.sounds.s_backgroundmusic.pause();
 				}else{
-					Glide.unmuteMusic();
+					this.parentEngine.sounds.s_backgroundmusic.play();
 				}
 			}else if(selected == 2){
-				if(Glide.sounds){
-					Glide.muteSounds();
+				if(this.parentEngine.enableSounds){
+					this.parentEngine.muteSounds();
 				}else{
-					Glide.unmuteSounds();
+					this.parentEngine.unmuteSounds();
 				}
 			}else if(selected == 3){
 				//Controls screen
-				Glide.s_enter.play();
-				Glide.setScreen(new ControlsMenu());
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				this.parentEngine.setScreen(new ControlsMenu(this.parentEngine));
 			}else if(selected == 4){
-				Glide.s_enter.play();
-				if(Glide.difficulty == Difficulty.Easy){
-					Glide.difficulty = Difficulty.Normal;
-				}else if(Glide.difficulty == Difficulty.Normal){
-					Glide.difficulty = Difficulty.Hard;
-				}else if(Glide.difficulty == Difficulty.Hard){
-					Glide.difficulty = Difficulty.Expert;
-				}else if(Glide.difficulty == Difficulty.Expert){
-					Glide.difficulty = Difficulty.Easy;
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				if(this.parentEngine.difficulty == Difficulty.Easy){
+					this.parentEngine.difficulty = Difficulty.Normal;
+				}else if(this.parentEngine.difficulty == Difficulty.Normal){
+					this.parentEngine.difficulty = Difficulty.Hard;
+				}else if(this.parentEngine.difficulty == Difficulty.Hard){
+					this.parentEngine.difficulty = Difficulty.Expert;
+				}else if(this.parentEngine.difficulty == Difficulty.Expert){
+					this.parentEngine.difficulty = Difficulty.Easy;
 				}
 			}else if(selected == 5){
-				Glide.s_enter.play();
-				Glide.setScreen(new MainMenu());
+				this.parentEngine.sounds.s_enter.play(this.parentEngine);
+				this.parentEngine.setScreen(new MainMenu(this.parentEngine));
 			}
 		}
 		

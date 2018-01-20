@@ -1,11 +1,11 @@
-package glide.engine;
+package two.d.engine;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.Random;
 
-public abstract class EntityController extends Renderer {
+public abstract class EntityController<ParentEngine extends Engine> extends Renderer {
 	
 	/**
 	 * A random object for use within the controller.
@@ -15,20 +15,26 @@ public abstract class EntityController extends Renderer {
 	/**
 	 * All entities currently being rendered alongside this controller.
 	 */
-	private LinkedList<Entity> entities = new LinkedList<Entity>();
+	private LinkedList<Entity<ParentEngine>> entities = new LinkedList<Entity<ParentEngine>>();
 	
 	/**
 	 * The screen that this controller is attached to. 
 	 */
-	private Screen parentScreen;
+	private Screen<ParentEngine> parentScreen;
+	
+	/**
+	 * The parent engine for this Controller.
+	 */
+	private ParentEngine parentEngine;
 	
 	/**
 	 * Create a new EntityController and attach it to the supplied Screen.
 	 * @param screen
 	 */
-	public EntityController(Screen screen)
+	public EntityController(Screen<ParentEngine> screen)
 	{
 		this.parentScreen = screen;
+		this.parentEngine = screen.parentEngine;
 	}
 	
 	/**
@@ -40,16 +46,16 @@ public abstract class EntityController extends Renderer {
 	 * Handles a control tick on a per Entity basis.
 	 * @param entity
 	 */
-	protected abstract void iterateEntityPerTick(Entity entity);
+	protected abstract void iterateEntityPerTick(Entity<ParentEngine> entity);
 	
 	/**
 	 * Render out all Entities under the scope of this EntityController.
 	 */
 	@Override
-	public final void render(Graphics g, Canvas canvas)
+	public final void render(Graphics graphics, Canvas canvas)
 	{
 		for (int entityId = 0; entityId < getAllEntities().size(); entityId++) {
-			getAllEntities().get(entityId).render(g, canvas);
+			getAllEntities().get(entityId).render(graphics, canvas);
 		}
 	}
 	
@@ -60,20 +66,20 @@ public abstract class EntityController extends Renderer {
 	public final void update()
 	{
 		for (int i = 0; i < this.getAllEntities().size(); i++) {
-			Entity entity = this.getAllEntities().get(i);
+			Entity<ParentEngine> entity = this.getAllEntities().get(i);
 			
 			// Perform control tick per entity.
 			iterateEntityPerTick(entity);
 			
 			// Check bounds
-			if (entity.position.isOutOfBoundsOf(Vector.Max(256))) {
+			if (entity.position.isOutOfBoundsOf(Vector.Max(256, this.parentScreen.parentEngine))) {
 				entity.onExitBounds();
 			}
 			
 			// Check Entity Collision
 			if (! entity.isDead()) {
 				for (int collidingEntityId = 0; collidingEntityId < this.getAllEntities().size(); collidingEntityId++) {
-					Entity collidingEntity = this.getAllEntities().get(collidingEntityId);
+					Entity<ParentEngine> collidingEntity = this.getAllEntities().get(collidingEntityId);
 					if (collidingEntity != entity && !collidingEntity.isDead()) {
 						if (entity.isCollidingWith(collidingEntity)) {
 							entity.onCollide(collidingEntity);
@@ -91,16 +97,26 @@ public abstract class EntityController extends Renderer {
 	 * The screen that this Controller is attached to.
 	 * @return
 	 */
-	public final Screen parentScreen()
+	public final Screen<ParentEngine> parentScreen()
 	{
 		return this.parentScreen;
+	}
+	
+	/**
+	 * The parent engine for this Controller.
+	 *
+	 * @return
+	 */
+	public final ParentEngine parentEngine()
+	{
+		return this.parentEngine;
 	}
 	
 	/**
 	 * Retrieve all Entities attached to this Controller.
 	 * @return
 	 */
-	public final LinkedList<Entity> getAllEntities()
+	public final LinkedList<Entity<ParentEngine>> getAllEntities()
 	{
 		return this.entities;
 	}
@@ -109,7 +125,7 @@ public abstract class EntityController extends Renderer {
 	 * Spawn an Entity on this Controller.
 	 * @param entity
 	 */
-	public final void spawnEntity(Entity entity)
+	public final void spawnEntity(Entity<ParentEngine> entity)
 	{
 		this.entities.add(entity);
 	}
@@ -118,7 +134,7 @@ public abstract class EntityController extends Renderer {
 	 * Despawn an Entity from this Controller.
 	 * @param entity
 	 */
-	public final void deSpawnEntity(Entity entity)
+	public final void deSpawnEntity(Entity<ParentEngine> entity)
 	{
 		this.entities.remove(entity);
 	}

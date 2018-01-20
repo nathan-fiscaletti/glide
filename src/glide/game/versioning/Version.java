@@ -1,4 +1,4 @@
-package glide.versioning;
+package glide.game.versioning;
 
 import java.io.Serializable;
 
@@ -25,10 +25,10 @@ public class Version implements Serializable{
 	}
 	
 	public static String getAppVersion(){
-		return "v1.0.79b";
+		return "v1.0.81b";
 	}
 	
 	public static int getAppBuild(){
-		return 624;
+		return 693;
 	}
 }

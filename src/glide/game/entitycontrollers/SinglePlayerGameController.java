@@ -2,23 +2,23 @@ package glide.game.entitycontrollers;
 
 import java.util.LinkedList;
 
-import glide.engine.Entity;
-import glide.engine.EntityController;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.engine.graphics.Bounds;
-import glide.game.Glide;
-import glide.game.Glide.Difficulty;
+import glide.game.Difficulty;
+import glide.game.GlideEngine;
 import glide.game.entities.Enemy;
 import glide.game.entities.Meteor;
 import glide.game.entities.MultiDirectionalBullet;
 import glide.game.entities.SmallMeteor;
 import glide.game.entities.Enemy.ProtectorType;
 import glide.game.screens.SinglePlayerGame;
+import two.d.engine.Entity;
+import two.d.engine.EntityController;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
+import two.d.engine.graphics.Bounds;
 
-public class SinglePlayerGameController extends EntityController {
+public class SinglePlayerGameController extends EntityController<GlideEngine> {
 	
-	public SinglePlayerGameController(Screen screen) {
+	public SinglePlayerGameController(Screen<GlideEngine> screen) {
 		super(screen);
 	}
 
@@ -31,26 +31,26 @@ public class SinglePlayerGameController extends EntityController {
 	
 	@Override
 	protected void runControlTick() {
-		if(Glide.mdb_cheat){
+		if(this.parentEngine().cheats.mdb_cheat){
 			this.getGame().mdbs = 5;
 		}
 		
-		if(Glide.shield_cheat){
+		if(this.parentEngine().cheats.shield_cheat){
 			this.getGame().isPlasmaActive = true;
 			this.getGame().getPlayer().setPlasma(true);
 		}
 		
-		if(Glide.beam_cheat){
+		if(this.parentEngine().cheats.beam_cheat){
 			this.getGame().getPlayer().setBeaming(true);
 		}
 		
-		if(Glide.cod_cheat){
+		if(this.parentEngine().cheats.cod_cheat){
 			this.getGame().cods = this.getGame().max_cods;
 		}
 	}
 	
 	@Override
-	public final void iterateEntityPerTick(Entity entity)
+	public final void iterateEntityPerTick(Entity<GlideEngine> entity)
 	{
 		// Check Player collision
 		if (! entity.isDead()) {
@@ -72,7 +72,7 @@ public class SinglePlayerGameController extends EntityController {
 								enemy.kill();
 							}
 							
-							Glide.s_explosion.play();
+							this.parentEngine().sounds.s_explosion.play(this.parentEngine());
 						}
 					}
 					
@@ -89,8 +89,8 @@ public class SinglePlayerGameController extends EntityController {
 	}
 	
 	public final boolean isBombSpawned(){
-		LinkedList<Entity> en = this.getAllEntities();
-		for(Entity e : en){
+		LinkedList<Entity<GlideEngine>> en = this.getAllEntities();
+		for(Entity<GlideEngine> e : en){
 			if (e instanceof Enemy) {
 				if(((Enemy)e).isBomb){
 					return true;
@@ -103,33 +103,33 @@ public class SinglePlayerGameController extends EntityController {
 	public final void spawnBomb()
 	{
 		/* Bomb */
-		this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98), this.getGame(), false, true, false, ProtectorType.None));
+		this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32, -98), this.getGame(), false, true, false, ProtectorType.None));
 		
 		/* Protectors */
-		if(Glide.difficulty == Difficulty.Normal){
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68), this.getGame(), false, false, true, ProtectorType.Normal));
-		}else if(Glide.difficulty == Difficulty.Hard){
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-		}else if(Glide.difficulty == Difficulty.Expert){
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68), this.getGame(), false, false, true, ProtectorType.Normal));
+		if(this.parentEngine().difficulty == Difficulty.Normal){
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32, -98 + 68), this.getGame(), false, false, true, ProtectorType.Normal));
+		}else if(this.parentEngine().difficulty == Difficulty.Hard){
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32, -98 + 68 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+		}else if(this.parentEngine().difficulty == Difficulty.Expert){
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 72, -98), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 36, -98 + 34), this.getGame(), false, false, true, ProtectorType.Normal));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32, -98 + 68), this.getGame(), false, false, true, ProtectorType.Normal));
 			
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 + 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32 - 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
-			this.spawnEntity(new Enemy(new Vector((Glide.WIDTH * Glide.SCALE) / 2 - 32, -98 + 68 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 72, -98 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 + 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32 - 36, -98 + 34 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
+			this.spawnEntity(new Enemy(new Vector(this.parentEngine().getWidth() / 2 - 32, -98 + 68 + 34), this.getGame(), false, false, true, ProtectorType.Hard));
 		}
 	}
 	

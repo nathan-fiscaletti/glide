@@ -1,17 +1,19 @@
 package glide.game.entities;
 
-import glide.engine.Entity;
-import glide.engine.Screen;
-import glide.engine.Vector;
-import glide.game.Glide;
+import glide.game.GlideEngine;
+import glide.game.GlideTextures;
+import two.d.engine.Entity;
+import two.d.engine.Screen;
+import two.d.engine.Vector;
 
-public class MultiDirectionalBullet extends Entity{
+public class MultiDirectionalBullet extends Entity<GlideEngine>
+{
 	
 	private int speed = 5;
 	
-	public MultiDirectionalBullet(Vector position, Screen screen, int tofro) {
+	public MultiDirectionalBullet(Vector position, Screen<GlideEngine> screen, int tofro) {
 		super(position, screen);
-		this.renderedSprite = Entity.getTextures().mdbullet;
+		this.renderedSprite = Entity.getTextures(GlideTextures.class).mdbullet;
 		
 		// Set the velocity for the entity.
 		if(tofro == 1){
@@ -34,18 +36,18 @@ public class MultiDirectionalBullet extends Entity{
 	}
 	
 	@Override
-	public final void onCollide(Entity collidedWith)
+	public final void onCollide(Entity<GlideEngine> collidedWith)
 	{
 		// Handle Collision with Meteor
 		if (collidedWith instanceof Meteor) {
 			((Meteor)collidedWith).kill(false);
-			Glide.s_explosion.play();
+			this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 		} 
 		
 		// Handle Collision with Small Meteor
 		else if (collidedWith instanceof SmallMeteor) {
 			((SmallMeteor)collidedWith).kill();
-			Glide.s_explosion.play();
+			this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 		}
 		
 		// Handle Collision with Enemy
@@ -58,7 +60,7 @@ public class MultiDirectionalBullet extends Entity{
 					enemy.kill();
 				}
 				
-				Glide.s_explosion.play();
+				this.parentEngine.sounds.s_explosion.play(this.parentEngine);
 			}
 		}
 	}
