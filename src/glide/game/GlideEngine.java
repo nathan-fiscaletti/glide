@@ -153,8 +153,8 @@ public final class GlideEngine extends Engine {
 
     @Override
     public void onEngineStart() {
-        this.addGlobalRenderer(this.backgroundRenderer);
-        this.addGlobalRenderer(this.logoRenderer);
+        this.addGlobalDrawable(this.backgroundRenderer);
+        this.addGlobalDrawable(this.logoRenderer);
         sounds.loadSounds();
 
         if (! Updater.checkedForUpdate) {

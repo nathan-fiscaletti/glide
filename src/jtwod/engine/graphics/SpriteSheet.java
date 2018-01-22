@@ -1,7 +1,5 @@
 package jtwod.engine.graphics;
 
-import java.awt.image.BufferedImage;
-
 /**
  * A SpriteSheet object.
  * @author Nathan

@@ -1,7 +1,6 @@
 package glide.game.entities;
 
 import glide.game.GlideEngine;
-import glide.game.screens.SinglePlayerGame;
 
 import jtwod.engine.drawable.Entity;
 import jtwod.engine.Screen;
@@ -29,10 +28,5 @@ public final class EnemyBullet extends Entity<GlideEngine> {
                 this.setVelocity(this.getVelocity().plusX(speed/2));
                 break;
         }
-    }
-
-    private SinglePlayerGame getGame()
-    {
-        return (SinglePlayerGame)this.getParentScreen();
     }
 }

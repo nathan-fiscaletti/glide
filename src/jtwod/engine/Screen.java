@@ -212,7 +212,7 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
      *
      * @return
      */
-    public final <ControllerType extends EntityController> ControllerType getController(Class<ControllerType> type) {
+    public final <ControllerType extends EntityController<? extends Engine>> ControllerType getController(Class<ControllerType> type) {
         return type.cast(this.controller);
     }
 
@@ -289,9 +289,9 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
 
         Graphics graphics = bs.getDrawGraphics();
 
-        for (Drawable drawable : parentEngine.getGlobalDrawables()) {
-            if (drawable.shouldREnderWhenGlobal() && !drawable.isTopMost()) {
-                drawable.render(graphics, this);
+        for (Drawable<? extends Engine> drawable : parentEngine.getGlobalDrawables()) {
+            if (drawable.shouldRenderWhenGlobal() && !drawable.isTopMost()) {
+                drawable.render(graphics, null);
             }
         }
 
@@ -301,9 +301,9 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
             this.controller.render(graphics, this);
         }
 
-        for (Drawable drawable : parentEngine.getGlobalDrawables()) {
-            if (drawable.shouldREnderWhenGlobal() && drawable.isTopMost()) {
-                drawable.render(graphics, this);
+        for (Drawable<? extends Engine> drawable : parentEngine.getGlobalDrawables()) {
+            if (drawable.shouldRenderWhenGlobal() && drawable.isTopMost()) {
+                drawable.render(graphics, null);
             }
         }
 
@@ -318,8 +318,8 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
      */
     private void runUpdate()
     {
-        for (Drawable drawable : parentEngine.getGlobalDrawables()) {
-            if (drawable.shouldREnderWhenGlobal()) {
+        for (Drawable<? extends Engine> drawable : parentEngine.getGlobalDrawables()) {
+            if (drawable.shouldRenderWhenGlobal()) {
                 drawable.update();
             }
         }

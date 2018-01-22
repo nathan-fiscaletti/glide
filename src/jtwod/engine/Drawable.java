@@ -1,8 +1,5 @@
 package jtwod.engine;
 
-import javafx.scene.Parent;
-
-import java.awt.Canvas;
 import java.awt.Graphics;
 
 /**
@@ -47,12 +44,12 @@ public abstract class Drawable<ParentEngine extends Engine> {
     }
 
     /**
-     * Render graphics out to a canvas.
+     * Render graphics out to a screen.
      *
-     * @param g
-     * @param canvas
+     * @param graphics
+     * @param screen
      */
-    protected abstract void render(Graphics g, Screen<ParentEngine> canvas);
+    protected abstract void render(Graphics graphics, Screen<ParentEngine> screen);
 
     /**
      * Update this renderer.
@@ -74,7 +71,7 @@ public abstract class Drawable<ParentEngine extends Engine> {
      *
      * @return
      */
-    public final boolean shouldREnderWhenGlobal()
+    public final boolean shouldRenderWhenGlobal()
     {
         return this.shouldRenderWhenGlobal;
     }

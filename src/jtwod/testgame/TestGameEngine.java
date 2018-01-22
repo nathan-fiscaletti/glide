@@ -25,7 +25,7 @@ public class TestGameEngine extends Engine {
     /**
      * Initialize the new GameEngine with a title, an icon, and textures.
      * Since we aren't using any textures, i left that null. We just use
-     * BufferedImageLoader.whiteImage(size); for our player sprite.
+     * Textures.whiteTexture(size); for our player sprite.
      */
     public TestGameEngine() {
         // Set the title to "My Game"
@@ -53,6 +53,11 @@ public class TestGameEngine extends Engine {
         Screen<TestGameEngine> mainScreen = new Screen<TestGameEngine>("Test Game Screen", this) {
 
             /**
+			 * The Serial version UID.
+			 */
+			private static final long serialVersionUID = -1982332528698274277L;
+
+			/**
              * Override this function to handle the initialization of the Screen.
              * This is called after the screen is primed. (Threads initialized etc).
              */
@@ -67,6 +72,7 @@ public class TestGameEngine extends Engine {
                     {
                         /*
                          * Initialize the player entity.
+                         *
                          * This is a very simple entity, just a rendered sprite of a white block
                          * for the entity sprite, and then we constrain the entities position
                          * to the bounds of the screen so that they cannot leave it.
@@ -107,21 +113,8 @@ public class TestGameEngine extends Engine {
              */
             @Override
             protected void renderFrame(Graphics graphics) {
-                // Crate the background.
-                Image image = new Image<TestGameEngine>(
-                    Texture.blackTexture(
-                        new Dimensions(
-                            (int)this.getSize().getWidth(),
-                            (int)this.getSize().getHeight()
-                        )
-                    ),
-                    Vector.Zero(),
-                    this.getParentEngine()
-                );
-
-
-                // Create the Text.
-                Text text = new Text<TestGameEngine>(
+            		// Create the Text.
+                Text<TestGameEngine> text = new Text<TestGameEngine>(
                     "Use the arrow keys to move around!",
                     new Font("Ariel", Font.BOLD, 24),
                     Color.white,
@@ -130,8 +123,7 @@ public class TestGameEngine extends Engine {
                     this.getParentEngine()
                 );
 
-                // Render them out.
-                image.render(graphics, this);
+                // Render the text out.
                 text.render(graphics, this);
             }
 
@@ -172,6 +164,44 @@ public class TestGameEngine extends Engine {
                 }
             }
         };
+        
+        /**
+         * Let's add our background to the global Drawables
+         * instead of rendering it directly from the screen.
+         * 
+         * This will add a black background to all screens.
+         */
+        this.addGlobalDrawable(new Drawable<TestGameEngine>(this) {
+        		/*
+        		 * Make sure that this Drawable is not topmost.
+        		 */
+        		{
+        			this.setTopMost(false);
+        		}
+        	
+			@Override
+			protected void render(Graphics graphics, Screen<TestGameEngine> screen) {
+				// Create the background.
+                Image<TestGameEngine> image = new Image<TestGameEngine>(
+                    Texture.blackTexture(
+                        new Dimensions(
+                            (int)this.getParentEngine().getWindowSize().getWidth(),
+                            (int)this.getParentEngine().getWindowSize().getHeight()
+                        )
+                    ),
+                    Vector.Zero(),
+                    this.getParentEngine()
+                );
+                
+                // Render it out
+                image.render(graphics, screen);
+			}
+
+			@Override
+			protected void update() {
+				// Not implemented.
+			}
+        });
 
         /*
          * Set the main screen for the engine to get things rolling.

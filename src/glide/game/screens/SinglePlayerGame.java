@@ -464,7 +464,7 @@ public final class SinglePlayerGame extends Screen<GlideEngine> {
                 }
             }else if(key == KeyEvent.VK_Z){
                 if(!isPaused() && !lost() && !cheating()){
-                    this.getPlayer().setVelocity(this.getPlayer().getVelocity().setX(-getPlayer().boostSpeed));
+                    this.getPlayer().setVelocity(this.getPlayer().getVelocity().setX(-Player.boostSpeed));
                 }else if(isPaused() && !lost() && ! cheating()){
                     if(! this.getParentEngine().isMuted()){
                         this.getParentEngine().muteSounds();
@@ -474,7 +474,7 @@ public final class SinglePlayerGame extends Screen<GlideEngine> {
                 }
             }else if(key == KeyEvent.VK_C){
                 if(!isPaused() && !lost() && !cheating()){
-                    this.getPlayer().setVelocity(this.getPlayer().getVelocity().setX(getPlayer().boostSpeed));
+                    this.getPlayer().setVelocity(this.getPlayer().getVelocity().setX(Player.boostSpeed));
                 }else if(isPaused() && !lost() && ! cheating()){
                     if(this.getParentEngine().enableMusic){
                         this.getParentEngine().sounds.s_backgroundmusic.pause();

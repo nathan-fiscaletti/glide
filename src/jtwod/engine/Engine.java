@@ -1,16 +1,15 @@
 package jtwod.engine;
 
 import java.awt.*;
-//import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import jtwod.engine.drawable.Entity;
 import jtwod.engine.graphics.TextureGroup;
 import jtwod.engine.metrics.Dimensions;
+
 import kuusisto.tinysound.TinySound;
 
 /**
@@ -29,7 +28,7 @@ public abstract class Engine {
      * Note: This can be changed by setting `renderer.shouldRenderWhenGlobal` to false
      *       on a per-Drawable basis. (See Drawable).
      */
-    private LinkedList<Drawable> globalDrawables = new LinkedList<Drawable>();
+    private LinkedList<Drawable<? extends Engine>> globalDrawables = new LinkedList<>();
 
     /**
      * The TextureGroup object that this engine was initialized with.
@@ -244,9 +243,9 @@ public abstract class Engine {
      *
      * @return The Global Drawables associated with this Engine.
      */
-    public final LinkedList<Drawable> getGlobalDrawables()
+    public final LinkedList<Drawable<? extends Engine>> getGlobalDrawables()
     {
-        return globalDrawables;
+    		return this.globalDrawables;
     }
 
     /**
@@ -260,31 +259,31 @@ public abstract class Engine {
     }
 
     /**
-     * Add a global drawable.
+     * Add a global Drawable.
      *
      * @param drawable The Drawable to add.
      */
-    public final void addGlobalRenderer(Drawable drawable)
+    public final void addGlobalDrawable(Drawable<? extends Engine> drawable)
     {
         this.globalDrawables.add(drawable);
     }
 
     /**
-     * Remove a global drawable.
+     * Remove a global Drawable.
      *
-     * @param drawable The renderer to remove.
+     * @param drawable The Drawable to remove.
      */
-    public final void removeRenderer(Drawable drawable)
+    public final void removeGlobalDrawable(Drawable<? extends Engine> drawable)
     {
         this.globalDrawables.remove(drawable);
     }
 
     /**
-     * Remove a global renderer based on it's index.
+     * Remove a global Drawable based on it's index.
      *
-     * @param index The index of the renderer to remove.
+     * @param index The index of the Drawable to remove.
      */
-    public final void removeRendererAtIndex(int index)
+    public final void removeGlobalDrawable(int index)
     {
         this.globalDrawables.remove(index);
     }

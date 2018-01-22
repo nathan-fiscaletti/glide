@@ -6,8 +6,7 @@ import jtwod.engine.graphics.Texture;
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 
 public final class Image<ParentEngine extends Engine> extends Shape<ParentEngine> {
     /**
