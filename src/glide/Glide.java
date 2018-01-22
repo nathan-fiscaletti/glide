@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import glide.game.GlideEngine;
 
-public class Glide {
-	public static void main(String[] args) throws IOException
-	{
-		(new GlideEngine()).start();
-	}
+public final class Glide {
+    public static void main(String[] args) throws IOException
+    {
+        (new GlideEngine()).start();
+    }
 }
