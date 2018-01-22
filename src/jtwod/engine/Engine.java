@@ -1,10 +1,7 @@
 package jtwod.engine;
 
-import java.awt.Color;
-import java.awt.Cursor;
+import java.awt.*;
 //import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
@@ -235,7 +232,7 @@ public abstract class Engine {
     /**
      * Retrieve the currently active window size.
      *
-     * @return
+     * @return The size of the Main Application Window.
      */
     public final Dimensions getWindowSize()
     {
@@ -245,7 +242,7 @@ public abstract class Engine {
     /**
      * Retrieve the currently active global drawables.
      *
-     * @return
+     * @return The Global Drawables associated with this Engine.
      */
     public final LinkedList<Drawable> getGlobalDrawables()
     {
@@ -255,7 +252,7 @@ public abstract class Engine {
     /**
      * Retrieve the TextureGroup.
      *
-     * @return
+     * @return The TextureGroup associated with this Engine.
      */
     public final TextureGroup getTextureGroup()
     {
@@ -275,7 +272,7 @@ public abstract class Engine {
     /**
      * Remove a global drawable.
      *
-     * @param drawable
+     * @param drawable The renderer to remove.
      */
     public final void removeRenderer(Drawable drawable)
     {
@@ -285,10 +282,17 @@ public abstract class Engine {
     /**
      * Remove a global renderer based on it's index.
      *
-     * @param index
+     * @param index The index of the renderer to remove.
      */
     public final void removeRendererAtIndex(int index)
     {
         this.globalDrawables.remove(index);
+    }
+
+    public final void setFullScreen(boolean fullScreen)
+    {
+        DisplayMode dm = new DisplayMode(this.getWindowSize().getWidth(), this.getWindowSize().getHeight(), 32, DisplayMode.REFRESH_RATE_UNKNOWN);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(dm);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this.windowFrame);
     }
 }

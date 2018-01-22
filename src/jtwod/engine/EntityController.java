@@ -17,7 +17,7 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     /**
      * All entities currently being rendered alongside this controller.
      */
-    private LinkedList<Entity<ParentEngine>> entities = new LinkedList<Entity<ParentEngine>>();
+    private LinkedList<Entity<ParentEngine>> entities = new LinkedList<>();
 
     /**
      * The screen that this controller is attached to.
@@ -26,7 +26,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
 
     /**
      * Create a new EntityController and attach it to the supplied Screen.
-     * @param screen
+     *
+     * @param screen The Screen associated with this EntityController.
      */
     public EntityController(Screen<ParentEngine> screen)
     {
@@ -43,7 +44,7 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
 
     /**
      * Handles a control tick on a per Entity basis.
-     * @param entity
+     * @param entity The Entity to run a Tick for.
      */
     protected void iterateEntityPerTick(Entity<ParentEngine> entity)
     {
@@ -53,8 +54,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     /**
      * Render out all Entities under the scope of this EntityController.
      *
-     * @param graphics
-     * @param screen
+     * @param graphics The Graphics to use for rendering.
+     * @param screen The Screen to use as an Observer.
      */
     @Override
     public final void render(Graphics graphics, Screen<ParentEngine> screen)
@@ -70,6 +71,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     @Override
     public final void update()
     {
+        this.runControlTick();
+
         for (int i = 0; i < this.getAllEntities().size(); i++) {
             Entity<ParentEngine> entity = this.getAllEntities().get(i);
 
@@ -108,7 +111,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
 
     /**
      * The screen that this Controller is attached to.
-     * @return
+     *
+     * @return The Screen associated with this EntityController.
      */
     public final Screen<ParentEngine> getParentScreen()
     {
@@ -118,7 +122,7 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     /**
      * Get the random utility object.
      *
-     * @return
+     * @return The Random associated with this EntityController.
      */
     public final Random getRandom()
     {
@@ -126,8 +130,9 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     }
 
     /**
-     * Retrieve all Entities attached to this Controller.
-     * @return
+     * Retrieve all Entities attached to this EntityController.
+     *
+     * @return All entities being managed by the EntityController.
      */
     public final LinkedList<Entity<ParentEngine>> getAllEntities()
     {
@@ -136,7 +141,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
 
     /**
      * Spawn an Entity on this Controller.
-     * @param entity
+     *
+     * @param entity The Entity to add.
      */
     public final void spawnEntity(Entity<ParentEngine> entity)
     {
@@ -145,7 +151,8 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
 
     /**
      * Despawn an Entity from this Controller.
-     * @param entity
+     *
+     * @param entity The Entity to remove.
      */
     public final void deSpawnEntity(Entity<ParentEngine> entity)
     {

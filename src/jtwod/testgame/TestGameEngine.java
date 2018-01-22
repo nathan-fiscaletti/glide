@@ -1,4 +1,4 @@
-package testgame;
+package jtwod.testgame;
 
 import jtwod.engine.Drawable;
 import jtwod.engine.Engine;
@@ -177,5 +177,6 @@ public class TestGameEngine extends Engine {
          * Set the main screen for the engine to get things rolling.
          */
         this.setScreen(mainScreen);
+        this.setFullScreen(true);
     }
 }

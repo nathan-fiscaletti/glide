@@ -1,4 +1,4 @@
-package testgame;
+package jtwod.testgame;
 
 public class TestGame {
     public static void main(String[] args)
