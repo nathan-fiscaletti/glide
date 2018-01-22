@@ -2,7 +2,7 @@
 * * *
 My First Java Game (Just to get my feet wet)
 
-[Wiki](https://github.com/nathan-fiscaletti/glide/wiki) | [Latest Release (v1.0.79b Build 624)](https://github.com/nathan-fiscaletti/glide/releases/tag/v1.0.79b)
+[Wiki](https://github.com/nathan-fiscaletti/glide/wiki) | [Latest Release (v1.0.81b Build 693)](https://github.com/nathan-fiscaletti/glide/releases/tag/v1.0.81b)
 
 Build it yourself instructions:
 
