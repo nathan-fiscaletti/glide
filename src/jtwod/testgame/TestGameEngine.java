@@ -1,16 +1,18 @@
 package jtwod.testgame;
 
-import jtwod.engine.Drawable;
 import jtwod.engine.Engine;
+import jtwod.engine.Screen;
+import jtwod.engine.Drawable;
+import jtwod.engine.EntityController;
+
 import jtwod.engine.drawable.Entity;
 import jtwod.engine.drawable.Image;
 import jtwod.engine.drawable.Text;
-import jtwod.engine.EntityController;
-import jtwod.engine.Screen;
+
 import jtwod.engine.graphics.Texture;
+
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
-
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -53,11 +55,11 @@ public class TestGameEngine extends Engine {
         Screen<TestGameEngine> mainScreen = new Screen<TestGameEngine>("Test Game Screen", this) {
 
             /**
-			 * The Serial version UID.
-			 */
-			private static final long serialVersionUID = -1982332528698274277L;
+             * The Serial version UID.
+             */
+            private static final long serialVersionUID = -1982332528698274277L;
 
-			/**
+            /**
              * Override this function to handle the initialization of the Screen.
              * This is called after the screen is primed. (Threads initialized etc).
              */
@@ -97,7 +99,7 @@ public class TestGameEngine extends Engine {
                             }
                         };
 
-                        spawnEntity(myPlayer);
+                        this.spawnEntity(myPlayer);
                     }
                 });
             }
@@ -113,7 +115,7 @@ public class TestGameEngine extends Engine {
              */
             @Override
             protected void renderFrame(Graphics graphics) {
-            		// Create the Text.
+                // Create the Text.
                 Text<TestGameEngine> text = new Text<TestGameEngine>(
                     "Use the arrow keys to move around!",
                     new Font("Ariel", Font.BOLD, 24),
@@ -172,16 +174,16 @@ public class TestGameEngine extends Engine {
          * This will add a black background to all screens.
          */
         this.addGlobalDrawable(new Drawable<TestGameEngine>(this) {
-        		/*
-        		 * Make sure that this Drawable is not topmost.
-        		 */
-        		{
-        			this.setTopMost(false);
-        		}
-        	
-			@Override
-			protected void render(Graphics graphics, Screen<TestGameEngine> screen) {
-				// Create the background.
+            /*
+             * Make sure that this Drawable is not topmost.
+             */
+            {
+                this.setTopMost(false);
+            }
+            
+            @Override
+            protected void render(Graphics graphics, Screen<TestGameEngine> screen) {
+                // Create the background.
                 Image<TestGameEngine> image = new Image<TestGameEngine>(
                     Texture.blackTexture(
                         new Dimensions(
@@ -195,12 +197,12 @@ public class TestGameEngine extends Engine {
                 
                 // Render it out
                 image.render(graphics, screen);
-			}
+            }
 
-			@Override
-			protected void update() {
-				// Not implemented.
-			}
+            @Override
+            protected void update() {
+                // Not implemented.
+            }
         });
 
         /*
