@@ -18,26 +18,26 @@ import jtwod.engine.metrics.Vector;
 
 public class PongEngine extends Engine {
 
-    public static Dimensions paddleDimensions = new Dimensions(20, 75);
-    public static Dimensions ballDimensions = new Dimensions(20, 20);
     
-    public static int startingBallSpeed = 15;
-    public static boolean paddlesFrozen = false;
-    private int paddleSpeed = 10;
+    // Configuration
+    public final static int startingBallSpeed = 15;    
+    public final static int paddleToWallPadding = 25;
+    public final static int ballToPaddlePadding = 10;
+    public final static int paddleSpeed = 10;
+    public final static Dimensions paddleDimensions = new Dimensions(20, 75);
+    public final static Dimensions ballDimensions = new Dimensions(20, 20);
     
-    
+    // Entities
     public static Paddle paddle1;
     public static Paddle paddle2;
     public static Ball ball;
     
+    // Custom Drawables
     public static Text<PongEngine> logo;
     public static Text<PongEngine> instructions;
     public static Text<PongEngine> score;
     public static Text<PongEngine> roundText;
     public static Text<PongEngine> worthText;
-    
-    public static int paddleToWallPadding = 25;
-    public static int ballToPaddlePadding = 10;
     
     public static int round = 1;
     
@@ -176,21 +176,18 @@ public class PongEngine extends Engine {
              */
             @Override
             protected final void onKeyPressed(KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN && !paddlesFrozen) {
+                if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
                     paddle2.setVelocity(Vector.Zero().setY(paddleSpeed));
-                } else if (keyEvent.getKeyCode() == KeyEvent.VK_UP && !paddlesFrozen) {
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_UP) {
                     paddle2.setVelocity(Vector.Zero().setY(-paddleSpeed));
-                } else if (keyEvent.getKeyCode() == KeyEvent.VK_W && !paddlesFrozen) {
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_W) {
                     paddle1.setVelocity(Vector.Zero().setY(-paddleSpeed));
-                } else if (keyEvent.getKeyCode() == KeyEvent.VK_S && !paddlesFrozen) {
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_S) {
                     paddle1.setVelocity(Vector.Zero().setY(paddleSpeed));
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     if (! ball.isStarted()) {
                         ball.setStarted(true);
                     }
-                } else if (paddlesFrozen) {
-                    paddle1.setVelocity(Vector.Zero());
-                    paddle2.setVelocity(Vector.Zero());
                 }
             }
 
