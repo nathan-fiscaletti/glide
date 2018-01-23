@@ -1,7 +1,7 @@
 package jtwod.engine.drawable;
 
 import jtwod.engine.Engine;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
@@ -39,7 +39,7 @@ public final class Image<ParentEngine extends Engine> extends Shape<ParentEngine
      * @param screen
      */
     @Override
-    public final void render(Graphics graphics, Screen<ParentEngine> screen)
+    public final void render(Graphics graphics, Scene<ParentEngine> screen)
     {
         switch (this.center) {
             case Vertically :

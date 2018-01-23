@@ -4,7 +4,7 @@ import glide.game.Difficulty;
 import glide.game.GlideEngine;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class Meteor extends Entity<GlideEngine>
@@ -15,33 +15,35 @@ public final class Meteor extends Entity<GlideEngine>
     protected int changeDirectionTick = 0;
     protected boolean forceSmall = false;
 
-    public Meteor(Vector position, Screen<GlideEngine> screen) {
+    public Meteor(Vector position, Scene<GlideEngine> screen) {
         super(position, screen);
         meteorType = random.nextInt(7);
+        
+        // Initialize the sprite for the entity.
+        switch(meteorType) {
+            case 1 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor1")); break;
+            case 2 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor2")); break;
+            case 3 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor3")); break;
+            case 4 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor4")); break;
+            case 5 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor5")); break;
+            case 6 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor6")); break;
 
+            default: this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("meteor1"));
+        }
+
+        // Set the velocity for the entity.
         this.setVelocity(this.getVelocity().plusY(speed));
 
         // Should the entity be small or large?
         // When we want it to be small, we simply
         // kill this meteor which will spawn
         // a group of smaller ones.
-        if(!random.nextBoolean()) {
+        if(! random.nextBoolean()) {
+            this.setShouldPlayDeathAnimation(false);
             this.kill(true);
         } else {
             // Tell the meteor to play the death animation when it dies.
             this.setShouldPlayDeathAnimation(true);
-
-            // Initialize the sprite for the entity.
-            switch(meteorType) {
-                case 1 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor1")); break;
-                case 2 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor2")); break;
-                case 3 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor3")); break;
-                case 4 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor4")); break;
-                case 5 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor5")); break;
-                case 6 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor6")); break;
-
-                default: this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("meteor1"));
-            }
         }
     }
 

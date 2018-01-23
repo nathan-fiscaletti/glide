@@ -10,7 +10,7 @@ import glide.game.entities.Player;
 import glide.game.entities.Enemy.ProtectorType;
 import glide.game.entitycontrollers.SinglePlayerGameController;
 
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 import jtwod.engine.metrics.Vector;
 
@@ -26,7 +26,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 
-public final class SinglePlayerGame extends Screen<GlideEngine> {
+public final class SinglePlayerGame extends Scene<GlideEngine> {
 
     private static final long serialVersionUID = -4093553489357496142L;
 
@@ -294,7 +294,7 @@ public final class SinglePlayerGame extends Screen<GlideEngine> {
             graphics.drawImage(beamer.asBufferedImage(), 32 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
             graphics.drawImage(level.asBufferedImage(), 32 + 34 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
         }else{
-            Texture beamer = this.getParentEngine().getTextureGroup().getTexture("beam").asGrayScaleTexture();
+            Texture beamer = this.getParentEngine().getTextureGroup().getTexture("beam_gray");
             graphics.drawImage(beamer.asBufferedImage(), 32 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
         }
 
@@ -316,7 +316,7 @@ public final class SinglePlayerGame extends Screen<GlideEngine> {
             graphics.drawImage(shielded.asBufferedImage(), 100 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
             graphics.drawImage(level.asBufferedImage(), 134 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
         }else{
-            Texture shielded = this.getParentEngine().getTextureGroup().getTexture("plasma").asGrayScaleTexture();
+            Texture shielded = this.getParentEngine().getTextureGroup().getTexture("plasma_gray");
             graphics.drawImage(shielded.asBufferedImage(), 100 + statsoffset, this.getParentEngine().getWindowSize().getHeight() - 92, null);
         }
 

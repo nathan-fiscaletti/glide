@@ -3,7 +3,7 @@ package glide.game.entities;
 import glide.game.GlideEngine;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class Bullet extends Entity<GlideEngine> {
@@ -16,12 +16,12 @@ public final class Bullet extends Entity<GlideEngine> {
      * @param position
      * @param screen
      */
-    public Bullet(Vector position, Screen<GlideEngine> screen)
+    public Bullet(Vector position, Scene<GlideEngine> screen)
     {
         super(position, screen);
 
         // Set the sprite.
-        this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("bullet"));
+        this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("bullet"));
 
         // Play the shoot sound.
         this.getParentEngine().sounds.s_shoot.play(this.getParentEngine());

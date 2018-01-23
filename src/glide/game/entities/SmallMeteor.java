@@ -4,7 +4,7 @@ import glide.game.Difficulty;
 import glide.game.GlideEngine;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class SmallMeteor extends Entity<GlideEngine>
@@ -16,22 +16,22 @@ public final class SmallMeteor extends Entity<GlideEngine>
 
     int changeDirectionTick = 0;
 
-    public SmallMeteor(Vector position, Screen<GlideEngine> screen) {
+    public SmallMeteor(Vector position, Scene<GlideEngine> screen) {
         super(position, screen);
         this.meteorType = random.nextInt(7);
         this.setShouldPlayDeathAnimation(true);
 
         switch (meteorType) {
-            case 1 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor1")); break;
-            case 2 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor2")); break;
-            case 3 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor3")); break;
-            case 4 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor4")); break;
-            case 5 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor5")); break;
-            case 6 : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor6")); break;
+            case 1 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor1")); break;
+            case 2 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor2")); break;
+            case 3 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor3")); break;
+            case 4 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor4")); break;
+            case 5 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor5")); break;
+            case 6 : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor6")); break;
 
-            default : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("smallmeteor1"));
+            default : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("smallmeteor1"));
         }
-    }
+    }    
 
     @Override
     public final void update()

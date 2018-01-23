@@ -2,7 +2,7 @@ package jtwod.engine.drawable;
 
 import jtwod.engine.Drawable;
 import jtwod.engine.Engine;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
 
@@ -29,6 +29,19 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
      * The constraint.
      */
     private Vector positionConstraint;
+    
+    /**
+     * Enumeration definition for cosntraint event types.
+     *
+     * @author Nathan
+     *
+     */
+    public enum ConstrainedEventType {
+        LeftXAxis,
+        RightXAxis,
+        TopYAxis,
+        BottomYAxis
+    }
 
     /**
      * Construct the Shape.
@@ -41,6 +54,16 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
         this.size = Dimensions.Zero();
         this.positionConstraint = Vector.Max(engine);
     }
+    
+    /**
+     * Called when this Shape was constrained on a specific axis.
+     *
+     * @param event
+     */
+    protected void onConstrained(ConstrainedEventType event)
+    {
+        // Not implemented by default.
+    }
 
     /**
      * Render the object out.
@@ -49,7 +72,7 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
      * @param screen
      */
     @Override
-    protected void render(Graphics g, Screen<ParentEngine> screen)
+    protected void render(Graphics g, Scene<ParentEngine> screen)
     {
         // Not implemented by default.
     }
@@ -68,8 +91,8 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
      */
     public void performUpdate()
     {
-        this.update();
         this.updateConstraints();
+        this.update();
     }
 
     /**
@@ -105,7 +128,7 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
     public final void updateConstraints()
     {
         if (this.position != null && this.positionConstraint != null && ! this.positionConstraint.isZero()) {
-            this.position.constrain(this.positionConstraint);
+            this.constrainCustom(this.positionConstraint);
         }
     }
 
@@ -177,5 +200,34 @@ public abstract class Shape<ParentEngine extends Engine> extends Drawable<Parent
                 this.setPosition(Vector.Zero().plusX(-buffer).plusY(-buffer));
             }
         };
+    }
+    
+    /**
+     * A custom implementation of the Vector constraint mechanism.
+     * This will call back to the onConstrained function.
+     *
+     * @param constraint
+     */
+    private void constrainCustom(Vector constraint)
+    {
+        if (this.position.getX() < 0 - constraint.getXBuffer()) {
+            this.position.setX(0);
+            this.onConstrained(ConstrainedEventType.LeftXAxis);
+        }
+
+        if (this.position.getY() < 0 - constraint.getYBuffer()) {
+            this.position.setY(0);
+            this.onConstrained(ConstrainedEventType.TopYAxis);
+        }
+
+        if (this.position.getX() > constraint.getX() - constraint.getXBuffer()) {
+            this.position.setX(constraint.getX());
+            this.onConstrained(ConstrainedEventType.RightXAxis);
+        }
+
+        if (this.position.getY() > constraint.getY() - constraint.getYBuffer()) {
+            this.position.setY(constraint.getY());
+            this.onConstrained(ConstrainedEventType.BottomYAxis);
+        }
     }
 }

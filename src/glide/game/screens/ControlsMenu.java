@@ -7,10 +7,10 @@ import java.awt.event.KeyEvent;
 
 import glide.game.GlideEngine;
 
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 
-public final class ControlsMenu extends Screen<GlideEngine> {
+public final class ControlsMenu extends Scene<GlideEngine> {
 
     /**
      * Create the menu.

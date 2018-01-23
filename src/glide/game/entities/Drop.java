@@ -3,7 +3,7 @@ package glide.game.entities;
 import glide.game.GlideEngine;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class Drop extends Entity<GlideEngine>
@@ -21,20 +21,20 @@ public final class Drop extends Entity<GlideEngine>
 
     public Drop.Type dropType;
 
-    public Drop(Vector position, Screen<GlideEngine> screen, Drop.Type type) {
+    public Drop(Vector position, Scene<GlideEngine> screen, Drop.Type type) {
 
         super(position, screen);
         this.dropType = type;
 
         switch(this.dropType) {
-            case HEALTHPACK : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("healthpack")); break;
-            case BEAM       : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("beam")); break;
-            case DIAMOND    : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("diamond")); break;
-            case DIAMOND2   : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("diamond2")); break;
-            case DIAMOND3   : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("diamond3")); break;
-            case PLASMA     : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("plasma")); break;
-            case MDB        : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("mdppickup")); break;
-            case COD        : this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("cod_pickup")); break;
+            case HEALTHPACK : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("healthpack")); break;
+            case BEAM       : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("beam")); break;
+            case DIAMOND    : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("diamond")); break;
+            case DIAMOND2   : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("diamond2")); break;
+            case DIAMOND3   : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("diamond3")); break;
+            case PLASMA     : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("plasma")); break;
+            case MDB        : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("mdppickup")); break;
+            case COD        : this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("cod_pickup")); break;
 
             default         : break;
         }

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 import glide.game.GlideEngine;
 import jtwod.engine.Drawable;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 
 public final class LogoDrawable extends Drawable<GlideEngine> {
@@ -24,7 +24,7 @@ public final class LogoDrawable extends Drawable<GlideEngine> {
     }
 
     @Override
-    public final void render(Graphics g, Screen<GlideEngine> canvas) {
+    public final void render(Graphics g, Scene<GlideEngine> canvas) {
         if (logo != null) {
             g.drawImage(logo.asBufferedImage(), (this.getParentEngine().getWindowSize().getWidth() / 2) - (logo.getWidth() / 2), 120, null);
         }

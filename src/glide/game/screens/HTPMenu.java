@@ -7,11 +7,11 @@ import java.awt.event.KeyEvent;
 
 import glide.game.GlideEngine;
 
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 
 
-public final class HTPMenu extends Screen<GlideEngine>
+public final class HTPMenu extends Scene<GlideEngine>
 {
 
     public HTPMenu(GlideEngine engine) {

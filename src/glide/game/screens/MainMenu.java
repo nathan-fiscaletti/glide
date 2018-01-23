@@ -7,9 +7,9 @@ import java.awt.event.KeyEvent;
 
 import glide.game.GlideEngine;
 
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 
-public final class MainMenu extends Screen<GlideEngine> {
+public final class MainMenu extends Scene<GlideEngine> {
 
     public MainMenu(GlideEngine engine) {
         super("MainMenu", engine);

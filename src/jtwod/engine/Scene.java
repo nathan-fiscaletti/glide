@@ -11,7 +11,7 @@ import java.awt.image.BufferStrategy;
  *
  * @param <ParentEngine> The engine type that this screen is associated with.
  */
-public abstract class Screen<ParentEngine extends Engine> extends Canvas implements Runnable
+public abstract class Scene<ParentEngine extends Engine> extends Canvas implements Runnable
 {
     /**
      * Serial Version UID
@@ -19,7 +19,7 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
     private static final long serialVersionUID = -1303916252996012557L;
 
     /**
-     * The name of the screen.
+     * The name of the Scene.
      */
     private String name;
 
@@ -60,7 +60,7 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
      *
      * @param engine
      */
-    public Screen(String name, ParentEngine engine)
+    public Scene(String name, ParentEngine engine)
     {
         this.name = name;
         this.parentEngine = engine;
@@ -72,7 +72,7 @@ public abstract class Screen<ParentEngine extends Engine> extends Canvas impleme
      *
      * @param controller
      */
-    public Screen(String name, ParentEngine engine, EntityController<ParentEngine> controller)
+    public Scene(String name, ParentEngine engine, EntityController<ParentEngine> controller)
     {
         this.name = name;
         this.parentEngine = engine;

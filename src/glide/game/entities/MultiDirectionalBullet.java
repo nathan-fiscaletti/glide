@@ -3,7 +3,7 @@ package glide.game.entities;
 import glide.game.GlideEngine;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class MultiDirectionalBullet extends Entity<GlideEngine>
@@ -11,9 +11,9 @@ public final class MultiDirectionalBullet extends Entity<GlideEngine>
 
     private int speed = 5;
 
-    public MultiDirectionalBullet(Vector position, Screen<GlideEngine> screen, int tofro) {
+    public MultiDirectionalBullet(Vector position, Scene<GlideEngine> screen, int tofro) {
         super(position, screen);
-        this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("mdbullet"));
+        this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("mdbullet"));
 
         // Set the velocity for the entity.
         if(tofro == 1){

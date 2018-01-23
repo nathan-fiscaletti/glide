@@ -1,9 +1,9 @@
 package jtwod.testgame;
 
-import jtwod.engine.Engine;
-import jtwod.engine.Screen;
 import jtwod.engine.Drawable;
+import jtwod.engine.Engine;
 import jtwod.engine.EntityController;
+import jtwod.engine.Scene;
 
 import jtwod.engine.drawable.Entity;
 import jtwod.engine.drawable.Image;
@@ -11,13 +11,17 @@ import jtwod.engine.drawable.Text;
 
 import jtwod.engine.graphics.Texture;
 
+import jtwod.engine.metrics.AspectRatio;
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
 import java.awt.event.KeyEvent;
 
-public class TestGameEngine extends Engine {
+public final class TestGameEngine extends Engine {
 
     /**
      * Define the player entity.
@@ -35,36 +39,55 @@ public class TestGameEngine extends Engine {
         super(
             "My Game",
             new Dimensions (
-                800,
-                new Dimensions (
-                    12, 9
+                new AspectRatio(
+                     new Dimensions(12, 9),
+                     AspectRatio.AspectRatioControlAxis.WidthControlled
                 )
-            )
+            ).setWidth(800)
         );
     }
-
-    /**
-     * This function is called after the engine has been primed.
-     * At this point, the main window should be open and active.
+    
+    /*
+     * Load the textures into the system.
+     *
+     * @see jtwod.engine.Engine#loadTextures()
      */
     @Override
-    public void onEngineStart() {
+    public final void loadTextures()
+    {
+        /*
+         * Load the Player texture into the game. 
+         * We just use the built in "Unknown Texture".
+         */
+        this.getTextureGroup().addTexture("Player", Texture.unknownTexture(new Dimensions(32, 32)));
+    }
+
+    /*
+     * This function is called after the engine has been primed.
+     * At this point, the main window should be open and active.
+     * 
+     * @see jtwod.engine.Engine#onEngineStart()
+     */
+    @Override
+    public final void onEngineStart() {
         /*
          * Initialize the new Screen that we will be using to render things out.
          */
-        Screen<TestGameEngine> mainScreen = new Screen<TestGameEngine>("Main Screen", this) {
+        Scene<TestGameEngine> mainScreen = new Scene<TestGameEngine>("Main Screen", this) {
 
             /**
              * The Serial version UID.
              */
             private static final long serialVersionUID = -1982332528698274277L;
 
-            /**
+            /*
              * Override this function to handle the initialization of the Screen.
              * This is called after the screen is primed. (Threads initialized etc).
+             * 
+             * @see jtwod.engine.Screen#initialize()
              */
             @Override
-            public void initialize()
+            protected final void initialize()
             {
                 /*
                  * Assign a new EntityController to the screen.
@@ -82,8 +105,8 @@ public class TestGameEngine extends Engine {
                         myPlayer = new Entity<TestGameEngine>(Vector.Zero(), this.getParentScreen()) {
                             {
                                 // Set the sprite for the entity to a white 10x10 image.
-                                this.setRenderedSprite(
-                                    Texture.unknownTexture(new Dimensions(32, 32))
+                                this.setRenderedTexture(
+                                    this.getParentEngine().getTextureGroup().getTexture("Player")
                                 );
 
                                 // Constrain the entity to the screen bounds.
@@ -99,6 +122,9 @@ public class TestGameEngine extends Engine {
                             }
                         };
 
+                        /*
+                         * Spawn the player.
+                         */
                         this.spawnEntity(myPlayer);
                     }
                 });
@@ -114,7 +140,7 @@ public class TestGameEngine extends Engine {
              * @param graphics The graphics object to use for rendering.
              */
             @Override
-            protected void renderFrame(Graphics graphics) {
+            protected final void renderFrame(Graphics graphics) {
                 // Create the Text.
                 Text<TestGameEngine> text = new Text<TestGameEngine>(
                     "Use the arrow keys to move around!",
@@ -136,7 +162,7 @@ public class TestGameEngine extends Engine {
              * @param keyEvent The key event.
              */
             @Override
-            protected void onKeyPressed(KeyEvent keyEvent) {
+            protected final void onKeyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
                     myPlayer.setVelocity(myPlayer.getVelocity().setY(3));
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_UP) {
@@ -154,7 +180,7 @@ public class TestGameEngine extends Engine {
              * @param keyEvent The key event.
              */
             @Override
-            protected void onKeyReleased(KeyEvent keyEvent) {
+            protected final void onKeyReleased(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
                     myPlayer.setVelocity(myPlayer.getVelocity().setY(0));
                 } else if (keyEvent.getKeyCode() == KeyEvent.VK_UP) {
@@ -181,8 +207,13 @@ public class TestGameEngine extends Engine {
                 this.setTopMost(false);
             }
             
+            /*
+             * Render the graphics for the Drawable out.
+             *
+             * @see jtwod.engine.Drawable#render(java.awt.Graphics, jtwod.engine.Screen)
+             */
             @Override
-            protected void render(Graphics graphics, Screen<TestGameEngine> screen) {
+            protected final void render(Graphics graphics, Scene<TestGameEngine> screen) {
                 // Create the background.
                 Image<TestGameEngine> image = new Image<TestGameEngine>(
                     Texture.blackTexture(
@@ -200,7 +231,7 @@ public class TestGameEngine extends Engine {
             }
 
             @Override
-            protected void update() {
+            protected final void update() {
                 // Not implemented.
             }
         });

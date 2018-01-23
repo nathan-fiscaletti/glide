@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.Random;
 
 import jtwod.engine.Engine;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.graphics.Texture;
 import jtwod.engine.metrics.Dimensions;
 import jtwod.engine.metrics.Vector;
@@ -25,12 +25,12 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
     /**
      * The Game that the entity is attached to.
      */
-    private Screen<ParentEngine> parentScreen;
+    private Scene<ParentEngine> parentScreen;
 
     /**
-     * The rendered sprite for the entity.
+     * The rendered Texture for the entity.
      */
-    private Texture renderedSprite;
+    private Texture renderedTexture;
 
     /**
      * Kill the entity after this many seconds.
@@ -71,7 +71,7 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
      * @param position The initial position.
      * @param screen The screen to attach the entity to.
      */
-    public Entity(Vector position, Screen<ParentEngine> screen)
+    public Entity(Vector position, Scene<ParentEngine> screen)
     {
         super(screen.getParentEngine());
 
@@ -160,32 +160,32 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
      * @param screen The screen that we are rendering out to.
      */
     @Override
-    public final void render(Graphics g, Screen<ParentEngine> screen)
+    public final void render(Graphics g, Scene<ParentEngine> screen)
     {
-        g.drawImage(this.getRenderedSprite().asBufferedImage(), this.getPosition().getX(), this.getPosition().getY(), screen);
+        g.drawImage(this.getRenderedTexture().asBufferedImage(), this.getPosition().getX(), this.getPosition().getY(), screen);
     }
 
     /**
-     * Update the sprite and the bounds.
+     * Update the Texture and the bounds.
      *
      * @param sprite
      */
-    public final void setRenderedSprite(Texture sprite)
+    public final void setRenderedTexture(Texture texture)
     {
-        this.renderedSprite = sprite;
-        this.setSize(new Dimensions(sprite.getWidth(), sprite.getHeight()));
+        this.renderedTexture = texture;
+        this.setSize(new Dimensions(texture.getWidth(), texture.getHeight()));
     }
 
     /**
-     * Retrieve the sprite.
+     * Retrieve the Texture.
      *
      * @return
      */
-    public final Texture getRenderedSprite()
+    public final Texture getRenderedTexture()
     {
-        return (this.renderedSprite != null)
-                ? this.renderedSprite
-                : Texture.unknownTexture(new Dimensions(32,32));
+        return (this.renderedTexture != null)
+            ? this.renderedTexture
+            : Texture.unknownTexture(new Dimensions(32,32));
     }
 
     /**
@@ -221,7 +221,8 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
      *
      * @param velocity
      */
-    public void setVelocity(Vector velocity) {
+    public void setVelocity(Vector velocity)
+    {
         this.velocity = velocity;
     }
 
@@ -240,7 +241,7 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
      *
      * @return
      */
-    public Screen<ParentEngine> getParentScreen()
+    public Scene<ParentEngine> getParentScreen()
     {
         return this.parentScreen;
     }
@@ -274,13 +275,13 @@ public abstract class Entity<ParentEngine extends Engine> extends Shape<ParentEn
         if (this.isDead) {
             if (this.shouldPlayDeathAnimation) {
                 if(deathTick < 5){
-                    this.renderedSprite = this.getParentEngine().getTextureGroup().getTexture("des1");
+                    this.renderedTexture = this.getParentEngine().getTextureGroup().getTexture("des1");
                     deathTick ++;
                 }else if(deathTick >= 5 && deathTick < 10){
-                    this.renderedSprite = this.getParentEngine().getTextureGroup().getTexture("des2");
+                    this.renderedTexture = this.getParentEngine().getTextureGroup().getTexture("des2");
                     deathTick ++;
                 }else if(deathTick >= 10 && deathTick < 15){
-                    this.renderedSprite = this.getParentEngine().getTextureGroup().getTexture("des3");
+                    this.renderedTexture = this.getParentEngine().getTextureGroup().getTexture("des3");
                     deathTick ++;
                 }else if(deathTick == 15){
                     this.onDeath();

@@ -16,9 +16,14 @@ public final class Vector {
     private int y;
 
     /**
-     * The buffer for the vector.
+     * The buffer for the vector X axis.
      */
-    public int buffer = 0;
+    private int bufferX = 0;
+    
+    /**
+     * The buffer for the vector Y axis.
+     */
+    private int bufferY = 0;
 
     /**
      * Create a new base vector.
@@ -48,20 +53,20 @@ public final class Vector {
      */
     public final void constrain(Vector constraint)
     {
-        if (this.x < 0) {
-            this.x = 0;
+        if (this.x < 0 - constraint.bufferX) {
+            this.x = 0 - constraint.bufferX;
         }
 
-        if (this.y < 0) {
-            this.y = 0;
+        if (this.y < 0 - constraint.bufferY) {
+            this.y = 0 - constraint.bufferY;
         }
 
-        if (this.x > constraint.x) {
-            this.x = constraint.x;
+        if (this.x > constraint.x + constraint.bufferX) {
+            this.x = constraint.x + constraint.bufferX;
         }
 
-        if (this.y > constraint.y) {
-            this.y = constraint.y;
+        if (this.y > constraint.y + constraint.bufferY) {
+            this.y = constraint.y + constraint.bufferY;
         }
     }
 
@@ -74,6 +79,7 @@ public final class Vector {
     public final Vector setX(int x)
     {
         this.x = x;
+
         return this;
     }
 
@@ -86,6 +92,7 @@ public final class Vector {
     public final Vector setY(int y)
     {
         this.y = y;
+
         return this;
     }
 
@@ -108,7 +115,46 @@ public final class Vector {
     {
         return this.y;
     }
+    
+    /**
+     * Retrieve the X axis buffer.
+     * 
+     * @return
+     */
+    public final int getXBuffer()
+    {
+        return this.bufferX;
+    }
+    
+    /**
+     * Update the X axis buffer.
+     * 
+     * @param buffer
+     */
+    public final void setXBuffer(int bufferX)
+    {
+        this.bufferX = bufferX;
+    }
 
+    /**
+     * Retrieve the Y axis buffer.
+     * 
+     * @return
+     */
+    public final int getYBuffer()
+    {
+        return this.bufferY;
+    }
+    
+    /**
+     * Update the Y axis buffer.
+     * 
+     * @param buffer
+     */
+    public final void setYBuffer(int bufferY)
+    {
+        this.bufferY = bufferY;
+    }
 
     /**
      * Add to the Y value to create a new Vector.
@@ -197,7 +243,21 @@ public final class Vector {
      */
     public final static Vector Max(int buffer, Engine engine) {
         Vector result = new Vector(engine.getWindowSize().getWidth() + buffer, engine.getWindowSize().getHeight() + buffer);
-        result.buffer = buffer;
+        result.bufferX = buffer;
+        result.bufferY = buffer;
+
+        return result;
+    }
+    
+    /**
+     * The maximum vector allowed with an additional buffer on a per-axis basis.
+     * @return
+     */
+    public final static Vector Max(int bufferX, int bufferY, Engine engine)
+    {
+        Vector result = new Vector(engine.getWindowSize().getWidth() + bufferX, engine.getWindowSize().getHeight() + bufferY);
+        result.bufferX = bufferX;
+        result.bufferY = bufferY;
 
         return result;
     }

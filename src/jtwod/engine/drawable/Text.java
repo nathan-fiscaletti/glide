@@ -1,7 +1,7 @@
 package jtwod.engine.drawable;
 
 import jtwod.engine.Engine;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 import java.awt.Font;
@@ -93,7 +93,7 @@ public final class Text<ParentEngine extends Engine> extends Shape<ParentEngine>
      * @param screen
      */
     @Override
-    public final void render(Graphics graphics, Screen<ParentEngine> screen)
+    public final void render(Graphics graphics, Scene<ParentEngine> screen)
     {
         Font resetFont = graphics.getFont();
         Color resetColor = graphics.getColor();

@@ -1,7 +1,7 @@
 package glide.game.screens;
 
 import glide.game.GlideEngine;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import glide.game.Difficulty;
 
 import java.awt.Color;
@@ -9,7 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-public final class OptionsMenu extends Screen<GlideEngine> {
+public final class OptionsMenu extends Scene<GlideEngine> {
 
     public OptionsMenu(GlideEngine engine) {
         super("OptionsMenu", engine);

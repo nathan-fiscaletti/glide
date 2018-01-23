@@ -17,19 +17,18 @@ public final class Dimensions {
     /**
      * The aspect ratio for this dimension.
      */
-    private Dimensions aspectRatio;
+    private AspectRatio aspectRatio;
 
     /**
      * Create a new dimension.
      *
-     * @param width the width.
      * @param aspectRatio the aspect ratio.
      */
-    public Dimensions(int width, Dimensions aspectRatio)
+    public Dimensions(AspectRatio aspectRatio)
     {
-        this.width = width;
         this.aspectRatio = aspectRatio;
-        this.recalculate();
+        this.width = aspectRatio.getRatio().getWidth();
+        this.height = aspectRatio.getRatio().getHeight();
     }
 
     /**
@@ -62,9 +61,11 @@ public final class Dimensions {
      *
      * @param width the new width.
      */
-    public final void setWidth(int width) {
+    public final Dimensions setWidth(int width) {
         this.width = width;
         this.recalculate();
+        
+        return this;
     }
 
     /**
@@ -86,9 +87,11 @@ public final class Dimensions {
      *
      * @param height the new width.
      */
-    public final void setHeight(int height) {
+    public final Dimensions setHeight(int height) {
         this.height = height;
         this.recalculate();
+        
+        return this;
     }
 
     /**
@@ -96,7 +99,7 @@ public final class Dimensions {
      *
      * @return aspectRatio
      */
-    public final Dimensions getAspectRatio() {
+    public final AspectRatio getAspectRatio() {
         return aspectRatio;
     }
 
@@ -107,9 +110,11 @@ public final class Dimensions {
      *
      * @param aspectRatio
      */
-    public final void setAspectRatio(Dimensions aspectRatio) {
+    public final Dimensions setAspectRatio(AspectRatio aspectRatio) {
         this.aspectRatio = aspectRatio;
         this.recalculate();
+        
+        return this;
     }
 
     /**
@@ -126,7 +131,21 @@ public final class Dimensions {
     private void recalculate()
     {
         if (this.aspectRatio != null) {
-            this.height = this.width / this.aspectRatio.width * this.aspectRatio.height;
+            switch (this.aspectRatio.getControlAxis()) {
+                case HeightControlled : 
+                    this.width = 
+                        this.height / 
+                            this.aspectRatio.getRatio().getHeight()
+                          * this.aspectRatio.getRatio().getWidth();
+                    break;
+                case WidthControlled :
+                    this.height = 
+                        this.width / 
+                              this.aspectRatio.getRatio().getWidth() 
+                            * this.aspectRatio.getRatio().getHeight();
+                    break;
+            }
+            
         }
     }
 

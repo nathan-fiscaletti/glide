@@ -36,13 +36,13 @@ public final class SpriteSheet {
     }
 
     /**
-     * Pull a Sprite from the SpriteSheet.
+     * Pull a Texture from the SpriteSheet.
      *
      * @param col
      * @param row
      * @return
      */
-    public Texture grabSprite(int col, int row){
+    public Texture getTexture(int col, int row){
         return this.texture.getSubTexture (
                 ( col-1 ) * this.colWidth,
                 ( row-1 ) * this.rowHeight,

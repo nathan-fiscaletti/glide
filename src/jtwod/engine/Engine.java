@@ -58,7 +58,7 @@ public abstract class Engine {
     /**
      * The current screen being displayed.
      */
-    private Screen<? extends Engine> currentScreen;
+    private Scene<? extends Engine> currentScreen;
 
     /**
      * Initialize a new Engine.
@@ -164,7 +164,7 @@ public abstract class Engine {
      *
      * @param screen
      */
-    public final void setScreen(Screen<? extends Engine> screen)
+    public final void setScreen(Scene<? extends Engine> screen)
     {
         if (currentScreen != null) {
             try {
@@ -199,7 +199,7 @@ public abstract class Engine {
     }
 
     /**
-     * Check if the soundns are muted.
+     * Check if the sounds are muted.
      *
      * @return
      */

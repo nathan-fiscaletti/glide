@@ -14,12 +14,12 @@ import glide.game.screens.SinglePlayerGame;
 
 import jtwod.engine.drawable.Entity;
 import jtwod.engine.EntityController;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class SinglePlayerGameController extends EntityController<GlideEngine> {
 
-    public SinglePlayerGameController(Screen<GlideEngine> screen) {
+    public SinglePlayerGameController(Scene<GlideEngine> screen) {
         super(screen);
     }
 

@@ -4,7 +4,7 @@ import glide.game.GlideEngine;
 import glide.game.screens.SinglePlayerGame;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class Player extends Entity<GlideEngine>
@@ -26,9 +26,9 @@ public final class Player extends Entity<GlideEngine>
     private int hurttick = 0;
     private int plasmatick = 0;
 
-    public Player(Vector position, Screen<GlideEngine> screen){
+    public Player(Vector position, Scene<GlideEngine> screen){
         super(position, screen);
-        this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("player"));
+        this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("player"));
         this.setPositionConstraint(Vector.Max(this.getParentEngine()).plusX(-this.getSize().getWidth()).plusY(-this.getSize().getHeight()));
     }
 
@@ -36,18 +36,18 @@ public final class Player extends Entity<GlideEngine>
     public final void updateSprite()
     {
         if (this.beaming) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("player2"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("player2"));
         } else if (!t) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("player"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("player"));
         }
 
         if (hurttick < 10 && this.hurting) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("playerhurt"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("playerhurt"));
         } else if (!t2) {
             if(!this.beaming){
-                this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("player"));
+                this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("player"));
             }else{
-                this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("player2"));
+                this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("player2"));
             }
         }
     }

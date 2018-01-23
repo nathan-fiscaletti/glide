@@ -4,18 +4,16 @@ import java.awt.Graphics;
 
 import glide.game.GlideEngine;
 import jtwod.engine.Drawable;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
+import jtwod.engine.drawable.Image;
 import jtwod.engine.graphics.Texture;
 import jtwod.engine.metrics.Vector;
 
 public final class BackgroundDrawable extends Drawable<GlideEngine> {
 
     private Texture blackTexture;
-    private Texture backgroundOne = null;
-    private Texture backgroundTwo = null;
-
-    private Vector backgroundOnePosition = Vector.Zero();
-    private Vector backgroundTwoPosition = Vector.Zero();
+    private Image<GlideEngine> backgroundOne = null;
+    private Image<GlideEngine> backgroundTwo = null;
 
     private int speed = 1;
 
@@ -26,35 +24,52 @@ public final class BackgroundDrawable extends Drawable<GlideEngine> {
         this.blackTexture = Texture.blackTexture(engine.getWindowSize());
 
         try{
-            backgroundOne = new Texture(backgroundImagePath);
-            backgroundTwo = backgroundOne;
-            backgroundTwoPosition.plusY(-backgroundOne.getHeight());
+            backgroundOne = new Image<>(
+                new Texture(backgroundImagePath),
+                Vector.Zero(),
+                engine
+            );
+            
+            backgroundTwo = new Image<>(
+                new Texture(backgroundImagePath),
+                Vector.Zero().plusY(
+                    -backgroundOne.getSize().getHeight()
+                ),
+                engine
+            );
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
     @Override
-    public void render(Graphics g, Screen<GlideEngine> canvas) {
-        g.drawImage(this.blackTexture.asBufferedImage(), 0, 0, this.getParentEngine().getWindowSize().getWidth(), this.getParentEngine().getWindowSize().getHeight(), canvas);
-
-        if(backgroundOnePosition.getY() >= Vector.Max(this.getParentEngine()).getY()){
-            backgroundOnePosition.setY(backgroundTwoPosition.getY() - backgroundTwo.getHeight());
-        }
-
-        if(backgroundTwoPosition.getY() >= Vector.Max(this.getParentEngine()).getY()){
-            backgroundTwoPosition.setY(backgroundOnePosition.getY() - backgroundTwo.getHeight());
-        }
-
-        g.drawImage(backgroundOne.asBufferedImage(), 0, (int)backgroundOnePosition.getY(), canvas);
-        g.drawImage(backgroundTwo.asBufferedImage(), 0, backgroundTwoPosition.getY(), canvas);
+    public void render(Graphics graphics, Scene<GlideEngine> screen) {
+        graphics.drawImage(
+            this.blackTexture.asBufferedImage(),
+            0,
+            0,
+            this.getParentEngine().getWindowSize().getWidth(),
+            this.getParentEngine().getWindowSize().getHeight(),
+            screen
+        );
+        
+        backgroundOne.render(graphics, screen);
+        backgroundTwo.render(graphics, screen);
     }
 
     @Override
     public void update()
     {
-        backgroundOnePosition = backgroundOnePosition.plusY(speed);
-        backgroundTwoPosition = backgroundTwoPosition.plusY(speed);
+        if(backgroundOne.getPosition().getY() >= Vector.Max(this.getParentEngine()).getY()){
+            backgroundOne.setPosition(Vector.Zero().setY(backgroundTwo.getPosition().getY() - backgroundTwo.getSize().getHeight()));
+        }
+
+        if(backgroundTwo.getPosition().getY() >= Vector.Max(this.getParentEngine()).getY()){
+            backgroundTwo.setPosition(Vector.Zero().setY(backgroundOne.getPosition().getY() - backgroundOne.getSize().getHeight()));
+        }
+        
+        backgroundOne.move(Vector.Zero().plusY(speed));
+        backgroundTwo.move(Vector.Zero().plusY(speed));
     }
 
     public void setSpeed(int speed)

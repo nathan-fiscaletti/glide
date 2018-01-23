@@ -22,14 +22,14 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
     /**
      * The screen that this controller is attached to.
      */
-    private Screen<ParentEngine> parentScreen;
+    private Scene<ParentEngine> parentScreen;
 
     /**
      * Create a new EntityController and attach it to the supplied Screen.
      *
      * @param screen The Screen associated with this EntityController.
      */
-    public EntityController(Screen<ParentEngine> screen)
+    public EntityController(Scene<ParentEngine> screen)
     {
         super(screen.getParentEngine());
         this.parentScreen = screen;
@@ -58,7 +58,7 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
      * @param screen The Screen to use as an Observer.
      */
     @Override
-    public final void render(Graphics graphics, Screen<ParentEngine> screen)
+    public final void render(Graphics graphics, Scene<ParentEngine> screen)
     {
         for (int entityId = 0; entityId < getAllEntities().size(); entityId++) {
             getAllEntities().get(entityId).render(graphics, screen);
@@ -114,7 +114,7 @@ public abstract class EntityController<ParentEngine extends Engine> extends Draw
      *
      * @return The Screen associated with this EntityController.
      */
-    public final Screen<ParentEngine> getParentScreen()
+    public final Scene<ParentEngine> getParentScreen()
     {
         return this.parentScreen;
     }

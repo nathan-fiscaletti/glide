@@ -49,7 +49,7 @@ public abstract class Drawable<ParentEngine extends Engine> {
      * @param graphics
      * @param screen
      */
-    protected abstract void render(Graphics graphics, Screen<ParentEngine> screen);
+    protected abstract void render(Graphics graphics, Scene<ParentEngine> screen);
 
     /**
      * Update this renderer.

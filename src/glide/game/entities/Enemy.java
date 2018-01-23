@@ -5,7 +5,7 @@ import glide.game.GlideEngine;
 import glide.game.screens.SinglePlayerGame;
 
 import jtwod.engine.drawable.Entity;
-import jtwod.engine.Screen;
+import jtwod.engine.Scene;
 import jtwod.engine.metrics.Vector;
 
 public final class Enemy extends Entity<GlideEngine>
@@ -40,7 +40,7 @@ public final class Enemy extends Entity<GlideEngine>
         Normal, Hard, None;
     }
 
-    public Enemy(Vector position, Screen<GlideEngine> screen, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
+    public Enemy(Vector position, Scene<GlideEngine> screen, boolean shouldDrop, boolean bomb, boolean isBombProtector, ProtectorType protectorType) {
         super(position, screen);
 
         this.shouldDrop = shouldDrop;
@@ -78,13 +78,13 @@ public final class Enemy extends Entity<GlideEngine>
         this.getGame().bsc ++;
 
         // Set up the sprite for the entity.
-        this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("enemy"));
+        this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("enemy"));
         if (isBomb) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("enemy3"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("enemy3"));
         } else if (highSpeed == 5) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("enemy2"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("enemy2"));
         } else if (protectorType == ProtectorType.Hard) {
-            this.setRenderedSprite(this.getParentEngine().getTextureGroup().getTexture("bossprotector"));
+            this.setRenderedTexture(this.getParentEngine().getTextureGroup().getTexture("bossprotector"));
         }
     }
 
@@ -214,7 +214,7 @@ public final class Enemy extends Entity<GlideEngine>
             if(this.ticksSinceLastLaserFireAttempt == this.tryToFireLaserEveryXTicks){
                 if(random.nextBoolean() && !(
                     (this.getParentEngine().difficulty == Difficulty.Expert)
-                        ? this.getRenderedSprite().equals(this.getParentEngine().getTextureGroup().getTexture("bossprotector"))
+                        ? this.getRenderedTexture().equals(this.getParentEngine().getTextureGroup().getTexture("bossprotector"))
                         : false
                 )){
 
