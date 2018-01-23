@@ -290,8 +290,8 @@ public abstract class Engine {
 
     public final void setFullScreen(boolean fullScreen)
     {
-        DisplayMode dm = new DisplayMode(this.getWindowSize().getWidth(), this.getWindowSize().getHeight(), 32, DisplayMode.REFRESH_RATE_UNKNOWN);
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(dm);
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this.windowFrame);
+        //DisplayMode dm = new DisplayMode(this.getWindowSize().getWidth(), this.getWindowSize().getHeight(), 32, DisplayMode.REFRESH_RATE_UNKNOWN);
+        //GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(dm);
+        //GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this.windowFrame);
     }
 }

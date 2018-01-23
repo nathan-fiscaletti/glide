@@ -52,7 +52,7 @@ public class TestGameEngine extends Engine {
         /*
          * Initialize the new Screen that we will be using to render things out.
          */
-        Screen<TestGameEngine> mainScreen = new Screen<TestGameEngine>("Test Game Screen", this) {
+        Screen<TestGameEngine> mainScreen = new Screen<TestGameEngine>("Main Screen", this) {
 
             /**
              * The Serial version UID.
